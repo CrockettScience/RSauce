@@ -34,6 +34,7 @@ public class ArrayList<T> {
 
     public void add(T element) {
         elements[size] = element;
+        size++;
 
         if (elements.length == size)
             reAllocate();

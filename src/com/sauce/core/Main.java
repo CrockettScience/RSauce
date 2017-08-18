@@ -1,12 +1,14 @@
-package com.sauce;
+package com.sauce.core;
 
-import com.sauce.assethandling.vis.draw.DrawBatch;
-import com.sauce.assethandling.vis.draw.Image;
+import com.sauce.asset.video.DrawBatch;
+import com.sauce.asset.video.Image;
+import com.sauce.input.InputEvent;
+import com.sauce.input.InputServer;
+import com.sauce.input.InputClient;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
-import org.lwjgl.stb.*;
 
 import java.nio.*;
 
@@ -20,7 +22,7 @@ import static org.lwjgl.system.MemoryUtil.*;
  * Created by John Crockett.
  */
 
-public class Main {
+public class Main implements InputClient {
 
     // The window handle
     private long window;
@@ -70,11 +72,14 @@ public class Main {
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
 
-        // Setup a key callback. It will be called every time a key is pressed, repeated or released.
+        // Setup a key callback. Forward raw input data to InputServer to be
+        // processed and sent to InputClients.
         glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-            if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
-                glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
+            InputServer.recieveRawInputEvent(new RawInputEvent(key, scancode, action, mods));
+
         });
+
+        InputServer.bind(this);
 
         // Get the thread stack and push a new frame
         try ( MemoryStack stack = stackPush() ) {
@@ -152,6 +157,35 @@ public class Main {
 
     public static void main(String[] args) {
         LOOP.run();
+    }
+
+    @Override
+    public void receivedInputEvent(InputEvent event) {
+        if ( event.key() == GLFW_KEY_ESCAPE && event.action() == GLFW_RELEASE )
+            glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
+    }
+
+    public static class RawInputEvent{
+
+        int key;
+        int scancode;
+        int action;
+        int mods;
+
+        private RawInputEvent(int key, int scancode, int action, int mods){
+            this.key = key;
+            this.scancode = scancode;
+            this.action = action;
+            this.mods = mods;
+        }
+
+        public int key(){
+            return key;
+        }
+
+        public int action(){
+            return action;
+        }
     }
 
 }

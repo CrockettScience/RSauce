@@ -1,4 +1,4 @@
-package com.sauce.assethandling.vis.draw;
+package com.sauce.asset.video;
 
 import static org.lwjgl.opengl.EXTFramebufferObject.*;
 import static org.lwjgl.opengl.GL11.*;

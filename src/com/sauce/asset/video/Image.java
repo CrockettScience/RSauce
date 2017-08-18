@@ -1,7 +1,6 @@
-package com.sauce.assethandling.vis.draw;
+package com.sauce.asset.video;
 
 import org.lwjgl.*;
-import org.lwjgl.opengl.EXTFramebufferObject;
 
 import static org.lwjgl.stb.STBImage.*;
 
