@@ -4,6 +4,7 @@ import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
+import org.lwjgl.stb.*;
 
 import java.nio.*;
 
@@ -22,8 +23,13 @@ public class Main {
     // The window handle
     private long window;
     private boolean running = true;
+
     // The game loop handle
     public static Main LOOP = new Main();
+
+    // Temporary settings values
+    public static int WIDTH = 1024;
+    public static int HEIGHT = 768;
 
     private void run() {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
@@ -51,12 +57,13 @@ public class Main {
             throw new IllegalStateException("Unable to initialize GLFW");
 
         // Configure GLFW
-        glfwDefaultWindowHints(); // optional, the current window hints are already the default
-        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // the window will be resizable
 
+        // Get the resolution of the primary monitor
+        GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+
         // Create the window
-        window = glfwCreateWindow(300, 300, Project.NAME, NULL, NULL);
+        window = glfwCreateWindow(WIDTH, HEIGHT, Project.NAME, NULL, NULL);
 
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
@@ -74,9 +81,6 @@ public class Main {
 
             // Get the window size passed to glfwCreateWindow
             glfwGetWindowSize(window, pWidth, pHeight);
-
-            // Get the resolution of the primary monitor
-            GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
             // Center the window
             glfwSetWindowPos(
@@ -106,10 +110,14 @@ public class Main {
         // Set the clear color
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
+        // Setup the Viewport
+        glViewport(0, 0, WIDTH, HEIGHT);
+
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
         while ( !glfwWindowShouldClose(window) && running) {
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+            glClear(GL_COLOR_BUFFER_BIT); // clear the framebuffer
+            
 
             glfwSwapBuffers(window); // swap the color buffers
 
