@@ -1,5 +1,7 @@
 package com.sauce;
 
+import com.sauce.assethandling.vis.draw.DrawBatch;
+import com.sauce.assethandling.vis.draw.Image;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -28,12 +30,12 @@ public class Main {
     public static Main LOOP = new Main();
 
     // Temporary settings values
-    public static int WIDTH = 1024;
-    public static int HEIGHT = 768;
+    public static int WIDTH = 800;
+    public static int HEIGHT = 600;
 
     private void run() {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
-        System.out.println("Hello RSauce " + Project.VERSION + "!");
+        System.out.println("Hello RSauce " + Project.ENGINE_VERSION + "!");
 
         init();
         loop();
@@ -113,11 +115,28 @@ public class Main {
         // Setup the Viewport
         glViewport(0, 0, WIDTH, HEIGHT);
 
+        // Setup our Matrix
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(0.0, WIDTH, HEIGHT, 0.0, -1.0, 1.0);
+        glMatrixMode(GL_MODELVIEW);
+
+        // Test our Teapot
+        Image teapot = new Image(Project.ASSET_ROOT + "tea.jpg");
+        DrawBatch batch = new DrawBatch();
+
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
         while ( !glfwWindowShouldClose(window) && running) {
             glClear(GL_COLOR_BUFFER_BIT); // clear the framebuffer
-            
+
+            // Draw our Teapots
+            batch.add(teapot, 0,0);
+            batch.add(teapot, 400, 0);
+            batch.add(teapot, 400, 300);
+            batch.add(teapot, 0, 300);
+
+            batch.renderBatch();
 
             glfwSwapBuffers(window); // swap the color buffers
 

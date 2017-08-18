@@ -1,6 +1,8 @@
-package com.sauce.assethandling.vis;
+package com.sauce.assethandling.vis.draw;
 
 import org.lwjgl.*;
+import org.lwjgl.opengl.EXTFramebufferObject;
+
 import static org.lwjgl.stb.STBImage.*;
 
 import java.io.*;
@@ -21,6 +23,7 @@ public class Image {
 
     public Image(String imagePath){
         ByteBuffer buffer;
+
         try{
             buffer = ioResourceToByteBuffer(imagePath, 1024);
         } catch(IOException e){
