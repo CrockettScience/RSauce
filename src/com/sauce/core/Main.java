@@ -31,6 +31,11 @@ public class Main implements InputClient {
     // The game loop handle
     public static Main LOOP = new Main();
 
+    // Teapot coordinate references
+    private int teaX = 0;
+    private int teaY = 0;
+    private Image teapot;
+
     // Temporary settings values
     public static int WIDTH = 800;
     public static int HEIGHT = 600;
@@ -127,7 +132,7 @@ public class Main implements InputClient {
         glMatrixMode(GL_MODELVIEW);
 
         // Test our Teapot
-        Image teapot = new Image(Project.ASSET_ROOT + "tea.jpg");
+        teapot = new Image(Project.ASSET_ROOT + "tea.jpg");
         DrawBatch batch = new DrawBatch();
 
         // Run the rendering loop until the user has attempted to close
@@ -136,10 +141,7 @@ public class Main implements InputClient {
             glClear(GL_COLOR_BUFFER_BIT); // clear the framebuffer
 
             // Draw our Teapots
-            batch.add(teapot, 0,0);
-            batch.add(teapot, 400, 0);
-            batch.add(teapot, 400, 300);
-            batch.add(teapot, 0, 300);
+            batch.add(teapot, teaX, teaY);
 
             batch.renderBatch();
 
@@ -161,8 +163,45 @@ public class Main implements InputClient {
 
     @Override
     public void receivedInputEvent(InputEvent event) {
-        if ( event.key() == GLFW_KEY_ESCAPE && event.action() == GLFW_RELEASE )
-            glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
+        switch (event.key()){
+            case GLFW_KEY_ESCAPE:
+                if(event.action() == GLFW_RELEASE)
+                    glfwSetWindowShouldClose(window, true);
+                break;
+
+            case GLFW_KEY_W:
+                teaY -= 3;
+                break;
+
+            case GLFW_KEY_A:
+                teaX -= 3;
+                break;
+
+            case GLFW_KEY_S:
+                teaY += 3;
+                break;
+
+            case GLFW_KEY_D:
+                teaX += 3;
+                break;
+
+            case GLFW_KEY_UP:
+                teapot.setScale(teapot.getScale() - 0.1f);
+                break;
+
+            case GLFW_KEY_DOWN:
+                teapot.setScale(teapot.getScale() + 0.1f);
+                break;
+
+            case GLFW_KEY_LEFT:
+                teapot.setAngle(teapot.getAngle() - 1.0f);
+                break;
+
+            case GLFW_KEY_RIGHT:
+                teapot.setAngle(teapot.getAngle() + 1.0f);
+                break;
+
+        }
     }
 
     public static class RawInputEvent{

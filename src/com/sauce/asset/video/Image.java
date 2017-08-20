@@ -15,10 +15,18 @@ import java.nio.file.*;
  */
 public class Image {
 
+    // Properties
     private int width;
     private int height;
     private int components;
     private ByteBuffer image;
+
+    private float angle;
+    private float scale;
+
+    // Precomputed Values
+    private int halfWidth;
+    private int halfHeight;
 
     public Image(String imagePath){
         ByteBuffer buffer;
@@ -45,6 +53,12 @@ public class Image {
         width = w.get(0);
         height = h.get(0);
         components = c.get(0);
+
+        angle = 0;
+        scale = 1;
+
+        halfWidth = width / 2;
+        halfHeight = height / 2;
 
     }
 
@@ -73,6 +87,30 @@ public class Image {
 
     public int height(){
         return height;
+    }
+
+    public void setAngle(float degrees){
+        angle = degrees;
+    }
+
+    public float getAngle(){
+        return angle;
+    }
+
+    public void setScale(float factor){
+        scale = factor;
+    }
+
+    public float getScale(){
+        return scale;
+    }
+
+    int halfwidth(){
+        return halfWidth;
+    }
+
+    int halfHeight(){
+        return halfHeight;
     }
 
     // Only for use by DrawBatch Class

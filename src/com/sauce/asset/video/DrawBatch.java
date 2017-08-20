@@ -43,8 +43,6 @@ public class DrawBatch {
             } else {
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width(), image.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image.image());
 
-                //glEnable(GL_BLEND);
-                //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             }
 
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -53,6 +51,10 @@ public class DrawBatch {
             glEnable(GL_TEXTURE_2D);
 
             glPushMatrix();
+            glTranslatef(coord.x + image.halfwidth() * image.getScale(), coord.y + image.halfHeight() * image.getScale(), 0);
+            glRotatef((float) image.getAngle(), 0, 0, 1);
+            glTranslatef(-coord.x - image.halfwidth() * image.getScale(), -coord.y - image.halfHeight() * image.getScale(), 0);
+
             renderImage(image, coord);
             glPopMatrix();
 
@@ -68,19 +70,21 @@ public class DrawBatch {
     private void renderImage(Image image, DrawingCoordinates coord){
         glBegin(GL_QUADS);
         {
-            glTexCoord2i(0, 0);
-            glVertex2i(coord.x, coord.y);
+            glTexCoord2f(0f, 0f);
+            glVertex2f(coord.x, coord.y);
 
-            glTexCoord2i(1, 0);
-            glVertex2i(coord.x + image.width(), coord.y);
+            glTexCoord2f(1f, 0f);
+            glVertex2f(coord.x + (image.width() * image.getScale()), coord.y);
 
-            glTexCoord2i(1, 1);
-            glVertex2i(coord.x + image.width(), coord.y + image.height());
+            glTexCoord2f(1f, 1f);
+            glVertex2f(coord.x + (image.width() * image.getScale()), coord.y + (image.height() * image.getScale()));
 
-            glTexCoord2i(0, 1);
-            glVertex2i(coord.x, coord.y + image.height());
+            glTexCoord2f(0f, 1f);
+            glVertex2f(coord.x, coord.y + (image.height() * image.getScale()));
         }
         glEnd();
+
+
     }
 
     private static class DrawingCoordinates{
