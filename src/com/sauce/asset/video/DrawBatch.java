@@ -11,7 +11,7 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class DrawBatch {
 
-    public Queue<Image> images;
+    public Queue<DrawableAsset> images;
     public Queue<DrawingCoordinates> coords;
 
     public DrawBatch(){
@@ -25,7 +25,7 @@ public class DrawBatch {
     }
 
     public void renderBatch(){
-        Image image;
+        DrawableAsset image;
         DrawingCoordinates coord;
 
         while(!images.isEmpty()){
@@ -39,9 +39,9 @@ public class DrawBatch {
                 if ((image.width() & 3) != 0) {
                     glPixelStorei(GL_UNPACK_ALIGNMENT, 2 - (image.width() & 1));
                 }
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.width(), image.height(), 0, GL_RGB, GL_UNSIGNED_BYTE, image.image());
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.width(), image.height(), 0, GL_RGB, GL_UNSIGNED_BYTE, image.imageData());
             } else {
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width(), image.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image.image());
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width(), image.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image.imageData());
 
             }
 
@@ -67,7 +67,7 @@ public class DrawBatch {
 
     }
 
-    private void renderImage(Image image, DrawingCoordinates coord){
+    private void renderImage(DrawableAsset image, DrawingCoordinates coord){
         glBegin(GL_QUADS);
         {
             glTexCoord2f(0f, 0f);

@@ -13,20 +13,11 @@ import java.nio.file.*;
 /**
  * Created by John Crockett.
  */
-public class Image {
+public class Image extends DrawableAsset {
 
     // Properties
-    private int width;
-    private int height;
-    private int components;
     private ByteBuffer image;
-
-    private float angle;
-    private float scale;
-
-    // Precomputed Values
-    private int halfWidth;
-    private int halfHeight;
+    private int components;
 
     public Image(String imagePath){
         ByteBuffer buffer;
@@ -50,15 +41,8 @@ public class Image {
             throw new RuntimeException("Failed to load image: " + stbi_failure_reason());
         }
 
-        width = w.get(0);
-        height = h.get(0);
+        super.lateConstructor(w.get(0), h.get(0));
         components = c.get(0);
-
-        angle = 0;
-        scale = 1;
-
-        halfWidth = width / 2;
-        halfHeight = height / 2;
 
     }
 
@@ -81,44 +65,13 @@ public class Image {
         return buffer;
     }
 
-    public int width(){
-        return width;
-    }
-
-    public int height(){
-        return height;
-    }
-
-    public void setAngle(float degrees){
-        angle = degrees;
-    }
-
-    public float getAngle(){
-        return angle;
-    }
-
-    public void setScale(float factor){
-        scale = factor;
-    }
-
-    public float getScale(){
-        return scale;
-    }
-
-    int halfwidth(){
-        return halfWidth;
-    }
-
-    int halfHeight(){
-        return halfHeight;
-    }
-
-    // Only for use by DrawBatch Class
-    int components(){
-        return components;
-    }
-
-    ByteBuffer image(){
+    @Override
+    protected ByteBuffer imageData(){
         return image;
+    }
+
+    @Override
+    protected int components() {
+        return components;
     }
 }
