@@ -24,6 +24,10 @@ public class Map<K, V> {
     }
 
     public boolean containsKey(K key) {
+        if(key == null){
+            return false;
+        }
+
         int currentPos = findPos(key);
         K other = mapTable[currentPos] == null ? null : mapTable[currentPos].key;
 
@@ -31,10 +35,16 @@ public class Map<K, V> {
     }
 
     public boolean put(K key, V value) {
+        if(key == null)
+            return false;
+
         return add(constructMapEntry(key, value));
     }
 
     public V get(K key) {
+        if(key == null)
+            return null;
+
         return mapTable[findPos(key)] == null ? null : mapTable[findPos(key)].value;
     }
 

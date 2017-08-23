@@ -1,10 +1,12 @@
 package com.sauce.core;
 
-import com.sauce.asset.video.DrawBatch;
-import com.sauce.asset.video.Image;
+import com.sauce.asset.graphics.DrawBatch;
+import com.sauce.asset.graphics.Image;
+import com.sauce.asset.graphics.Sprite;
 import com.sauce.input.InputEvent;
 import com.sauce.input.InputServer;
 import com.sauce.input.InputClient;
+import com.structures.nonsaveable.ArrayGrid;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -31,10 +33,10 @@ public class Main implements InputClient {
     // The game loop handle
     public static Main LOOP = new Main();
 
-    // Teapot coordinate references
-    private int teaX = 0;
-    private int teaY = 0;
-    private Image teapot;
+    // Eggy handles
+    int eggyX = WIDTH / 2;
+    int eggyY = HEIGHT / 2;
+    Sprite eggy;
 
     // Temporary settings values
     public static int WIDTH = 800;
@@ -120,29 +122,47 @@ public class Main implements InputClient {
         GL.createCapabilities();
 
         // Set the clear color
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClearColor(0.0f, 0.0f, 0.5f, 0.0f);
 
         // Setup the Viewport
         glViewport(0, 0, WIDTH, HEIGHT);
 
+        // Set up blending function
+        glDisable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
+
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
         // Setup our Matrix
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        glOrtho(0.0, WIDTH, HEIGHT, 0.0, -1.0, 1.0);
+        glOrtho(0.0, WIDTH, 0.0, HEIGHT, -1.0, 1.0);
         glMatrixMode(GL_MODELVIEW);
 
-        // Test our Teapot
-        teapot = new Image(Project.ASSET_ROOT + "tea.jpg");
+        // Mr. Eggy
+
+        // Setup the "ID Matrix" to identify separate frame loops.
+        ArrayGrid<String> eggyMatrix = new ArrayGrid<>(4, 4);
+        createEggyMatrix(eggyMatrix);
+
+        eggy = new Sprite(Project.ASSET_ROOT + "eggy.png",
+                4,
+                4,
+                eggyMatrix,
+                true);
         DrawBatch batch = new DrawBatch();
+
+        eggy.setXScale(4f);
+        eggy.setYScale(4f);
+
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
         while ( !glfwWindowShouldClose(window) && running) {
             glClear(GL_COLOR_BUFFER_BIT); // clear the framebuffer
 
-            // Draw our Teapots
-            batch.add(teapot, teaX, teaY);
-
+            eggy.update();
+            batch.add(eggy, eggyX, eggyY);
             batch.renderBatch();
 
             glfwSwapBuffers(window); // swap the color buffers
@@ -151,6 +171,26 @@ public class Main implements InputClient {
             // invoked during this call.
             glfwPollEvents();
         }
+    }
+
+    private void createEggyMatrix(ArrayGrid<String> eggy) {
+        String idle = "idle";
+        String down = "down";
+        String up = "up";
+        String left = "left";
+        String right = "right";
+
+        eggy.set(0, 0, idle);
+        eggy.set(1, 0, down);
+        eggy.set(2, 0, down);
+        eggy.set(3, 0, left);
+
+        eggy.set(0, 1, left);
+        eggy.set(1, 1, right);
+        eggy.set(2, 1, right);
+        eggy.set(3, 1, up);
+
+        eggy.set(0, 2, up);
     }
 
     public void quitAtEndOfCycle(){
@@ -170,37 +210,36 @@ public class Main implements InputClient {
                 break;
 
             case GLFW_KEY_W:
-                teaY -= 3;
-                break;
-
-            case GLFW_KEY_A:
-                teaX -= 3;
+                if(event.action() == GLFW_REPEAT) {
+                    eggyY++;
+                    eggy.setAnimationState("up");
+                } else
+                    eggy.setAnimationState("idle");
                 break;
 
             case GLFW_KEY_S:
-                teaY += 3;
+                if(event.action() == GLFW_REPEAT) {
+                    eggyY--;
+                    eggy.setAnimationState("down");
+                } else
+                    eggy.setAnimationState("idle");
+                break;
+
+            case GLFW_KEY_A:
+                if(event.action() == GLFW_REPEAT) {
+                    eggyX--;
+                    eggy.setAnimationState("left");
+                } else
+                    eggy.setAnimationState("idle");
                 break;
 
             case GLFW_KEY_D:
-                teaX += 3;
+                if(event.action() == GLFW_REPEAT) {
+                    eggyX++;
+                    eggy.setAnimationState("right");
+                } else
+                    eggy.setAnimationState("idle");
                 break;
-
-            case GLFW_KEY_UP:
-                teapot.setScale(teapot.getScale() - 0.1f);
-                break;
-
-            case GLFW_KEY_DOWN:
-                teapot.setScale(teapot.getScale() + 0.1f);
-                break;
-
-            case GLFW_KEY_LEFT:
-                teapot.setAngle(teapot.getAngle() - 1.0f);
-                break;
-
-            case GLFW_KEY_RIGHT:
-                teapot.setAngle(teapot.getAngle() + 1.0f);
-                break;
-
         }
     }
 

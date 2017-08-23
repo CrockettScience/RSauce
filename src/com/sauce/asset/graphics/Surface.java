@@ -1,4 +1,4 @@
-package com.sauce.asset.video;
+package com.sauce.asset.graphics;
 
 import static org.lwjgl.opengl.EXTFramebufferObject.*;
 import static org.lwjgl.opengl.GL11.*;

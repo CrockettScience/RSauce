@@ -1,4 +1,4 @@
-package com.sauce.asset.video;
+package com.sauce.asset.graphics;
 
 import org.lwjgl.*;
 
@@ -23,7 +23,7 @@ public class Image extends DrawableAsset {
         ByteBuffer buffer;
 
         try{
-            buffer = ioResourceToByteBuffer(imagePath, 1024);
+            buffer = ioResourceToByteBuffer(imagePath);
         } catch(IOException e){
             throw new RuntimeException();
         }
@@ -41,21 +41,19 @@ public class Image extends DrawableAsset {
             throw new RuntimeException("Failed to load image: " + stbi_failure_reason());
         }
 
-        super.lateConstructor(w.get(0), h.get(0));
+        super.lateConstructor(w.get(0), h.get(0), w.get(0), h.get(0));
         components = c.get(0);
 
     }
 
-    private static ByteBuffer ioResourceToByteBuffer(String resource, int bufferSize) throws IOException {
+    private static ByteBuffer ioResourceToByteBuffer(String resource) throws IOException {
         ByteBuffer buffer;
 
         Path path = Paths.get(resource);
         if (Files.isReadable(path)) {
             try (SeekableByteChannel fc = Files.newByteChannel(path)) {
                 buffer = BufferUtils.createByteBuffer((int)fc.size() + 1);
-                while (fc.read(buffer) != -1) {
-                    ;
-                }
+                while (fc.read(buffer) != -1) {}
             }
         } else {
             throw new IOException();
@@ -68,6 +66,12 @@ public class Image extends DrawableAsset {
     @Override
     protected ByteBuffer imageData(){
         return image;
+    }
+
+    @Override
+    protected float[] regionCoordinates() {
+        float[] arr = {0f, 0f, 1f, 0f, 1f, 1f, 0f, 1f};
+        return arr;
     }
 
     @Override
