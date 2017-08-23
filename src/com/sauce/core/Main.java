@@ -1,7 +1,6 @@
 package com.sauce.core;
 
 import com.sauce.asset.graphics.DrawBatch;
-import com.sauce.asset.graphics.Image;
 import com.sauce.asset.graphics.Sprite;
 import com.sauce.input.InputEvent;
 import com.sauce.input.InputServer;
@@ -149,27 +148,35 @@ public class Main implements InputClient {
                 4,
                 4,
                 eggyMatrix,
-                true);
+                true,
+                4);
         DrawBatch batch = new DrawBatch();
 
         eggy.setXScale(4f);
         eggy.setYScale(4f);
 
 
+
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
+        long current;
+        long last = System.nanoTime();
+
         while ( !glfwWindowShouldClose(window) && running) {
+            current = System.nanoTime();
+            int delta = (int) ((current - last) / 1000000);
+
             glClear(GL_COLOR_BUFFER_BIT); // clear the framebuffer
 
-            eggy.update();
+            eggy.update(delta);
             batch.add(eggy, eggyX, eggyY);
             batch.renderBatch();
 
-            glfwSwapBuffers(window); // swap the color buffers
+            glfwSwapBuffers(window);
 
-            // Poll for window events. The key callback above will only be
-            // invoked during this call.
             glfwPollEvents();
+
+            last = current;
         }
     }
 
@@ -183,11 +190,11 @@ public class Main implements InputClient {
         eggy.set(0, 0, idle);
         eggy.set(1, 0, down);
         eggy.set(2, 0, down);
-        eggy.set(3, 0, left);
+        eggy.set(3, 0, right);
 
-        eggy.set(0, 1, left);
-        eggy.set(1, 1, right);
-        eggy.set(2, 1, right);
+        eggy.set(0, 1, right);
+        eggy.set(1, 1, left);
+        eggy.set(2, 1, left);
         eggy.set(3, 1, up);
 
         eggy.set(0, 2, up);

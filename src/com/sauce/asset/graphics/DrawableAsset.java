@@ -8,10 +8,10 @@ import java.nio.ByteBuffer;
 public abstract class DrawableAsset {
 
     // Properties
-    private int width;
-    private int height;
-    private int absWidth;
-    private int absHeight;
+    private int w;
+    private int h;
+    private int absW;
+    private int absH;
     private float angle = 0.0f;
     private float xScale = 1.0f;
     private float yScale = 1.0f;
@@ -21,43 +21,43 @@ public abstract class DrawableAsset {
     private int halfHeight;
 
     public DrawableAsset(int width, int height, int absWidth, int absHeight){
-        this.width = width;
-        this.height = height;
+        this.w = width;
+        this.h = height;
 
-        this.absWidth = absWidth;
-        this.absHeight = absHeight;
+        this.absW = absWidth;
+        this.absH = absHeight;
 
         halfWidth = width / 2;
         halfHeight = height / 2;
     }
 
-    public DrawableAsset(){};
+    public DrawableAsset(){}
 
     protected void lateConstructor(int width, int height, int absWidth, int absHeight){
-        this.width = width;
-        this.height = height;
+        w = width;
+        h = height;
 
-        this.absWidth = absWidth;
-        this.absHeight = absHeight;
+        absW = absWidth;
+        absH = absHeight;
 
         halfWidth = width / 2;
         halfHeight = height / 2;
     }
 
     public int width(){
-        return width;
+        return w;
     }
 
     public int height(){
-        return height;
+        return h;
     }
 
     public int absWidth() {
-        return absWidth;
+        return absW;
     }
 
     public int absHeight() {
-        return absHeight;
+        return absH;
     }
 
     public void setAngle(float degrees){
