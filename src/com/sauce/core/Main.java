@@ -2,6 +2,7 @@ package com.sauce.core;
 
 import com.sauce.asset.graphics.DrawBatch;
 import com.sauce.asset.graphics.Sprite;
+import com.sauce.asset.graphics.TiledTexture;
 import com.sauce.input.InputEvent;
 import com.sauce.input.InputServer;
 import com.sauce.input.InputClient;
@@ -138,9 +139,7 @@ public class Main implements InputClient {
         glOrtho(0.0, WIDTH, 0.0, HEIGHT, -1.0, 1.0);
         glMatrixMode(GL_MODELVIEW);
 
-        // Mr. Eggy
-
-        // Setup the "ID Matrix" to identify separate frame loops.
+        // Setup Eggy
         ArrayGrid<String> eggyMatrix = new ArrayGrid<>(4, 4);
         createEggyMatrix(eggyMatrix);
 
@@ -151,11 +150,11 @@ public class Main implements InputClient {
                 true,
                 4);
         DrawBatch batch = new DrawBatch();
-
         eggy.setXScale(4f);
         eggy.setYScale(4f);
 
-
+        // Setup Background
+        TiledTexture bg = new TiledTexture(Project.ASSET_ROOT + "bg.png");
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
@@ -168,8 +167,11 @@ public class Main implements InputClient {
 
             glClear(GL_COLOR_BUFFER_BIT); // clear the framebuffer
 
+            batch.add(bg, 0, 0);
+
             eggy.update(delta);
             batch.add(eggy, eggyX, eggyY);
+
             batch.renderBatch();
 
             glfwSwapBuffers(window);
@@ -218,7 +220,7 @@ public class Main implements InputClient {
 
             case GLFW_KEY_W:
                 if(event.action() == GLFW_REPEAT) {
-                    eggyY++;
+                    eggyY += 2;
                     eggy.setAnimationState("up");
                 } else
                     eggy.setAnimationState("idle");
@@ -226,7 +228,7 @@ public class Main implements InputClient {
 
             case GLFW_KEY_S:
                 if(event.action() == GLFW_REPEAT) {
-                    eggyY--;
+                    eggyY -= 2;
                     eggy.setAnimationState("down");
                 } else
                     eggy.setAnimationState("idle");
@@ -234,7 +236,7 @@ public class Main implements InputClient {
 
             case GLFW_KEY_A:
                 if(event.action() == GLFW_REPEAT) {
-                    eggyX--;
+                    eggyX -= 2;
                     eggy.setAnimationState("left");
                 } else
                     eggy.setAnimationState("idle");
@@ -242,7 +244,7 @@ public class Main implements InputClient {
 
             case GLFW_KEY_D:
                 if(event.action() == GLFW_REPEAT) {
-                    eggyX++;
+                    eggyX += 2;
                     eggy.setAnimationState("right");
                 } else
                     eggy.setAnimationState("idle");
