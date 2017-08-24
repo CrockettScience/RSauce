@@ -179,6 +179,17 @@ public class Set<T> implements Iterable<T> {
         occupied = 0;
     }
 
+    public T[] toArray(){
+        T[] arr = (T[]) new Object[currentSize];
+        int i = 0;
+        Iterator<T> itr = iterator();
+        while(itr.hasNext()){
+            arr[i] = itr.next();
+            i++;
+        }
+        return arr;
+    }
+
     private int findPos(T e) {
         return Math.abs(e.hashCode() % entryTable.length);
     }
