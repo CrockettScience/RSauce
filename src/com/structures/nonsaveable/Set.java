@@ -119,7 +119,7 @@ public class Set<T> implements Iterable<T> {
         return xor;
     }
 
-    private boolean add(SetEntry<T> entry) {
+    protected boolean add(SetEntry<T> entry) {
         int currentPos = findPos(entry.element);
 
         if (entryTable[currentPos] != null) {
@@ -153,24 +153,24 @@ public class Set<T> implements Iterable<T> {
         return true;
     }
 
-    public boolean remove(T e) {
+    public T remove(T e) {
         int currentPos = findPos(e);
 
         if (entryTable[currentPos] != null) {
-            SetEntry i = entryTable[currentPos];
+            SetEntry<T> i = entryTable[currentPos];
 
             while (i.next != null) {
                 if (i.element.equals(e) && i.isActive) {
                     i.isActive = false;
                     currentSize--;
-                    return true;
+                    return i.element;
                 }
 
                 i = i.next;
             }
         }
 
-        return false;
+        return null;
     }
 
     public void clear() {
@@ -190,7 +190,7 @@ public class Set<T> implements Iterable<T> {
         return arr;
     }
 
-    private int findPos(T e) {
+    protected int findPos(T e) {
         return Math.abs(e.hashCode() % entryTable.length);
     }
 

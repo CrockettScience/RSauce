@@ -39,6 +39,28 @@ public class Entity implements Comparable<Entity>{
         componentMap.clear();
     }
 
+    public boolean hasComponent(Class<? extends Component> c){
+        return componentMap.containsKey(c);
+    }
+
+    public boolean hasAll(Class<? extends Component>... comps){
+        for(Class<? extends Component> c : comps){
+            if(!componentMap.containsKey(c))
+                return false;
+        }
+
+        return true;
+    }
+
+    public boolean hasNone(Class<? extends Component>... comps){
+        for(Class<? extends Component> c : comps){
+            if(componentMap.containsKey(c))
+                return false;
+        }
+
+        return true;
+    }
+
     protected Map<Class<? extends Component>, Component> getComponentMap(){
         return componentMap;
     }
