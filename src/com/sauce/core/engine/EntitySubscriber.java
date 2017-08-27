@@ -1,6 +1,6 @@
 package com.sauce.core.engine;
 
-import com.structures.nonsaveable.Set;
+import com.util.structures.nonsaveable.Set;
 
 /**
  * Created by John Crockett.

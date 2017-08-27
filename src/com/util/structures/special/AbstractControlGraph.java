@@ -1,4 +1,4 @@
-package com.structures.special;
+package com.util.structures.special;
 
 /**
  * Created by John Crockett.

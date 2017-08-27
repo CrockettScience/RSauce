@@ -1,8 +1,8 @@
 package com.sauce.asset.graphics;
 
 import com.sauce.core.Project;
-import com.structures.nonsaveable.Queue;
-import com.util.Coordinates;
+import com.util.structures.nonsaveable.Queue;
+import com.util.Vector2D;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -14,8 +14,8 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class DrawBatch {
 
-    public Queue<DrawableAsset> images;
-    public Queue<Coordinates> coords;
+    private Queue<DrawableAsset> images;
+    private Queue<Vector2D> coords;
 
     public DrawBatch(){
         images = new Queue<>();
@@ -24,12 +24,12 @@ public class DrawBatch {
 
     public void add(DrawableAsset image, int x, int y){
         images.enqueue(image);
-        coords.enqueue(new Coordinates(x, y));
+        coords.enqueue(new Vector2D(x, y));
     }
 
     public void renderBatch(){
         DrawableAsset image;
-        Coordinates coord;
+        Vector2D coord;
 
         while(!images.isEmpty()){
             image = images.dequeue();
@@ -57,10 +57,10 @@ public class DrawBatch {
             glEnable(GL_TEXTURE_2D);
 
             glPushMatrix();
-            glTranslatef(coord.x() + image.halfwidth(), coord.y() + image.halfHeight(), 0);
+            glTranslatef(coord.getX() + image.halfwidth(), coord.getY() + image.halfHeight(), 0);
             glRotatef(image.getAngle(), 0, 0, 1);
             glScalef(image.getXScale(), -image.getYScale(), 1f);
-            glTranslatef(-coord.x() - image.halfwidth(), -coord.y() - image.halfHeight(), 0);
+            glTranslatef(-coord.getX() - image.halfwidth(), -coord.getY() - image.halfHeight(), 0);
 
             renderImage(image, coord);
 
@@ -73,21 +73,21 @@ public class DrawBatch {
 
     }
 
-    private void renderImage(DrawableAsset image, Coordinates coord){
+    private void renderImage(DrawableAsset image, Vector2D coord){
         float[] texCoords = image.regionCoordinates();
         glBegin(GL_QUADS);
         {
             glTexCoord2f(texCoords[0], texCoords[1]);
-            glVertex2f(coord.x(), coord.y());
+            glVertex2f(coord.getX(), coord.getY());
 
             glTexCoord2f(texCoords[2], texCoords[3]);
-            glVertex2f(coord.x() + image.width(), coord.y());
+            glVertex2f(coord.getX() + image.width(), coord.getY());
 
             glTexCoord2f(texCoords[4], texCoords[5]);
-            glVertex2f(coord.x() + image.width(), coord.y() + image.height());
+            glVertex2f(coord.getX() + image.width(), coord.getY() + image.height());
 
             glTexCoord2f(texCoords[6], texCoords[7]);
-            glVertex2f(coord.x(), coord.y() + image.height());
+            glVertex2f(coord.getX(), coord.getY() + image.height());
         }
         glEnd();
 

@@ -1,4 +1,4 @@
-package com.structures.saveable.wrappers;
+package com.util.structures.saveable.wrappers;
 
 /**
  * Created by John Crockett.

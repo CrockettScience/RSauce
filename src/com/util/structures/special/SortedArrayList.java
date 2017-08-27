@@ -1,4 +1,4 @@
-package com.structures.special;
+package com.util.structures.special;
 
 import java.util.Comparator;
 import java.util.Iterator;

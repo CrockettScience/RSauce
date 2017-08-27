@@ -1,6 +1,6 @@
-package com.structures.special;
+package com.util.structures.special;
 
-import com.structures.nonsaveable.Queue;
+import com.util.structures.nonsaveable.Queue;
 
 /**
  * Created by John Crockett.

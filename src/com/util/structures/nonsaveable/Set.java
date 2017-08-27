@@ -1,4 +1,4 @@
-package com.structures.nonsaveable;
+package com.util.structures.nonsaveable;
 
 import java.util.Iterator;
 

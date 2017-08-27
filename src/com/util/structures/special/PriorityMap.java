@@ -1,17 +1,21 @@
-package com.structures.special;
+package com.util.structures.special;
 
-import com.structures.nonsaveable.Map;
-import com.structures.nonsaveable.Set;
+import com.util.structures.nonsaveable.LinkedList;
+import com.util.structures.nonsaveable.Map;
+import com.util.structures.nonsaveable.Queue;
+import com.util.structures.nonsaveable.Set;
 
-import java.util.NoSuchElementException;
+import java.util.Iterator;
 
 /**
  * Created by John Crockett.
  * The same as a PriorityQueue<T>, but with the functionality of Map-like linear access and modification
+ * to remove elements, user must use remove method with key. PriorityMap cycles through elements.
  */
-public class PriorityMap<K, V> {
+public class PriorityMap<K, V>{
 
     private PriorityQueue<PriorityMapEntry<K, V>> queue;
+    private Queue<PriorityMapEntry<K, V>> poolQueue = new Queue<>();
     private Map<K, PriorityMapEntry<K, V>> map;
 
     public PriorityMap(){
@@ -53,16 +57,18 @@ public class PriorityMap<K, V> {
         return map.isEmpty();
     }
 
-    public V getNext() {
+    public V next() {
         skipToNextActiveElement();
 
-        return queue.getNext().value;
-    }
+        PriorityMapEntry<K, V> entry = queue.getNext();
+        poolQueue.enqueue(entry);
 
-    public V removeNext() {
-        skipToNextActiveElement();
-
-        PriorityMapEntry<K, V> entry = queue.removeNext();
+        if(isEmpty()) {
+            while(!poolQueue.isEmpty()){
+                PriorityMapEntry<K, V> poolEntry = poolQueue.dequeue();
+                put(poolEntry.key, poolEntry.value, poolEntry.priority);
+            }
+        }
 
         return entry.value;
     }

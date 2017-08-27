@@ -6,7 +6,7 @@ import com.sauce.asset.graphics.TiledTexture;
 import com.sauce.input.InputEvent;
 import com.sauce.input.InputServer;
 import com.sauce.input.InputClient;
-import com.structures.nonsaveable.ArrayGrid;
+import com.util.structures.nonsaveable.ArrayGrid;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;

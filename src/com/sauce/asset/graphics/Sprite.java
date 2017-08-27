@@ -1,9 +1,9 @@
 package com.sauce.asset.graphics;
 
-import com.structures.nonsaveable.ArrayGrid;
-import com.structures.nonsaveable.ArrayList;
-import com.structures.nonsaveable.Map;
-import com.util.Coordinates;
+import com.util.structures.nonsaveable.ArrayGrid;
+import com.util.structures.nonsaveable.ArrayList;
+import com.util.structures.nonsaveable.Map;
+import com.util.Vector2D;
 
 import java.nio.ByteBuffer;
 
@@ -17,13 +17,13 @@ public class Sprite extends DrawableAsset{
     private int cellsInRow;
     private int cellsInColumn;
     private ArrayGrid<String> animIds;
-    private Map<String, ArrayList<Coordinates>> idMap;
+    private Map<String, ArrayList<Vector2D>> idMap;
     private boolean loop;
     private int fpms;
 
     //Sprite State Variables;
-    private Coordinates cellCoords = new Coordinates(0,0);
-    private ArrayList<Coordinates> animationState = new ArrayList<>();
+    private Vector2D cellCoords = new Vector2D(0,0);
+    private ArrayList<Vector2D> animationState = new ArrayList<>();
     private int animationStateIndex = 0;
     private String animStateID;
 
@@ -38,17 +38,17 @@ public class Sprite extends DrawableAsset{
         animStateID = animIds.get(0, 0);
         idMap = new Map<>();
         idMap.put(animStateID, animationState);
-        animationState.add(new Coordinates(0, 0));
+        animationState.add(new Vector2D(0, 0));
 
         int i = 1, j = 0;
         while(j < animIds.height()){
             while(i < animIds.width()){
                 if(idMap.containsKey(animIds.get(i, j)))
-                    idMap.get(animIds.get(i, j)).add(new Coordinates(i, j));
+                    idMap.get(animIds.get(i, j)).add(new Vector2D(i, j));
 
                 else if(animIds.get(i, j) != null) {
                     idMap.put(animIds.get(i, j), new ArrayList<>());
-                    idMap.get(animIds.get(i, j)).add(new Coordinates(i, j));
+                    idMap.get(animIds.get(i, j)).add(new Vector2D(i, j));
                 }
                 i++;
             }
@@ -103,8 +103,8 @@ public class Sprite extends DrawableAsset{
     protected float[] regionCoordinates() {
         float w = 1.0f / cellsInRow;
         float h = 1.0f / cellsInColumn;
-        float x = w * cellCoords.x();
-        float y = h * cellCoords.y();
+        float x = w * cellCoords.getX();
+        float y = h * cellCoords.getY();
 
         float[] arr = { x, y, x + w, y, x + w, y + h, x, y + h};
         return arr;

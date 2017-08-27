@@ -1,6 +1,6 @@
 package com.sauce.core.engine;
 
-import com.structures.nonsaveable.Map;
+import com.util.structures.nonsaveable.Map;
 
 /**
  * Created by John Crockett.
@@ -37,6 +37,10 @@ public class Entity implements Comparable<Entity>{
 
     public void clearComponents(){
         componentMap.clear();
+    }
+
+    public Component getComponent(Class<? extends Component> c){
+        return componentMap.get(c);
     }
 
     public boolean hasComponent(Class<? extends Component> c){

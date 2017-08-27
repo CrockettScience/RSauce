@@ -1,7 +1,7 @@
-package com.structures.saveable;
+package com.util.structures.saveable;
 
-import com.structures.nonsaveable.Set;
-import com.structures.saveable.util.*;
+import com.util.structures.nonsaveable.Set;
+import com.util.structures.saveable.util.*;
 
 import java.io.*;
 import java.util.logging.Level;

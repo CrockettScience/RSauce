@@ -1,7 +1,7 @@
 package com.sauce.input;
 
 import com.sauce.core.Main;
-import com.structures.nonsaveable.ArrayList;
+import com.util.structures.nonsaveable.ArrayList;
 
 /**
  * Created by John Crockett.

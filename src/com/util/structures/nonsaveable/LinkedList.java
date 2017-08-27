@@ -1,4 +1,4 @@
-package com.structures.nonsaveable;
+package com.util.structures.nonsaveable;
 
 import java.util.Iterator;
 import java.util.ListIterator;
@@ -7,7 +7,7 @@ import java.util.ListIterator;
  * Created by John Crockett.
  */
 
-public class LinkedList<T> implements Iterable {
+public class LinkedList<T> implements Iterable<T> {
 
     private LinkedListNode header;
     private LinkedListNode footer;
@@ -30,6 +30,14 @@ public class LinkedList<T> implements Iterable {
         footer.prev = header;
         header.next = footer;
 
+    }
+
+    public int size(){
+        return size;
+    }
+
+    public boolean isEmpty(){
+        return size == 0;
     }
 
     public T get(int i) {
@@ -94,7 +102,7 @@ public class LinkedList<T> implements Iterable {
     }
 
     @Override
-    public Iterator iterator() {
+    public Iterator<T> iterator() {
         return new LinkedListIterator();
     }
 

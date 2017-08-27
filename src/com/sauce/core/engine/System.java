@@ -10,9 +10,9 @@ abstract class System implements Comparable<System> {
         prio = priority;
     }
 
-    public abstract void addedToEngine();
+    public abstract void addedToEngine(Engine engine);
     public abstract void update(int delta);
-    public abstract void removedFromEngine();
+    public abstract void removedFromEngine(Engine engine);
 
     @Override
     public int compareTo(System o) {

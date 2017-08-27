@@ -1,4 +1,4 @@
-package com.structures.saveable.util;
+package com.util.structures.saveable.util;
 
 /**
  * Created by John Crockett.

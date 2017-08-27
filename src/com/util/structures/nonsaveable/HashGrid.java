@@ -1,4 +1,4 @@
-package com.structures.nonsaveable;
+package com.util.structures.nonsaveable;
 
 /**
  * Created by John Crockett.

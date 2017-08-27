@@ -1,6 +1,6 @@
-package com.structures.saveable.wrappers;
+package com.util.structures.saveable.wrappers;
 
-import com.structures.saveable.util.SaveableData;
+import com.util.structures.saveable.util.SaveableData;
 
 /**
  * Created by John Crockett.

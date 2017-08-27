@@ -1,7 +1,7 @@
 package com.sauce.core.engine;
 
-import com.structures.nonsaveable.ArrayList;
-import com.structures.nonsaveable.Set;
+import com.util.structures.nonsaveable.ArrayList;
+import com.util.structures.nonsaveable.Set;
 
 import java.util.Iterator;
 
