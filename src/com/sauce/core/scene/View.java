@@ -13,16 +13,16 @@ import com.sauce.core.engine.Engine;
 public class View{
     private static final Engine ENGINE = Engine.getEngine(Project.FRAME_LIMIT);
 
-    private float x;
-    private float y;
-    private float width;
-    private float height;
+    private int x;
+    private int y;
+    private int width;
+    private int height;
 
     private Entity entityFollowing;
-    private float xBufferZone;
-    private float yBufferZone;
+    private int xBufferZone;
+    private int yBufferZone;
 
-    public View(float aX, float aY, float aWidth, float aHeight, float xBuff, float yBuff) {
+    public View(int aX, int aY, int aWidth, int aHeight, int xBuff, int yBuff) {
         x = aX;
         y = aY;
         width = aWidth;
@@ -31,7 +31,7 @@ public class View{
         yBufferZone = yBuff;
     }
 
-    public void resize(float newWidth, float newHeight) {
+    public void resize(int newWidth, int newHeight) {
         width = newWidth;
         height = newHeight;
     }
@@ -39,28 +39,28 @@ public class View{
     /**
      * @return the x
      */
-    public float getX() {
+    public int getX() {
         return x;
     }
 
     /**
      * @return the y
      */
-    public float getY() {
+    public int getY() {
         return y;
     }
 
     /**
      * @return the width
      */
-    public float getWidth() {
+    public int getWidth() {
         return width;
     }
 
     /**
      * @return the height
      */
-    public float getHeight() {
+    public int getHeight() {
         return height;
     }
 
@@ -81,7 +81,7 @@ public class View{
      * @param xBuff
      * @param yBuff
      */
-    public void setBufferZone(float xBuff, float yBuff) {
+    public void setBufferZone(int xBuff, int yBuff) {
         xBufferZone = xBuff;
         yBufferZone = yBuff;
     }
@@ -97,14 +97,14 @@ public class View{
     /**
      * @param x the x to set
      */
-    public void setX(float x) {
+    public void setX(int x) {
         this.x = x;
     }
 
     /**
      * @param y the y to set
      */
-    public void setY(float y) {
+    public void setY(int y) {
         this.y = y;
     }
 }

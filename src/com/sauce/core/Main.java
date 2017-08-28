@@ -182,7 +182,6 @@ public class Main implements InputClient {
         while ( !glfwWindowShouldClose(window) && running) {
             current = System.nanoTime();
             int delta = (int) ((current - last) / 1000000);
-
             glClear(GL_COLOR_BUFFER_BIT); // clear the framebuffer
 
             engine.update(delta);

@@ -96,7 +96,7 @@ public abstract class DrawableAsset {
 
     protected abstract int components();
 
-    protected abstract ByteBuffer imageData();
+    protected abstract int textureID();
 
     public abstract void update(int delta);
 }

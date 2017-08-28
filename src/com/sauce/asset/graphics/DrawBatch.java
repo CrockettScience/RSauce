@@ -35,18 +35,7 @@ public class DrawBatch {
             image = images.dequeue();
             coord = coords.dequeue();
 
-            int texID = glGenTextures();
-            glBindTexture(GL_TEXTURE_2D, texID);
-
-            if (image.components() == 3) {
-                if ((image.absWidth() & 3) != 0) {
-                    glPixelStorei(GL_UNPACK_ALIGNMENT, 2 - (image.absWidth() & 1));
-                }
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.absWidth(), image.absHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, image.imageData());
-            } else {
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.absWidth(), image.absHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image.imageData());
-
-            }
+            glBindTexture(GL_TEXTURE_2D, image.textureID());
 
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Project.INTERPOLATION ? GL_LINEAR : GL_NEAREST);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Project.INTERPOLATION ? GL_LINEAR : GL_NEAREST);
@@ -65,8 +54,6 @@ public class DrawBatch {
             renderImage(image, coord);
 
             glPopMatrix();
-
-            glDeleteTextures(texID);
 
         }
 

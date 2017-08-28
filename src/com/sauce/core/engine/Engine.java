@@ -1,13 +1,19 @@
 package com.sauce.core.engine;
 
 import com.sauce.asset.graphics.DrawBatch;
+import com.sauce.asset.graphics.Surface;
+import com.sauce.core.scene.SceneManager;
 import com.sun.org.apache.regexp.internal.RE;
 import com.util.structures.nonsaveable.ArrayList;
 import com.util.structures.nonsaveable.Set;
 import com.util.structures.special.PriorityMap;
 import com.util.structures.special.SortedArrayList;
+import javafx.scene.Scene;
 
 import java.util.Comparator;
+
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.glClear;
 
 /**
  * Created by John Crockett.
@@ -89,24 +95,47 @@ public final class Engine {
         entities.clear();
     }
 
+    private Surface backBuffer = new Surface(800, 600);
     private int timeSinceLastUpdate;
+
     public void update(int delta){
         if (timeSinceLastUpdate >= fpms) {
-            // Step Systems
-            for (int i = 0; i < steps.size(); i++) {
-                steps.next().update(delta);
-            }
+            step(delta);
 
-            // Render
-            render.update(delta);
+            backBuffer.bind();
 
-            // Draw Systems
-            for (int i = 0; i < draws.size(); i++) {
-                draws.next().update(delta);
-            }
+            preDraw(delta);
+
+            draw(delta);
+
+            backBuffer.unbind();
+
+            swapBuffer();
         } else {
             timeSinceLastUpdate += delta;
         }
+    }
+
+    private void step(int delta){
+        for (int i = 0; i < steps.size(); i++) {
+            steps.next().update(delta);
+        }
+    }
+
+    private void preDraw(int delta){
+
+        render.update(delta);
+    }
+
+    private void draw(int delta){
+        for (int i = 0; i < draws.size(); i++) {
+            draws.next().update(delta);
+        }
+    }
+
+    private void swapBuffer(){
+        render.batch.add(backBuffer, 0, 0);
+        render.batch.renderBatch();
     }
 
     private EntitySet onlyEntitiesWithComponent(Class<? extends Component> c){

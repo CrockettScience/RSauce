@@ -35,8 +35,8 @@ public class TiledTexture extends DrawableAsset {
     }
 
     @Override
-    protected ByteBuffer imageData() {
-        return image.imageData();
+    protected int textureID() {
+        return image.textureID();
     }
 
     @Override

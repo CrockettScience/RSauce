@@ -114,7 +114,7 @@ public class Sprite extends DrawableAsset{
     }
 
     @Override
-    protected ByteBuffer imageData() {
-        return source.imageData();
+    protected int textureID() {
+        return source.textureID();
     }
 }

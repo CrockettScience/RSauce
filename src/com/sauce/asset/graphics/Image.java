@@ -2,6 +2,9 @@ package com.sauce.asset.graphics;
 
 import org.lwjgl.*;
 
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_RGBA;
+import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
 import static org.lwjgl.stb.STBImage.*;
 
 import java.io.*;
@@ -64,14 +67,6 @@ public class Image extends DrawableAsset {
     }
 
     @Override
-    protected ByteBuffer imageData(){
-        return image;
-    }
-
-    @Override
-    public void update(int delta) {}
-
-    @Override
     protected float[] regionCoordinates() {
         float[] arr = {0f, 0f, 1f, 0f, 1f, 1f, 0f, 1f};
         return arr;
@@ -80,5 +75,28 @@ public class Image extends DrawableAsset {
     @Override
     protected int components() {
         return components;
+    }
+
+    @Override
+    protected int textureID() {
+        int texID = glGenTextures();
+        glBindTexture(GL_TEXTURE_2D, texID);
+
+        if (components() == 3) {
+            if ((absWidth() & 3) != 0) {
+                glPixelStorei(GL_UNPACK_ALIGNMENT, 2 - (absWidth() & 1));
+            }
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, absWidth(), absHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+        } else {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, absWidth(), absHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+
+        }
+
+        return texID;
+    }
+
+    @Override
+    public void update(int delta) {
+
     }
 }
