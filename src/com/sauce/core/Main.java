@@ -3,6 +3,9 @@ package com.sauce.core;
 import com.sauce.asset.graphics.DrawBatch;
 import com.sauce.asset.graphics.Sprite;
 import com.sauce.asset.graphics.TiledTexture;
+import com.sauce.core.engine.DrawComponent;
+import com.sauce.core.engine.Engine;
+import com.sauce.core.engine.Entity;
 import com.sauce.input.InputEvent;
 import com.sauce.input.InputServer;
 import com.sauce.input.InputClient;
@@ -34,9 +37,7 @@ public class Main implements InputClient {
     public static Main LOOP = new Main();
 
     // Eggy handles
-    int eggyX = WIDTH / 2;
-    int eggyY = HEIGHT / 2;
-    Sprite eggy;
+    DrawComponent eggyComponent;
 
     // Temporary settings values
     public static int WIDTH = 800;
@@ -140,21 +141,38 @@ public class Main implements InputClient {
         glMatrixMode(GL_MODELVIEW);
 
         // Setup Eggy
-        ArrayGrid<String> eggyMatrix = new ArrayGrid<>(4, 4);
-        createEggyMatrix(eggyMatrix);
+        Entity eggy = new Entity();
 
-        eggy = new Sprite(Project.ASSET_ROOT + "eggy.png",
-                4,
-                4,
-                eggyMatrix,
-                true,
-                4);
-        DrawBatch batch = new DrawBatch();
-        eggy.setXScale(4f);
-        eggy.setYScale(4f);
+            ArrayGrid<String> eggyMatrix = new ArrayGrid<>(4, 4);
+            createEggyMatrix(eggyMatrix);
+
+            Sprite eggySprite = new Sprite(Project.ASSET_ROOT + "eggy.png",
+                    4,
+                    4,
+                    eggyMatrix,
+                    true,
+                    4);
+
+            eggySprite.setXScale(4f);
+            eggySprite.setYScale(4f);
+
+            eggyComponent = new DrawComponent(eggySprite, WIDTH / 2, HEIGHT / 2, 0);
+            eggy.addComponent(eggyComponent);
+
 
         // Setup Background
-        TiledTexture bg = new TiledTexture(Project.ASSET_ROOT + "bg.png");
+        Entity background = new Entity();
+
+            TiledTexture bgSprite = new TiledTexture(Project.ASSET_ROOT + "bg.png");
+
+            DrawComponent bgComponent = new DrawComponent(bgSprite, 0, 0, 10);
+
+            background.addComponent(bgComponent);
+
+        Engine engine = Engine.getEngine(60);
+
+        engine.add(eggy);
+        engine.add(background);
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
@@ -167,15 +185,9 @@ public class Main implements InputClient {
 
             glClear(GL_COLOR_BUFFER_BIT); // clear the framebuffer
 
-            batch.add(bg, 0, 0);
-
-            eggy.update(delta);
-            batch.add(eggy, eggyX, eggyY);
-
-            batch.renderBatch();
+            engine.update(delta);
 
             glfwSwapBuffers(window);
-
             glfwPollEvents();
 
             last = current;
@@ -220,34 +232,34 @@ public class Main implements InputClient {
 
             case GLFW_KEY_W:
                 if(event.action() == GLFW_REPEAT) {
-                    eggyY += 2;
-                    eggy.setAnimationState("up");
+                    eggyComponent.setY(eggyComponent.getY() + 2);
+                    ((Sprite) eggyComponent.getImage()).setAnimationState("up");
                 } else
-                    eggy.setAnimationState("idle");
+                    ((Sprite) eggyComponent.getImage()).setAnimationState("idle");
                 break;
 
             case GLFW_KEY_S:
                 if(event.action() == GLFW_REPEAT) {
-                    eggyY -= 2;
-                    eggy.setAnimationState("down");
+                    eggyComponent.setY(eggyComponent.getY() - 2);
+                    ((Sprite) eggyComponent.getImage()).setAnimationState("down");
                 } else
-                    eggy.setAnimationState("idle");
+                    ((Sprite) eggyComponent.getImage()).setAnimationState("idle");
                 break;
 
             case GLFW_KEY_A:
                 if(event.action() == GLFW_REPEAT) {
-                    eggyX -= 2;
-                    eggy.setAnimationState("left");
+                    eggyComponent.setX(eggyComponent.getX() - 2);
+                    ((Sprite) eggyComponent.getImage()).setAnimationState("left");
                 } else
-                    eggy.setAnimationState("idle");
+                    ((Sprite) eggyComponent.getImage()).setAnimationState("idle");
                 break;
 
             case GLFW_KEY_D:
                 if(event.action() == GLFW_REPEAT) {
-                    eggyX += 2;
-                    eggy.setAnimationState("right");
+                    eggyComponent.setX(eggyComponent.getX() + 2);
+                    ((Sprite) eggyComponent.getImage()).setAnimationState("right");
                 } else
-                    eggy.setAnimationState("idle");
+                    ((Sprite) eggyComponent.getImage()).setAnimationState("idle");
                 break;
         }
     }

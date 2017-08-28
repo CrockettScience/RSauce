@@ -191,12 +191,12 @@ public class SortedArrayList<T> implements Iterable<T> {
 
         @Override
         public boolean hasNext() {
-            return current < SortedArrayList.this.elements.length;
+            return current < SortedArrayList.this.size();
         }
 
         @Override
         public T next() {
-            return (T) SortedArrayList.this.elements[current];
+            return (T) SortedArrayList.this.elements[current++];
 
         }
     }

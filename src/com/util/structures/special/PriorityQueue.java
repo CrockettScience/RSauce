@@ -15,7 +15,7 @@ public class PriorityQueue<T extends Comparable<? super T>> {
 
     public PriorityQueue() {
         size = 0;
-        array = (T[]) new Object[DEFAULT_CAPACITY + 1];
+        array = (T[]) new Comparable[DEFAULT_CAPACITY + 1];
     }
 
     public boolean add(T e) {
@@ -80,7 +80,7 @@ public class PriorityQueue<T extends Comparable<? super T>> {
     private void reAllocate() {
         T[] newArray;
 
-        newArray = (T[]) new Object[array.length * 2];
+        newArray = (T[]) new Comparable[array.length * 2];
         for (int i = 0; i < array.length; i++)
             newArray[i] = array[i];
         array = newArray;

@@ -62,7 +62,7 @@ public class Sprite extends DrawableAsset{
     }
 
     private int timeSinceLastUpdate;
-    public boolean update(int delta){
+    public void update(int delta){
         if(timeSinceLastUpdate >= fpms) {
             if (animationStateIndex >= animationState.size()) {
                 if (loop)
@@ -76,11 +76,9 @@ public class Sprite extends DrawableAsset{
 
 
             timeSinceLastUpdate -= fpms;
-            return true;
         }
         else{
             timeSinceLastUpdate += delta;
-            return false;
         }
 
     }

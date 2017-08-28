@@ -19,17 +19,17 @@ public final class Engine {
     private ArrayList<EntitySubscriber> subs = new ArrayList<>();
     private PriorityMap<Class<? extends StepSystem>, StepSystem> steps = new PriorityMap<>();
     private PriorityMap<Class<? extends DrawSystem>, DrawSystem> draws = new PriorityMap<>();
-    private Integer fps;
+    private Integer fpms;
     private RenderSystem render = new RenderSystem(0);
 
     private Engine(int maxUpdatesPerSecond) {
-        fps = maxUpdatesPerSecond;
+        fpms = 1000 / maxUpdatesPerSecond;
         render.addedToEngine(this);
     }
 
     public static Engine getEngine(int maxUpdatesPerSecond){
         if(singletonEngine == null)
-            return new Engine(maxUpdatesPerSecond);
+            singletonEngine = new Engine(maxUpdatesPerSecond);
 
         return singletonEngine;
     }
@@ -89,18 +89,23 @@ public final class Engine {
         entities.clear();
     }
 
+    private int timeSinceLastUpdate;
     public void update(int delta){
-        // Step Systems
-        for(int i = 0; i < steps.size(); i++){
-            steps.next().update(delta);
-        }
+        if (timeSinceLastUpdate >= fpms) {
+            // Step Systems
+            for (int i = 0; i < steps.size(); i++) {
+                steps.next().update(delta);
+            }
 
-        // Render
-        render.update(delta);
+            // Render
+            render.update(delta);
 
-        // Draw Systems
-        for(int i = 0; i < draws.size(); i++){
-            draws.next().update(delta);
+            // Draw Systems
+            for (int i = 0; i < draws.size(); i++) {
+                draws.next().update(delta);
+            }
+        } else {
+            timeSinceLastUpdate += delta;
         }
     }
 
@@ -161,7 +166,7 @@ public final class Engine {
         public void update(int delta) {
             for(Entity ent : entities){
                 DrawComponent draw = (DrawComponent) ent.getComponent(DrawComponent.class);
-
+                draw.getImage().update(delta);
                 batch.add(draw.getImage(), draw.getX(), draw.getY());
             }
 
@@ -190,18 +195,22 @@ public final class Engine {
         }
 
         public EntityQualifier all(Class<? extends Component>... components){
-            EntitySet ents = Engine.this.onlyEntitiesWithComponent(components[0]);
-            for(int i = 1; i < components.length; i++){
-                ents = ents.onlyEntitiesWithComponent(components[i]);
+            if(components.length > 0) {
+                EntitySet ents = Engine.this.onlyEntitiesWithComponent(components[0]);
+                for (int i = 1; i < components.length; i++) {
+                    ents = ents.onlyEntitiesWithComponent(components[i]);
+                }
             }
 
             return this;
         }
 
         public EntityQualifier not(Class<? extends Component>... components){
-            ents = Engine.this.onlyEntitiesWithoutComponent(components[0]);
-            for(int i = 1; i < components.length; i++){
-                ents = ents.onlyEntitiesWithoutComponent(components[i]);
+            if(components.length > 0) {
+                ents = Engine.this.onlyEntitiesWithoutComponent(components[0]);
+                for (int i = 1; i < components.length; i++) {
+                    ents = ents.onlyEntitiesWithoutComponent(components[i]);
+                }
             }
 
             return this;

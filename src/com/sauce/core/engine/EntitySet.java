@@ -11,7 +11,7 @@ import java.util.Iterator;
  * to compare entities based on their components.
  */
 class EntitySet implements Iterable<Entity>{
-    private Set<EntityEntry> entities;
+    private Set<EntityEntry> entities = new Set<>();
 
     public int size() {
         return entities.size();

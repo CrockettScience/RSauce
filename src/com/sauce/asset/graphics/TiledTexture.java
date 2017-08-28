@@ -38,4 +38,7 @@ public class TiledTexture extends DrawableAsset {
     protected ByteBuffer imageData() {
         return image.imageData();
     }
+
+    @Override
+    public void update(int delta) {}
 }

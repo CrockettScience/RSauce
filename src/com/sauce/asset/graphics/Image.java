@@ -69,6 +69,9 @@ public class Image extends DrawableAsset {
     }
 
     @Override
+    public void update(int delta) {}
+
+    @Override
     protected float[] regionCoordinates() {
         float[] arr = {0f, 0f, 1f, 0f, 1f, 1f, 0f, 1f};
         return arr;

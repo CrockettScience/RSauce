@@ -97,12 +97,12 @@ public class ArrayList<T> implements Iterable<T> {
 
         @Override
         public boolean hasNext() {
-            return current < ArrayList.this.elements.length;
+            return current < ArrayList.this.size();
         }
 
         @Override
         public T next() {
-            return (T) ArrayList.this.elements[current];
+            return (T) ArrayList.this.elements[current++];
 
         }
     }
