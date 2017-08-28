@@ -1,6 +1,5 @@
 package com.sauce.core;
 
-import com.sauce.asset.graphics.DrawBatch;
 import com.sauce.asset.graphics.Sprite;
 import com.sauce.asset.graphics.TiledTexture;
 import com.sauce.core.engine.DrawComponent;
@@ -22,6 +21,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
+import static com.sauce.core.Project.*;
 
 /**
  * Created by John Crockett.
@@ -45,7 +45,7 @@ public class Main implements InputClient {
 
     private void run() {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
-        System.out.println("Hello RSauce " + Project.ENGINE_VERSION + "!");
+        System.out.println("Hello RSauce " + ENGINE_VERSION + "!");
 
         init();
         loop();
@@ -146,7 +146,7 @@ public class Main implements InputClient {
             ArrayGrid<String> eggyMatrix = new ArrayGrid<>(4, 4);
             createEggyMatrix(eggyMatrix);
 
-            Sprite eggySprite = new Sprite(Project.ASSET_ROOT + "eggy.png",
+            Sprite eggySprite = new Sprite(ASSET_ROOT + "eggy.png",
                     4,
                     4,
                     eggyMatrix,
@@ -163,13 +163,13 @@ public class Main implements InputClient {
         // Setup Background
         Entity background = new Entity();
 
-            TiledTexture bgSprite = new TiledTexture(Project.ASSET_ROOT + "bg.png");
+            TiledTexture bgSprite = new TiledTexture(ASSET_ROOT + "bg.png");
 
             DrawComponent bgComponent = new DrawComponent(bgSprite, 0, 0, 10);
 
             background.addComponent(bgComponent);
 
-        Engine engine = Engine.getEngine(60);
+        Engine engine = Engine.getEngine(FRAME_LIMIT);
 
         engine.add(eggy);
         engine.add(background);
