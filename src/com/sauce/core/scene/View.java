@@ -11,7 +11,6 @@ import com.sauce.core.engine.Engine;
  * @author Jonathan Crockett
  */
 public class View{
-    private static final Engine ENGINE = Engine.getEngine(Project.FRAME_LIMIT);
 
     private int x;
     private int y;

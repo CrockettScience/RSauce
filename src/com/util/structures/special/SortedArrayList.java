@@ -122,12 +122,12 @@ public class SortedArrayList<T> implements Iterable<T> {
 
     public void clear() {
         size = 0;
-        elements = (T[]) new Comparable[ DEFAULT_CAPACITY ];
+        elements = (T[]) new Object[ DEFAULT_CAPACITY ];
     }
 
     public void clear(int size) {
         this.size = size;
-        elements = (T[]) new Comparable[ size ];
+        elements = (T[]) new Object[ size ];
     }
 
     public Iterator<T> iterator() {

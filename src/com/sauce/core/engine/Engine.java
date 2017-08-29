@@ -2,18 +2,16 @@ package com.sauce.core.engine;
 
 import com.sauce.asset.graphics.DrawBatch;
 import com.sauce.asset.graphics.Surface;
+import com.sauce.core.scene.BackgroundAttribute;
+import com.sauce.core.scene.Scene;
 import com.sauce.core.scene.SceneManager;
-import com.sun.org.apache.regexp.internal.RE;
 import com.util.structures.nonsaveable.ArrayList;
 import com.util.structures.nonsaveable.Set;
 import com.util.structures.special.PriorityMap;
 import com.util.structures.special.SortedArrayList;
-import javafx.scene.Scene;
 
 import java.util.Comparator;
 
-import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.glClear;
 
 /**
  * Created by John Crockett.
@@ -95,7 +93,7 @@ public final class Engine {
         entities.clear();
     }
 
-    private Surface backBuffer = new Surface(800, 600);
+    private Surface backBuffer = new Surface(SceneManager.getView().getWidth(), SceneManager.getView().getHeight());
     private int timeSinceLastUpdate;
 
     public void update(int delta){
@@ -104,9 +102,11 @@ public final class Engine {
 
             backBuffer.bind();
 
-            preDraw(delta);
+            preDraw();
 
             draw(delta);
+
+            postDraw();
 
             backBuffer.unbind();
 
@@ -122,15 +122,93 @@ public final class Engine {
         }
     }
 
-    private void preDraw(int delta){
+    private void preDraw(){
+        Scene scene = SceneManager.getCurrentScene();
 
-        render.update(delta);
+        if(scene.containsAttribute(BackgroundAttribute.class)){
+            BackgroundAttribute bg = scene.getAttribute(BackgroundAttribute.class);
+
+            if(bg.background_0 != null)
+                render.batch.add(bg.background_0, 0, 0);
+
+            if(bg.background_1 != null)
+                render.batch.add(bg.background_1, 0, 0);
+
+            if(bg.background_2 != null)
+                render.batch.add(bg.background_2, 0, 0);
+
+            if(bg.background_3 != null)
+                render.batch.add(bg.background_3, 0, 0);
+
+            if(bg.background_4 != null)
+                render.batch.add(bg.background_4, 0, 0);
+
+            if(bg.background_5 != null)
+                render.batch.add(bg.background_5, 0, 0);
+
+            if(bg.background_6 != null)
+                render.batch.add(bg.background_6, 0, 0);
+
+            if(bg.background_7 != null)
+                render.batch.add(bg.background_7, 0, 0);
+
+            if(bg.background_8 != null)
+                render.batch.add(bg.background_8, 0, 0);
+
+            if(bg.background_9 != null)
+                render.batch.add(bg.background_9, 0, 0);
+        }
+
+        render.batch.renderBatch();
     }
 
     private void draw(int delta){
+        render.update(delta);
+
         for (int i = 0; i < draws.size(); i++) {
             draws.next().update(delta);
         }
+    }
+
+    private void postDraw(){
+        Scene scene = SceneManager.getCurrentScene();
+
+        if(scene.containsAttribute(BackgroundAttribute.class)){
+            BackgroundAttribute bg = scene.getAttribute(BackgroundAttribute.class);
+
+            if(bg.foreground_0 != null)
+                render.batch.add(bg.foreground_0, 0, 0);
+
+            if(bg.foreground_1 != null)
+                render.batch.add(bg.foreground_1, 0, 0);
+
+            if(bg.foreground_2 != null)
+                render.batch.add(bg.foreground_2, 0, 0);
+
+            if(bg.foreground_3 != null)
+                render.batch.add(bg.foreground_3, 0, 0);
+
+            if(bg.foreground_4 != null)
+                render.batch.add(bg.foreground_4, 0, 0);
+
+            if(bg.foreground_5 != null)
+                render.batch.add(bg.foreground_5, 0, 0);
+
+            if(bg.foreground_6 != null)
+                render.batch.add(bg.foreground_6, 0, 0);
+
+            if(bg.foreground_7 != null)
+                render.batch.add(bg.foreground_7, 0, 0);
+
+            if(bg.foreground_8 != null)
+                render.batch.add(bg.foreground_8, 0, 0);
+
+            if(bg.foreground_9 != null)
+                render.batch.add(bg.foreground_9, 0, 0);
+        }
+
+
+        render.batch.renderBatch();
     }
 
     private void swapBuffer(){
@@ -194,7 +272,7 @@ public final class Engine {
         @Override
         public void update(int delta) {
             for(Entity ent : entities){
-                DrawComponent draw = (DrawComponent) ent.getComponent(DrawComponent.class);
+                DrawComponent draw = ent.getComponent(DrawComponent.class);
                 draw.getImage().update(delta);
                 batch.add(draw.getImage(), draw.getX(), draw.getY());
             }

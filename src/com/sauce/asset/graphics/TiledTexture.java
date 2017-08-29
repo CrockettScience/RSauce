@@ -1,6 +1,7 @@
 package com.sauce.asset.graphics;
 
 import com.sauce.core.Main;
+import com.sauce.core.scene.SceneManager;
 
 import java.nio.ByteBuffer;
 
@@ -17,13 +18,13 @@ public class TiledTexture extends DrawableAsset {
         tileWidth = image.width();
         tileHeight = image.height();
 
-        super.lateConstructor(Main.WIDTH, Main.HEIGHT, tileWidth, tileHeight);
+        super.lateConstructor(SceneManager.getView().getWidth(), SceneManager.getView().getHeight(), tileWidth, tileHeight);
     }
 
     @Override
     protected float[] regionCoordinates() {
-        float w = Main.WIDTH / tileWidth;
-        float h = Main.HEIGHT / tileHeight;
+        float w = SceneManager.getView().getWidth() / tileWidth;
+        float h = SceneManager.getView().getHeight() / tileHeight;
 
         float[] arr = { 0, 0, w, 0, w, h, 0, h};
         return arr;
@@ -41,4 +42,9 @@ public class TiledTexture extends DrawableAsset {
 
     @Override
     public void update(int delta) {}
+
+    @Override
+    public void dispose() {
+        image.dispose();
+    }
 }

@@ -16,6 +16,7 @@ public class SceneManager{
     public static View getView() {
         return view;
     }
+
     public static void setScene(Scene aScene) {
         if(scene != null){
             scene.destroyResources();

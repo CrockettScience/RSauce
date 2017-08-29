@@ -5,17 +5,8 @@ import com.util.structures.nonsaveable.Map;
 /**
  * Created by John Crockett.
  */
-public class Entity implements Comparable<Entity>{
+public class Entity{
     private Map<Class<? extends Component>, Component> componentMap = new Map<>();
-    private Integer zPos;
-
-    public Entity(int zPosition){
-        zPos = zPosition;
-    }
-
-    public Entity(){
-        zPos = null;
-    }
 
     public boolean addComponent(Component c){
         if(!componentMap.containsKey(c.getClass())) {
@@ -39,8 +30,8 @@ public class Entity implements Comparable<Entity>{
         componentMap.clear();
     }
 
-    public Component getComponent(Class<? extends Component> c){
-        return componentMap.get(c);
+    public <T extends Component>T getComponent(Class<T> c){
+        return (T) componentMap.get(c);
     }
 
     public boolean hasComponent(Class<? extends Component> c){
@@ -67,20 +58,5 @@ public class Entity implements Comparable<Entity>{
 
     protected Map<Class<? extends Component>, Component> getComponentMap(){
         return componentMap;
-    }
-
-    @Override
-    public int compareTo(Entity o) {
-        if(zPos == null){
-            if(o.zPos == null)
-                return 0;
-
-            return 1;
-        }
-
-        if(o.zPos == null)
-            return -1;
-
-        return zPos - o.zPos;
     }
 }

@@ -1,14 +1,10 @@
 package com.sauce.core;
 
-import com.sauce.asset.graphics.Sprite;
-import com.sauce.asset.graphics.TiledTexture;
-import com.sauce.core.engine.DrawComponent;
+import com.demo.scenes.DemoScene;
 import com.sauce.core.engine.Engine;
-import com.sauce.core.engine.Entity;
-import com.sauce.input.InputEvent;
+import com.sauce.core.scene.SceneManager;
+import com.sauce.core.scene.View;
 import com.sauce.input.InputServer;
-import com.sauce.input.InputClient;
-import com.util.structures.nonsaveable.ArrayGrid;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -27,21 +23,18 @@ import static com.sauce.core.Project.*;
  * Created by John Crockett.
  */
 
-public class Main implements InputClient {
+public class Main{
 
     // The window handle
-    private long window;
-    private boolean running = true;
+    private static long window;
+    private static boolean running = true;
 
     // The game loop handle
     public static Main LOOP = new Main();
 
-    // Eggy handles
-    DrawComponent eggyComponent;
-
     // Temporary settings values
-    public static int WIDTH = 800;
-    public static int HEIGHT = 600;
+    private static int WIDTH = 1024;
+    private static int HEIGHT = 768;
 
     private void run() {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
@@ -86,8 +79,6 @@ public class Main implements InputClient {
             InputServer.recieveRawInputEvent(new RawInputEvent(key, scancode, action, mods));
 
         });
-
-        InputServer.bind(this);
 
         // Get the thread stack and push a new frame
         try ( MemoryStack stack = stackPush() ) {
@@ -140,39 +131,12 @@ public class Main implements InputClient {
         glOrtho(0.0, WIDTH, 0.0, HEIGHT, -1.0, 1.0);
         glMatrixMode(GL_MODELVIEW);
 
-        // Setup Eggy
-        Entity eggy = new Entity();
 
-            ArrayGrid<String> eggyMatrix = new ArrayGrid<>(4, 4);
-            createEggyMatrix(eggyMatrix);
-
-            Sprite eggySprite = new Sprite(ASSET_ROOT + "eggy.png",
-                    4,
-                    4,
-                    eggyMatrix,
-                    true,
-                    4);
-
-            eggySprite.setXScale(4f);
-            eggySprite.setYScale(4f);
-
-            eggyComponent = new DrawComponent(eggySprite, WIDTH / 2, HEIGHT / 2, 0);
-            eggy.addComponent(eggyComponent);
-
-
-        // Setup Background
-        Entity background = new Entity();
-
-            TiledTexture bgSprite = new TiledTexture(ASSET_ROOT + "bg.png");
-
-            DrawComponent bgComponent = new DrawComponent(bgSprite, 0, 0, 10);
-
-            background.addComponent(bgComponent);
+        // Set the view, scene, and engine
+        SceneManager.setView(new View(0, 0, WIDTH, HEIGHT, 0, 0));
+        SceneManager.setScene(new DemoScene());
 
         Engine engine = Engine.getEngine(FRAME_LIMIT);
-
-        engine.add(eggy);
-        engine.add(background);
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
@@ -193,74 +157,12 @@ public class Main implements InputClient {
         }
     }
 
-    private void createEggyMatrix(ArrayGrid<String> eggy) {
-        String idle = "idle";
-        String down = "down";
-        String up = "up";
-        String left = "left";
-        String right = "right";
-
-        eggy.set(0, 0, idle);
-        eggy.set(1, 0, down);
-        eggy.set(2, 0, down);
-        eggy.set(3, 0, right);
-
-        eggy.set(0, 1, right);
-        eggy.set(1, 1, left);
-        eggy.set(2, 1, left);
-        eggy.set(3, 1, up);
-
-        eggy.set(0, 2, up);
-    }
-
-    public void quitAtEndOfCycle(){
+    public static void quitAtEndOfCycle(){
         running = false;
     }
 
     public static void main(String[] args) {
         LOOP.run();
-    }
-
-    @Override
-    public void receivedInputEvent(InputEvent event) {
-        switch (event.key()){
-            case GLFW_KEY_ESCAPE:
-                if(event.action() == GLFW_RELEASE)
-                    glfwSetWindowShouldClose(window, true);
-                break;
-
-            case GLFW_KEY_W:
-                if(event.action() == GLFW_REPEAT) {
-                    eggyComponent.setY(eggyComponent.getY() + 2);
-                    ((Sprite) eggyComponent.getImage()).setAnimationState("up");
-                } else
-                    ((Sprite) eggyComponent.getImage()).setAnimationState("idle");
-                break;
-
-            case GLFW_KEY_S:
-                if(event.action() == GLFW_REPEAT) {
-                    eggyComponent.setY(eggyComponent.getY() - 2);
-                    ((Sprite) eggyComponent.getImage()).setAnimationState("down");
-                } else
-                    ((Sprite) eggyComponent.getImage()).setAnimationState("idle");
-                break;
-
-            case GLFW_KEY_A:
-                if(event.action() == GLFW_REPEAT) {
-                    eggyComponent.setX(eggyComponent.getX() - 2);
-                    ((Sprite) eggyComponent.getImage()).setAnimationState("left");
-                } else
-                    ((Sprite) eggyComponent.getImage()).setAnimationState("idle");
-                break;
-
-            case GLFW_KEY_D:
-                if(event.action() == GLFW_REPEAT) {
-                    eggyComponent.setX(eggyComponent.getX() + 2);
-                    ((Sprite) eggyComponent.getImage()).setAnimationState("right");
-                } else
-                    ((Sprite) eggyComponent.getImage()).setAnimationState("idle");
-                break;
-        }
     }
 
     public static class RawInputEvent{

@@ -83,6 +83,11 @@ public class Sprite extends DrawableAsset{
 
     }
 
+    @Override
+    public void dispose() {
+        source.dispose();
+    }
+
     public void setAnimationState(String state){
         if(!state.equals(animStateID)){
             animationState = idMap.get(state);

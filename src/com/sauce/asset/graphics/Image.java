@@ -21,6 +21,7 @@ public class Image extends DrawableAsset {
     // Properties
     private ByteBuffer image;
     private int components;
+    private int texID = glGenTextures();
 
     public Image(String imagePath){
         ByteBuffer buffer;
@@ -79,7 +80,6 @@ public class Image extends DrawableAsset {
 
     @Override
     protected int textureID() {
-        int texID = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, texID);
 
         if (components() == 3) {
@@ -98,5 +98,10 @@ public class Image extends DrawableAsset {
     @Override
     public void update(int delta) {
 
+    }
+
+    @Override
+    public void dispose() {
+        glDeleteTextures(texID);
     }
 }

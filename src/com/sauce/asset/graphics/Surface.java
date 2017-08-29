@@ -41,6 +41,11 @@ public class Surface extends DrawableAsset {
         glPopAttrib();
     }
 
+    public void dispose(){
+        glDeleteFramebuffersEXT(fboHandle);
+        glDeleteTextures(texID);
+    }
+
     @Override
     protected float[] regionCoordinates() {
         float[] arr = {0f, 0f, 1f, 0f, 1f, -1f, 0f, -1f};

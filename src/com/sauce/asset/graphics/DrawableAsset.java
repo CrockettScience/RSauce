@@ -99,4 +99,6 @@ public abstract class DrawableAsset {
     protected abstract int textureID();
 
     public abstract void update(int delta);
+
+    public abstract void dispose();
 }
