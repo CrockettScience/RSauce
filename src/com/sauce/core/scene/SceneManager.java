@@ -18,9 +18,8 @@ public class SceneManager{
     }
 
     public static void setScene(Scene aScene) {
-        if(scene != null){
+        if(scene != null)
             scene.destroyResources();
-        }
         
         scene = aScene;
         scene.loadResources();

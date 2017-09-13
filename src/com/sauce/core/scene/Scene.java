@@ -68,6 +68,8 @@ public abstract class Scene{
 
     public boolean removeEntity(String key){
         if(entities.containsKey(key)){
+            ENGINE.removeEntity(entities.get(key));
+            entities.get(key).dispose();
             entities.remove(key);
             isInEngine.remove(key);
             return true;
@@ -97,6 +99,11 @@ public abstract class Scene{
     }
     
     public void removeEntities(){
+        for(Entity ent : entities.valueSet()) {
+            ent.dispose();
+            ENGINE.removeEntity(ent);
+        }
+
         entities.clear();
         isInEngine.clear();
     }

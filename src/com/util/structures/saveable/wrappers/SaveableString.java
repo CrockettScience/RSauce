@@ -1,5 +1,6 @@
 package com.util.structures.saveable.wrappers;
 
+import com.util.RSauceLogger;
 import com.util.structures.saveable.util.SaveableData;
 
 import java.util.Arrays;
@@ -19,7 +20,7 @@ public class SaveableString implements SaveableData {
 
     public byte[] saveState() {
         if (string.length() >= TOTAL_BYTES) {
-            System.out.println("\u001B[31mWARNING: String may have been truncated upon saving to file.");
+            RSauceLogger.printWarningln("String may have been truncated upon saving to file");
         }
 
         return Arrays.copyOf(string.getBytes(), TOTAL_BYTES);

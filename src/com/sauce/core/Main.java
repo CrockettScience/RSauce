@@ -5,6 +5,8 @@ import com.sauce.core.engine.Engine;
 import com.sauce.core.scene.SceneManager;
 import com.sauce.core.scene.View;
 import com.sauce.input.InputServer;
+import com.util.Vector2D;
+import com.util.Vector2DDouble;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -26,19 +28,19 @@ import static com.sauce.core.Project.*;
 public class Main{
 
     // The window handle
-    private static long window;
+    public static long window;
     private static boolean running = true;
 
     // The game loop handle
     public static Main LOOP = new Main();
 
     // Temporary settings values
-    private static int WIDTH = 1024;
-    private static int HEIGHT = 768;
+    private static int WIDTH = 4096;
+    private static int HEIGHT = 2160;
 
     private void run() {
-        System.out.println("Hello LWJGL " + Version.getVersion() + "!");
-        System.out.println("Hello RSauce " + ENGINE_VERSION + "!");
+        System.out.println("LWJGL " + Version.getVersion() + "!");
+        System.out.println("RSauce " + ENGINE_VERSION + "!");
 
         init();
         loop();
@@ -73,12 +75,9 @@ public class Main{
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
 
-        // Setup a key callback. Forward raw input data to InputServer to be
+        // Setup callbacks. Forward raw input data to InputServer to be
         // processed and sent to InputClients.
-        glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-            InputServer.recieveRawInputEvent(new RawInputEvent(key, scancode, action, mods));
-
-        });
+        setInputCallbacks();
 
         // Get the thread stack and push a new frame
         try ( MemoryStack stack = stackPush() ) {
@@ -150,7 +149,6 @@ public class Main{
 
             engine.update(delta);
 
-            glfwSwapBuffers(window);
             glfwPollEvents();
 
             last = current;
@@ -165,18 +163,54 @@ public class Main{
         LOOP.run();
     }
 
+    private void setInputCallbacks(){
+        glfwSetKeyCallback(window, (window, key, scanCode, action, mods) -> {
+            InputServer.recieveRawInputEvent(new RawInputEvent(RawInputEvent.EVENT_TYPE_KEY, key, action, mods, null));
+        });
+
+        glfwSetCharCallback(window, (window, character) -> {
+            InputServer.recieveRawInputEvent(new RawInputEvent(RawInputEvent.EVENT_TYPE_TEXT, character,-1,-1, null));
+        });
+
+        glfwSetMouseButtonCallback(window, (window, button, action, mods) -> {
+            InputServer.recieveRawInputEvent(new RawInputEvent(RawInputEvent.EVENT_TYPE_MOUSE_BUTTON, button, action, mods, null));
+        });
+
+        glfwSetScrollCallback(window, (window, x, y) -> {
+            InputServer.recieveRawInputEvent(new RawInputEvent(RawInputEvent.EVENT_TYPE_MOUSE_SCROLL, -1, -1, -1, new Vector2DDouble(x, y)));
+        });
+
+        glfwSetCursorPosCallback(window, (window, x, y) -> {
+            InputServer.recieveRawInputEvent(new RawInputEvent(RawInputEvent.EVENT_TYPE_MOUSE_MOVE, -1, -1, -1, new Vector2DDouble(x, y)));
+        });
+
+        glfwSetJoystickCallback((joyId, event) -> {
+            InputServer.recieveRawInputEvent(new RawInputEvent(RawInputEvent.EVENT_TYPE_JOYSTICK_CONNECT, joyId, event, -1, null));
+
+        });
+    }
+
     public static class RawInputEvent{
 
+        public static final int EVENT_TYPE_KEY = 0;
+        public static final int EVENT_TYPE_TEXT = 1;
+        public static final int EVENT_TYPE_MOUSE_BUTTON = 2;
+        public static final int EVENT_TYPE_MOUSE_SCROLL = 3;
+        public static final int EVENT_TYPE_MOUSE_MOVE = 4;
+        public static final int EVENT_TYPE_JOYSTICK_CONNECT = 5;
+
         int key;
-        int scancode;
         int action;
         int mods;
+        int type;
+        Vector2DDouble coords;
 
-        private RawInputEvent(int key, int scancode, int action, int mods){
+        private RawInputEvent(int type, int key, int action, int mods, Vector2DDouble coordinates){
+            this.type = type;
             this.key = key;
-            this.scancode = scancode;
             this.action = action;
             this.mods = mods;
+            coords = coordinates;
         }
 
         public int key(){
@@ -185,6 +219,18 @@ public class Main{
 
         public int action(){
             return action;
+        }
+
+        public int mods(){
+            return mods;
+        }
+
+        public int type(){
+            return type;
+        }
+
+        public Vector2DDouble coordinates(){
+            return coords;
         }
     }
 

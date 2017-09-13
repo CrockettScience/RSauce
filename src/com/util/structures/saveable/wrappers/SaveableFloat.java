@@ -4,39 +4,38 @@ import com.util.structures.saveable.util.SaveableData;
 
 import java.nio.ByteBuffer;
 
-/**
- * Created by John Crockett.
- */
-public class SaveableDouble implements SaveableData{
+public class SaveableFloat implements SaveableData {
 
-    private double val;
+    private float val;
 
-    public SaveableDouble(double value){
+    public SaveableFloat(float value){
         val = value;
     }
 
     @Override
     public byte[] saveState() {
-        byte[] bytes = new byte[8];
-        ByteBuffer.wrap(bytes).putDouble(val);
+        byte[] bytes = new byte[4];
+        ByteBuffer.wrap(bytes).putFloat(val);
         return bytes;
+
     }
 
     @Override
     public void loadState(byte[] bytes) {
-        val = ByteBuffer.wrap(bytes).getDouble();
+        val = ByteBuffer.wrap(bytes).getFloat();
+
     }
 
     @Override
     public int byteSize() {
-        return 8;
+        return 4;
     }
 
-    public double getValue() {
+    public float getValue() {
         return val;
     }
 
-    public void setValue(double value) {
+    public void setValue(float value) {
         val = value;
     }
 }

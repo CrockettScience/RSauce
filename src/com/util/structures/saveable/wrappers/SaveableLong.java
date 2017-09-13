@@ -4,27 +4,23 @@ import com.util.structures.saveable.util.SaveableData;
 
 import java.nio.ByteBuffer;
 
-/**
- * Created by John Crockett.
- */
-public class SaveableDouble implements SaveableData{
+public class SaveableLong implements SaveableData {
 
-    private double val;
+    private long val;
 
-    public SaveableDouble(double value){
+    public SaveableLong(long value) {
         val = value;
     }
-
     @Override
     public byte[] saveState() {
         byte[] bytes = new byte[8];
-        ByteBuffer.wrap(bytes).putDouble(val);
+        ByteBuffer.wrap(bytes).putLong(val);
         return bytes;
     }
 
     @Override
     public void loadState(byte[] bytes) {
-        val = ByteBuffer.wrap(bytes).getDouble();
+
     }
 
     @Override
@@ -32,11 +28,11 @@ public class SaveableDouble implements SaveableData{
         return 8;
     }
 
-    public double getValue() {
+    public long getValue() {
         return val;
     }
 
-    public void setValue(double value) {
+    public void setValue(long value) {
         val = value;
     }
 }

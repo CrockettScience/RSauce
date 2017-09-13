@@ -59,4 +59,6 @@ public class Entity{
     protected Map<Class<? extends Component>, Component> getComponentMap(){
         return componentMap;
     }
+
+    public void dispose(){}
 }

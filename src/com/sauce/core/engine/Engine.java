@@ -2,6 +2,7 @@ package com.sauce.core.engine;
 
 import com.sauce.asset.graphics.DrawBatch;
 import com.sauce.asset.graphics.Surface;
+import com.sauce.core.Main;
 import com.sauce.core.scene.BackgroundAttribute;
 import com.sauce.core.scene.Scene;
 import com.sauce.core.scene.SceneManager;
@@ -11,6 +12,8 @@ import com.util.structures.special.PriorityMap;
 import com.util.structures.special.SortedArrayList;
 
 import java.util.Comparator;
+
+import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
 
 
 /**
@@ -97,20 +100,20 @@ public final class Engine {
     private int timeSinceLastUpdate;
 
     public void update(int delta){
+
+        step(delta);
+
         if (timeSinceLastUpdate >= fpms) {
-            step(delta);
 
             backBuffer.bind();
-
             preDraw();
-
             draw(delta);
-
             postDraw();
-
             backBuffer.unbind();
 
             swapBuffer();
+
+            timeSinceLastUpdate -= fpms;
         } else {
             timeSinceLastUpdate += delta;
         }
@@ -214,6 +217,8 @@ public final class Engine {
     private void swapBuffer(){
         render.batch.add(backBuffer, 0, 0);
         render.batch.renderBatch();
+
+        glfwSwapBuffers(Main.LOOP.window);
     }
 
     private EntitySet onlyEntitiesWithComponent(Class<? extends Component> c){
