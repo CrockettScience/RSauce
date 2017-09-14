@@ -4,6 +4,7 @@ package com.sauce.core.scene;
 import com.sauce.core.Project;
 import com.sauce.core.engine.Engine;
 import com.sauce.core.engine.Entity;
+import com.util.RSauceLogger;
 import com.util.structures.nonsaveable.Map;
 
 /**
@@ -50,7 +51,7 @@ public abstract class Scene{
             }
             return true;
         }
-        System.out.println("Scene: Cannot activate entity; entity '" + key + "' could not be found");
+        RSauceLogger.printWarningln("Cannot activate entity; entity '" + key + "' could not be found");
         return false;
     }
     
@@ -62,7 +63,7 @@ public abstract class Scene{
             }
             return true;
         }
-        System.out.println("Scene: Cannot disable entity; entity '" + key + "' could not be found");
+        RSauceLogger.printWarningln("Cannot disable entity; entity '" + key + "' could not be found");
         return false;
     }
 
@@ -74,7 +75,7 @@ public abstract class Scene{
             isInEngine.remove(key);
             return true;
         }
-        System.out.println("Scene: Cannot remove entity; entity '" + key + "' could not be found");
+        RSauceLogger.printWarningln("Cannot remove entity; entity '" + key + "' could not be found");
         return false;
     }
     
@@ -82,7 +83,7 @@ public abstract class Scene{
         Entity ent = entities.get(key);
         
         if(ent == null) {
-            System.out.println("Scene: Cannot get entity; entity '" + key + "' could not be found");
+            RSauceLogger.printWarningln("Cannot get entity; entity '" + key + "' could not be found");
             ent = new Entity();
         }
         

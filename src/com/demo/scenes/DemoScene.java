@@ -53,10 +53,40 @@ public class DemoScene extends Scene implements InputClient {
     }
 
     @Override
-    public void receivedInputEvent(InputEvent event) {
+    public void receivedKeyEvent(InputEvent event) {
         if(event.key() == GLFW_KEY_ESCAPE){
             if(event.action() == GLFW_RELEASE)
                 Main.quitAtEndOfCycle();
         }
+    }
+
+    @Override
+    public void receivedTextEvent(char character) {
+
+    }
+
+    @Override
+    public void receivedMouseButtonEvent(InputEvent event) {
+
+    }
+
+    @Override
+    public void mouseScrolled(double x, double y) {
+
+    }
+
+    @Override
+    public void cursorPosChanged(double x, double y) {
+
+    }
+
+    @Override
+    public void joystickConnected(int joyID) {
+
+    }
+
+    @Override
+    public void joystickDisconnected(int joyID) {
+
     }
 }

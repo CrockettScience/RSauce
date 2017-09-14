@@ -1,19 +1,16 @@
 package com.demo.entities;
 
+import com.demo.systems.EggyControl;
 import com.sauce.asset.graphics.Sprite;
 import com.sauce.core.engine.DrawComponent;
+import com.sauce.core.engine.Engine;
 import com.sauce.core.engine.Entity;
 import com.sauce.core.scene.SceneManager;
-import com.sauce.input.InputClient;
-import com.sauce.input.InputEvent;
 import com.util.structures.nonsaveable.ArrayGrid;
 
 import static com.sauce.core.Project.ASSET_ROOT;
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
-import static org.lwjgl.glfw.GLFW.GLFW_REPEAT;
 
-public class Eggy extends Entity implements InputClient {
+public class Eggy extends Entity{
 
     DrawComponent eggyComponent;
 
@@ -33,6 +30,8 @@ public class Eggy extends Entity implements InputClient {
 
         eggyComponent = new DrawComponent(eggySprite, SceneManager.getView().getWidth() / 2, SceneManager.getView().getHeight() / 2, 0);
         addComponent(eggyComponent);
+
+        Engine.getEngine(60).add(new EggyControl(0, eggyComponent));
     }
 
     private void createEggyMatrix(ArrayGrid<String> eggy) {
@@ -55,40 +54,6 @@ public class Eggy extends Entity implements InputClient {
         eggy.set(0, 2, up);
     }
 
-    @Override
-    public void receivedInputEvent(InputEvent event) {
-        if(event.key() == GLFW_KEY_W){
-            if(event.action() == GLFW_REPEAT) {
-                eggyComponent.setY(eggyComponent.getY() + 8);
-                ((Sprite) eggyComponent.getImage()).setAnimationState("up");
-            } else
-                ((Sprite) eggyComponent.getImage()).setAnimationState("idle");
-        }
-
-        if(event.key() == GLFW_KEY_S) {
-            if (event.action() == GLFW_REPEAT) {
-                eggyComponent.setY(eggyComponent.getY() - 8);
-                ((Sprite) eggyComponent.getImage()).setAnimationState("down");
-            } else
-                ((Sprite) eggyComponent.getImage()).setAnimationState("idle");
-        }
-
-        if(event.key() == GLFW_KEY_A) {
-            if (event.action() == GLFW_REPEAT) {
-                eggyComponent.setX(eggyComponent.getX() - 8);
-                ((Sprite) eggyComponent.getImage()).setAnimationState("left");
-            } else
-                ((Sprite) eggyComponent.getImage()).setAnimationState("idle");
-        }
-
-        if(event.key() == GLFW_KEY_D) {
-            if (event.action() == GLFW_REPEAT) {
-                eggyComponent.setX(eggyComponent.getX() + 8);
-                ((Sprite) eggyComponent.getImage()).setAnimationState("right");
-            } else
-                ((Sprite) eggyComponent.getImage()).setAnimationState("idle");
-        }
-    }
 
     @Override
     public void dispose(){

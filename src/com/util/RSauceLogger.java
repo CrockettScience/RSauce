@@ -24,10 +24,10 @@ public class RSauceLogger {
     }
 
     public static void printError(Object o){
-        System.out.print(ANSI_RED + "WARNING: " + o);
+        System.out.print(ANSI_RED + "ERROR: " + o);
     }
 
     public static void printErrorln(Object o){
-        System.out.println(ANSI_RED + "WARNING: " + o);
+        System.out.println(ANSI_RED + "ERROR: " + o);
     }
 }

@@ -5,5 +5,12 @@ package com.sauce.input;
  */
 public interface InputClient {
 
-    void receivedInputEvent(InputEvent event);
+    void receivedKeyEvent(InputEvent event);
+    void receivedTextEvent(char character);
+    void receivedMouseButtonEvent(InputEvent event);
+    void mouseScrolled(double x, double y);
+    void cursorPosChanged(double x, double y);
+    void joystickConnected(int joyID);
+    void joystickDisconnected(int joyID);
+
 }
