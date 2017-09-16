@@ -25,6 +25,10 @@ class EntitySet implements Iterable<Entity>{
         return entities.add(new EntityEntry(e));
     }
 
+    public boolean contains(Entity e){
+        return entities.contains(e);
+    }
+
     public EntitySet onlyEntitiesWithComponent(Class<? extends Component> c) {
         EntitySet ents = new EntitySet();
 

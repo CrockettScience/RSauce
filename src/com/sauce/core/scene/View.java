@@ -5,6 +5,7 @@ import com.sauce.core.Project;
 import com.sauce.core.engine.DrawComponent;
 import com.sauce.core.engine.Entity;
 import com.sauce.core.engine.Engine;
+import com.util.RSauceLogger;
 
 /**
  *
@@ -35,37 +36,25 @@ public class View{
         height = newHeight;
     }
 
-    /**
-     * @return the x
-     */
     public int getX() {
         return x;
     }
 
-    /**
-     * @return the y
-     */
     public int getY() {
         return y;
     }
 
-    /**
-     * @return the width
-     */
     public int getWidth() {
         return width;
     }
 
-    /**
-     * @return the height
-     */
     public int getHeight() {
         return height;
     }
 
     public void followEntity(Entity ent) {
         if (ent.getComponent(DrawComponent.class) == null) {
-            System.out.println("WARNING: The view attempted to follow an entity that does not have a position");
+            RSauceLogger.printWarningln("The view attempted to follow an entity that does not have a position");
         } else {
             entityFollowing = ent;
         }
@@ -75,11 +64,6 @@ public class View{
         return entityFollowing;
     }
 
-    /**
-     *
-     * @param xBuff
-     * @param yBuff
-     */
     public void setBufferZone(int xBuff, int yBuff) {
         xBufferZone = xBuff;
         yBufferZone = yBuff;
@@ -93,16 +77,10 @@ public class View{
         return yBufferZone;
     }
 
-    /**
-     * @param x the x to set
-     */
     public void setX(int x) {
         this.x = x;
     }
 
-    /**
-     * @param y the y to set
-     */
     public void setY(int y) {
         this.y = y;
     }

@@ -24,6 +24,8 @@ public class Surface extends DrawableAsset {
 
         glBindTexture(GL_TEXTURE_2D, texID);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_INT, (java.nio.ByteBuffer) null);
+
+        setStaticMode(true);
     }
 
     public void bind(){

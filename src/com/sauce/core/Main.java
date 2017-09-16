@@ -131,7 +131,7 @@ public class Main{
         SceneManager.setView(new View(0, 0, WIDTH, HEIGHT, 0, 0));
         SceneManager.setScene(new DemoScene());
 
-        Engine engine = Engine.getEngine(FRAME_LIMIT);
+        Engine engine = Engine.getEngine();
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.

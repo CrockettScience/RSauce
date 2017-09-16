@@ -9,12 +9,15 @@ import com.sauce.core.scene.SceneManager;
 import com.util.structures.nonsaveable.ArrayGrid;
 
 import static com.sauce.core.Project.ASSET_ROOT;
+import static com.sauce.core.Project.ENGINE_VERSION;
 
 public class Eggy extends Entity{
 
-    DrawComponent eggyComponent;
 
-    public Eggy(){
+    private static EggyControl controller;
+    private DrawComponent eggyComponent;
+
+    public Eggy(float xScale, float yScale, int x, int y, int z){
         ArrayGrid<String> eggyMatrix = new ArrayGrid<>(4, 4);
         createEggyMatrix(eggyMatrix);
 
@@ -25,13 +28,20 @@ public class Eggy extends Entity{
                 true,
                 8);
 
-        eggySprite.setXScale(16f);
-        eggySprite.setYScale(16f);
+        eggySprite.setXScale(xScale);
+        eggySprite.setYScale(yScale);
 
-        eggyComponent = new DrawComponent(eggySprite, SceneManager.getView().getWidth() / 2, SceneManager.getView().getHeight() / 2, 0);
+        eggyComponent = new DrawComponent(eggySprite, x, y, z);
         addComponent(eggyComponent);
 
-        Engine.getEngine(60).add(new EggyControl(0, eggyComponent));
+        if(controller == null){
+            controller = new EggyControl(0,this,  eggyComponent);
+            Engine.getEngine().add(controller);
+        }
+        else{
+            controller.addEggy(this, eggyComponent);
+        }
+
     }
 
     private void createEggyMatrix(ArrayGrid<String> eggy) {
@@ -58,5 +68,9 @@ public class Eggy extends Entity{
     @Override
     public void dispose(){
         eggyComponent.getImage().dispose();
+        if(controller.removeEggy(this)){
+            Engine.getEngine().removeStepSystem(EggyControl.class);
+            controller = null;
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.sauce.input;
 
 import com.sauce.core.Main;
+import com.util.Vector2DDouble;
 import com.util.structures.nonsaveable.ArrayList;
 import com.util.structures.special.RecyclePool;
 
@@ -114,6 +115,14 @@ public class InputServer {
 
     public static boolean isButtonReleased(int button){
         return glfwGetMouseButton(Main.window, button) == GLFW_RELEASE;
+    }
+
+    public static Vector2DDouble mousePosition(){
+        double[] x = new double[1];
+        double[] y = new double[1];
+
+        glfwGetCursorPos(Main.window, x, y);
+        return new Vector2DDouble(x[0], y[0]);
     }
 
     public static final int MOUSE_LEFT = GLFW_MOUSE_BUTTON_LEFT;

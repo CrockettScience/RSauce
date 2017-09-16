@@ -1,6 +1,7 @@
 package com.sauce.asset.graphics;
 
 import com.sauce.core.Project;
+import com.sauce.core.scene.SceneManager;
 import com.util.structures.nonsaveable.Queue;
 import com.util.Vector2D;
 
@@ -50,6 +51,11 @@ public class DrawBatch {
             glRotatef(image.getAngle(), 0, 0, 1);
             glScalef(image.getXScale(), -image.getYScale(), 1f);
             glTranslatef(-coord.getX() - image.halfwidth(), -coord.getY() - image.halfHeight(), 0);
+
+            if(!image.isStatic()) {
+                glTranslatef(-SceneManager.getView().getX() / image.getXScale(), -SceneManager.getView().getY() / image.getYScale(), 0);
+
+            }
 
             renderImage(image, coord);
 

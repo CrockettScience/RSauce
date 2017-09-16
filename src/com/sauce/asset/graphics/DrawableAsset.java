@@ -15,6 +15,7 @@ public abstract class DrawableAsset {
     private float angle = 0.0f;
     private float xScale = 1.0f;
     private float yScale = 1.0f;
+    private boolean staticMode = false;
 
     // Precomputed Values
     private int halfWidth;
@@ -33,7 +34,7 @@ public abstract class DrawableAsset {
 
     public DrawableAsset(){}
 
-    protected void lateConstructor(int width, int height, int absWidth, int absHeight){
+    protected final void resize(int width, int height, int absWidth, int absHeight){
         w = width;
         h = height;
 
@@ -97,6 +98,14 @@ public abstract class DrawableAsset {
     protected abstract int components();
 
     protected abstract int textureID();
+
+    protected void setStaticMode(boolean mode){
+        staticMode = mode;
+    }
+
+    protected boolean isStatic(){
+        return staticMode;
+    }
 
     public abstract void update(int delta);
 

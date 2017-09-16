@@ -1,9 +1,6 @@
 package com.sauce.asset.graphics;
 
-import com.sauce.core.Main;
 import com.sauce.core.scene.SceneManager;
-
-import java.nio.ByteBuffer;
 
 /**
  * Created by John Crockett.
@@ -12,22 +9,33 @@ public class TiledTexture extends DrawableAsset {
     private Image image;
     private final int tileWidth;
     private final int tileHeight;
+    private int textureWidth;
+    private int textureHeight;
 
-    public TiledTexture(String fileSource){
+    public TiledTexture(String fileSource, int width, int height){
         image = new Image(fileSource);
         tileWidth = image.width();
         tileHeight = image.height();
+        textureWidth = width;
+        textureHeight = height;
 
-        super.lateConstructor(SceneManager.getView().getWidth(), SceneManager.getView().getHeight(), tileWidth, tileHeight);
+        resize(width, height, tileWidth, tileHeight);
     }
 
     @Override
     protected float[] regionCoordinates() {
-        float w = SceneManager.getView().getWidth() / tileWidth;
-        float h = SceneManager.getView().getHeight() / tileHeight;
+        float w = (float)textureWidth / (float)tileWidth;
+        float h = (float)textureHeight / (float)tileHeight;
 
         float[] arr = { 0, 0, w, 0, w, h, 0, h};
         return arr;
+    }
+
+    public void resize(int width, int height){
+        textureWidth = width;
+        textureHeight = height;
+
+        resize(width, height, tileWidth, tileHeight);
     }
 
     @Override

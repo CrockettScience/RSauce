@@ -12,7 +12,7 @@ import com.util.structures.nonsaveable.Map;
  * @author Jonathan Crockett
  */
 public abstract class Scene{
-    private static final Engine ENGINE = Engine.getEngine(Project.FRAME_LIMIT);
+    private static final Engine ENGINE = Engine.getEngine();
 
     private final Map<Class<? extends Attribute>, Attribute> attributes = new Map<>();
     private Map<String, Entity> entities = new Map<>();

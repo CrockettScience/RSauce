@@ -5,8 +5,6 @@ import com.util.structures.nonsaveable.ArrayList;
 import com.util.structures.nonsaveable.Map;
 import com.util.Vector2D;
 
-import java.nio.ByteBuffer;
-
 /**
  * Created by John Crockett.
  */
@@ -58,7 +56,7 @@ public class Sprite extends DrawableAsset{
 
         fpms = 1000 / fps;
 
-        super.lateConstructor(source.width() / cellsInRow, source.height() / cellsInColumn, source.width(), source.height());
+        resize(source.width() / cellsInRow, source.height() / cellsInColumn, source.width(), source.height());
     }
 
     private int timeSinceLastUpdate;

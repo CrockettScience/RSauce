@@ -45,7 +45,7 @@ public class Image extends DrawableAsset {
             throw new RuntimeException("Failed to load image: " + stbi_failure_reason());
         }
 
-        super.lateConstructor(w.get(0), h.get(0), w.get(0), h.get(0));
+        resize(w.get(0), h.get(0), w.get(0), h.get(0));
         components = c.get(0);
 
     }

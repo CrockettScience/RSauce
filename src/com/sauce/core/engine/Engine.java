@@ -3,6 +3,7 @@ package com.sauce.core.engine;
 import com.sauce.asset.graphics.DrawBatch;
 import com.sauce.asset.graphics.Surface;
 import com.sauce.core.Main;
+import com.sauce.core.Project;
 import com.sauce.core.scene.BackgroundAttribute;
 import com.sauce.core.scene.Scene;
 import com.sauce.core.scene.SceneManager;
@@ -29,14 +30,14 @@ public final class Engine {
     private Integer fpms;
     private RenderSystem render = new RenderSystem(0);
 
-    private Engine(int maxUpdatesPerSecond) {
-        fpms = 1000 / maxUpdatesPerSecond;
+    private Engine() {
+        fpms = 1000 / Project.FRAME_LIMIT;
         render.addedToEngine(this);
     }
 
-    public static Engine getEngine(int maxUpdatesPerSecond){
+    public static Engine getEngine(){
         if(singletonEngine == null)
-            singletonEngine = new Engine(maxUpdatesPerSecond);
+            singletonEngine = new Engine();
 
         return singletonEngine;
     }
@@ -69,18 +70,30 @@ public final class Engine {
         }
     }
 
-    public StepSystem removeStepSystem(Class<? extends StepSystem> sys){
+    public boolean containsStepSystem(Class<? extends StepSystem> sys){
+        return steps.containsKey(sys);
+    }
+
+    public boolean containsDrawSystem(Class<? extends DrawSystem> sys){
+        return draws.containsKey(sys);
+    }
+
+    public boolean containsEntity(Entity ent){
+        return entities.contains(ent);
+    }
+
+    public <T extends StepSystem> T removeStepSystem(Class<T> sys){
         StepSystem ret = steps.get(sys);
         steps.remove(sys);
         ret.removedFromEngine(this);
-        return ret;
+        return (T) ret;
     }
 
-    public DrawSystem removeDrawSystem(Class<? extends DrawSystem> sys){
+    public <T extends DrawSystem> T removeDrawSystem(Class<T> sys){
         DrawSystem ret = draws.get(sys);
         draws.remove(sys);
         ret.removedFromEngine(this);
-        return ret;
+        return (T) ret;
     }
 
     public void removeEntity(Entity ent){
@@ -106,9 +119,9 @@ public final class Engine {
         if (timeSinceLastUpdate >= fpms) {
 
             backBuffer.bind();
-            preDraw();
+            preDraw(delta);
             draw(delta);
-            postDraw();
+            postDraw(delta);
             backBuffer.unbind();
 
             swapBuffer();
@@ -125,41 +138,61 @@ public final class Engine {
         }
     }
 
-    private void preDraw(){
+    private void preDraw(int delta){
         Scene scene = SceneManager.getCurrentScene();
 
         if(scene.containsAttribute(BackgroundAttribute.class)){
             BackgroundAttribute bg = scene.getAttribute(BackgroundAttribute.class);
 
-            if(bg.background_0 != null)
+            if(bg.background_0 != null){
+                bg.background_0.update(delta);
                 render.batch.add(bg.background_0, 0, 0);
+            }
 
-            if(bg.background_1 != null)
+            if(bg.background_1 != null){
+                bg.background_1.update(delta);
                 render.batch.add(bg.background_1, 0, 0);
+            }
 
-            if(bg.background_2 != null)
+            if(bg.background_2 != null){
+                bg.background_2.update(delta);
                 render.batch.add(bg.background_2, 0, 0);
+            }
 
-            if(bg.background_3 != null)
+            if(bg.background_3 != null){
+                bg.background_3.update(delta);
                 render.batch.add(bg.background_3, 0, 0);
+            }
 
-            if(bg.background_4 != null)
+            if(bg.background_4 != null){
+                bg.background_4.update(delta);
                 render.batch.add(bg.background_4, 0, 0);
+            }
 
-            if(bg.background_5 != null)
+            if(bg.background_5 != null){
+                bg.background_5.update(delta);
                 render.batch.add(bg.background_5, 0, 0);
+            }
 
-            if(bg.background_6 != null)
+            if(bg.background_6 != null){
+                bg.background_6.update(delta);
                 render.batch.add(bg.background_6, 0, 0);
+            }
 
-            if(bg.background_7 != null)
+            if(bg.background_7 != null){
+                bg.background_7.update(delta);
                 render.batch.add(bg.background_7, 0, 0);
+            }
 
-            if(bg.background_8 != null)
+            if(bg.background_8 != null){
+                bg.background_8.update(delta);
                 render.batch.add(bg.background_8, 0, 0);
+            }
 
-            if(bg.background_9 != null)
+            if(bg.background_9 != null){
+                bg.background_9.update(delta);
                 render.batch.add(bg.background_9, 0, 0);
+            }
         }
 
         render.batch.renderBatch();
@@ -173,43 +206,62 @@ public final class Engine {
         }
     }
 
-    private void postDraw(){
+    private void postDraw(int delta){
         Scene scene = SceneManager.getCurrentScene();
 
-        if(scene.containsAttribute(BackgroundAttribute.class)){
+        if(scene.containsAttribute(BackgroundAttribute.class)) {
             BackgroundAttribute bg = scene.getAttribute(BackgroundAttribute.class);
 
-            if(bg.foreground_0 != null)
+            if (bg.foreground_0 != null) {
+                bg.foreground_0.update(delta);
                 render.batch.add(bg.foreground_0, 0, 0);
+            }
 
-            if(bg.foreground_1 != null)
+            if (bg.foreground_1 != null) {
+                bg.foreground_1.update(delta);
                 render.batch.add(bg.foreground_1, 0, 0);
+            }
 
-            if(bg.foreground_2 != null)
+            if (bg.foreground_2 != null) {
+                bg.foreground_2.update(delta);
                 render.batch.add(bg.foreground_2, 0, 0);
+            }
 
-            if(bg.foreground_3 != null)
+            if (bg.foreground_3 != null) {
+                bg.foreground_3.update(delta);
                 render.batch.add(bg.foreground_3, 0, 0);
+            }
 
-            if(bg.foreground_4 != null)
+            if (bg.foreground_4 != null) {
+                bg.foreground_4.update(delta);
                 render.batch.add(bg.foreground_4, 0, 0);
+            }
 
-            if(bg.foreground_5 != null)
+            if (bg.foreground_5 != null) {
+                bg.foreground_5.update(delta);
                 render.batch.add(bg.foreground_5, 0, 0);
+            }
 
-            if(bg.foreground_6 != null)
+            if (bg.foreground_6 != null) {
+                bg.foreground_6.update(delta);
                 render.batch.add(bg.foreground_6, 0, 0);
+            }
 
-            if(bg.foreground_7 != null)
+            if (bg.foreground_7 != null) {
+                bg.foreground_7.update(delta);
                 render.batch.add(bg.foreground_7, 0, 0);
+            }
 
-            if(bg.foreground_8 != null)
+            if (bg.foreground_8 != null) {
+                bg.foreground_8.update(delta);
                 render.batch.add(bg.foreground_8, 0, 0);
+            }
 
-            if(bg.foreground_9 != null)
+            if (bg.foreground_9 != null) {
+                bg.foreground_9.update(delta);
                 render.batch.add(bg.foreground_9, 0, 0);
+            }
         }
-
 
         render.batch.renderBatch();
     }
