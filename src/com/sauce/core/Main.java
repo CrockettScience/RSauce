@@ -34,10 +34,6 @@ public class Main{
     // The game loop handle
     public static Main LOOP = new Main();
 
-    // Temporary settings values
-    private static int WIDTH = 4096;
-    private static int HEIGHT = 2160;
-
     private void run() {
         System.out.println("LWJGL " + Version.getVersion() + "!");
         System.out.println("RSauce " + ENGINE_VERSION + "!");
@@ -70,7 +66,7 @@ public class Main{
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
         // Create the window
-        window = glfwCreateWindow(WIDTH, HEIGHT, Project.NAME, NULL, NULL);
+        window = glfwCreateWindow(Project.EXTERNAL_WIDTH, Project.EXTERNAL_HEIGHT, Project.NAME, NULL, NULL);
 
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
@@ -112,7 +108,7 @@ public class Main{
         glClearColor(0.0f, 0.0f, 0.5f, 0.0f);
 
         // Setup the Viewport
-        glViewport(0, 0, WIDTH, HEIGHT);
+        glViewport(0, 0, Project.EXTERNAL_WIDTH, Project.EXTERNAL_HEIGHT);
 
         // Set up blending function
         glDisable(GL_DEPTH_TEST);
@@ -123,12 +119,12 @@ public class Main{
         // Setup our Matrix
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        glOrtho(0.0, WIDTH, 0.0, HEIGHT, -1.0, 1.0);
+        glOrtho(0.0, Project.EXTERNAL_WIDTH, 0.0, Project.EXTERNAL_HEIGHT, -1.0, 1.0);
         glMatrixMode(GL_MODELVIEW);
 
 
         // Set the view, scene, and engine
-        SceneManager.setView(new View(0, 0, WIDTH, HEIGHT, 0, 0));
+        SceneManager.setView(new View(0, 0, Project.INTERNAL_WIDTH, Project.INTERNAL_HEIGHT, 0, 0));
         SceneManager.setScene(new DemoScene());
 
         Engine engine = Engine.getEngine();

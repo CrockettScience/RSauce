@@ -5,11 +5,9 @@ import com.sauce.asset.graphics.Sprite;
 import com.sauce.core.engine.DrawComponent;
 import com.sauce.core.engine.Engine;
 import com.sauce.core.engine.Entity;
-import com.sauce.core.scene.SceneManager;
 import com.util.structures.nonsaveable.ArrayGrid;
 
 import static com.sauce.core.Project.ASSET_ROOT;
-import static com.sauce.core.Project.ENGINE_VERSION;
 
 public class Eggy extends Entity{
 

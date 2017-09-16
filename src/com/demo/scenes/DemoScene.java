@@ -23,9 +23,7 @@ public class DemoScene extends Scene implements InputClient {
     @Override
     protected void loadResources() {
         // Setup Eggy
-        Entity eggy1 = new Eggy(16, 16, SceneManager.getView().getWidth() / 2, SceneManager.getView().getHeight() / 2, 0);
-
-        Engine engine = Engine.getEngine();
+        Entity eggy1 = new Eggy(4, 4, SceneManager.getView().getWidth() / 2, SceneManager.getView().getHeight() / 2, 0);
 
         putEntity("eggy1", eggy1);
 
@@ -34,8 +32,8 @@ public class DemoScene extends Scene implements InputClient {
         addAttribute(attr);
 
         attr.background_0 = new ParallaxBackground(ASSET_ROOT + "bg.png", 1, 0);
-        attr.background_0.setXScale(4f);
-        attr.background_0.setYScale(4f);
+        attr.background_0.setXScale(1f);
+        attr.background_0.setYScale(1f);
 
         // Bind to recieve InputEvents
         bind(this);

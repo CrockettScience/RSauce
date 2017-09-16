@@ -1,5 +1,8 @@
 package com.sauce.asset.graphics;
 
+import com.sauce.core.Main;
+import com.sauce.core.Project;
+
 import static org.lwjgl.opengl.EXTFramebufferObject.*;
 import static org.lwjgl.opengl.GL11.*;
 
@@ -25,7 +28,6 @@ public class Surface extends DrawableAsset {
         glBindTexture(GL_TEXTURE_2D, texID);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_INT, (java.nio.ByteBuffer) null);
 
-        setStaticMode(true);
     }
 
     public void bind(){
@@ -35,12 +37,22 @@ public class Surface extends DrawableAsset {
         glPushAttrib(GL_VIEWPORT_BIT);
         glViewport(0,0, width, height);
 
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(0.0, width, 0.0, height, -1.0, 1.0);
+        glMatrixMode(GL_MODELVIEW);
+
         glClear(GL_COLOR_BUFFER_BIT);
     }
 
     public void unbind(){
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
         glPopAttrib();
+
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(0.0, Project.EXTERNAL_WIDTH, 0.0, Project.EXTERNAL_HEIGHT, -1.0, 1.0);
+        glMatrixMode(GL_MODELVIEW);
     }
 
     public void dispose(){

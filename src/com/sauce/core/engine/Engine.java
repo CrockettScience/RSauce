@@ -15,6 +15,7 @@ import com.util.structures.special.SortedArrayList;
 import java.util.Comparator;
 
 import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
+import static org.lwjgl.opengl.GL11.*;
 
 
 /**
@@ -109,7 +110,7 @@ public final class Engine {
         entities.clear();
     }
 
-    private Surface backBuffer = new Surface(SceneManager.getView().getWidth(), SceneManager.getView().getHeight());
+    private BackBuffer backBuffer = new BackBuffer();
     private int timeSinceLastUpdate;
 
     public void update(int delta){
@@ -267,8 +268,34 @@ public final class Engine {
     }
 
     private void swapBuffer(){
-        render.batch.add(backBuffer, 0, 0);
-        render.batch.renderBatch();
+
+        glBindTexture(GL_TEXTURE_2D, backBuffer.texID());
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+        glEnable(GL_TEXTURE_2D);
+
+        glPushMatrix();
+
+
+        glBegin(GL_QUADS);
+        {
+            glTexCoord2f(0, 0);
+            glVertex2f(0, 0);
+
+            glTexCoord2f(1, 0);
+            glVertex2f(Project.EXTERNAL_WIDTH, 0);
+
+            glTexCoord2f(1, 1);
+            glVertex2f(Project.EXTERNAL_WIDTH, Project.EXTERNAL_HEIGHT);
+
+            glTexCoord2f(0, 1);
+            glVertex2f(0, Project.EXTERNAL_HEIGHT);
+        }
+        glEnd();
+
+        glPopMatrix();
 
         glfwSwapBuffers(Main.LOOP.window);
     }

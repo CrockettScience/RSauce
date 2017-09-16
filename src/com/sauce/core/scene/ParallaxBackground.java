@@ -1,6 +1,7 @@
 package com.sauce.core.scene;
 
 import com.sauce.asset.graphics.TiledTexture;
+import com.sauce.core.Project;
 
 public class ParallaxBackground extends TiledTexture {
 
@@ -10,7 +11,7 @@ public class ParallaxBackground extends TiledTexture {
     private int yPos;
 
     public ParallaxBackground(String fileSource, int xScrollFactor, int yScrollFactor) {
-        super(fileSource, SceneManager.getView().getWidth(), SceneManager.getView().getHeight());
+        super(fileSource, Project.INTERNAL_WIDTH, Project.INTERNAL_HEIGHT);
 
         xScroll = xScrollFactor;
         yScroll = yScrollFactor;
