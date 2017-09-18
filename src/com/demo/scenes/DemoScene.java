@@ -2,6 +2,7 @@ package com.demo.scenes;
 
 import com.demo.entities.Eggy;
 import com.sauce.core.Main;
+import com.sauce.core.Project;
 import com.sauce.core.engine.Entity;
 import com.sauce.core.engine.ParallaxBackground;
 import com.sauce.core.scene.*;
@@ -95,7 +96,7 @@ public class DemoScene extends Scene implements InputClient {
     @Override
     public void mouseScrolled(double x, double y) {
         Camera v = SceneManager.getCamera();
-        v.resize((int)(v.getWidth() + ZOOM_SPEED * -y), (int)(v.getHeight() + ZOOM_SPEED * -y));
+        v.resize((int)(v.getWidth() + ZOOM_SPEED * -y), (int)(v.getHeight() + (ZOOM_SPEED * Project.SCREEN_HEIGHT / Project.SCREEN_WIDTH) * -y));
     }
 
     @Override

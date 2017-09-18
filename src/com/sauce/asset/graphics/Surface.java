@@ -52,7 +52,9 @@ public class Surface extends DrawableAsset {
 
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        glOrtho(0.0, SceneManager.getCamera().getWidth(), 0.0, SceneManager.getCamera().getHeight(), -1.0, 1.0);
+        glOrtho(SceneManager.getCamera().getX(), SceneManager.getCamera().getX() + SceneManager.getCamera().getWidth(),
+                SceneManager.getCamera().getY(), SceneManager.getCamera().getY() + SceneManager.getCamera().getHeight(),
+                -1.0, 1.0);
         glMatrixMode(GL_MODELVIEW);
     }
 
