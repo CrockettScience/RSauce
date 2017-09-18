@@ -2,11 +2,14 @@ package com.demo.scenes;
 
 import com.demo.entities.Eggy;
 import com.sauce.core.Main;
-import com.sauce.core.engine.Engine;
 import com.sauce.core.engine.Entity;
+import com.sauce.core.engine.ParallaxBackground;
 import com.sauce.core.scene.*;
 import com.sauce.input.InputClient;
 import com.sauce.input.InputEvent;
+
+import java.util.Iterator;
+
 import static com.sauce.input.InputServer.*;
 
 import static com.sauce.core.Project.ASSET_ROOT;
@@ -17,13 +20,13 @@ import static com.sauce.core.scene.SceneManager.*;
  */
 public class DemoScene extends Scene implements InputClient {
 
-    private static final int VIEW_SPEED = 20;
-    private static final int ZOOM_SPEED = 5;
+    private static final int VIEW_SPEED = 50;
+    private static final int ZOOM_SPEED = 100;
 
     @Override
     protected void loadResources() {
         // Setup Eggy
-        Entity eggy1 = new Eggy(4, 4, SceneManager.getView().getWidth() / 2, SceneManager.getView().getHeight() / 2, 0);
+        Entity eggy1 = new Eggy(16, 16, SceneManager.getCamera().getWidth() / 2, SceneManager.getCamera().getHeight() / 2, 0);
 
         putEntity("eggy1", eggy1);
 
@@ -31,9 +34,9 @@ public class DemoScene extends Scene implements InputClient {
         BackgroundAttribute attr = new BackgroundAttribute();
         addAttribute(attr);
 
-        attr.background_0 = new ParallaxBackground(ASSET_ROOT + "bg.png", 1, 0);
-        attr.background_0.setXScale(1f);
-        attr.background_0.setYScale(1f);
+        ParallaxBackground triangles = new ParallaxBackground(ASSET_ROOT + "bg.png", 0, 0);
+
+        attr.setBackground(triangles, 0);
 
         // Bind to recieve InputEvents
         bind(this);
@@ -42,7 +45,11 @@ public class DemoScene extends Scene implements InputClient {
     @Override
     protected void destroyResources() {
         removeEntities();
-        getAttribute(BackgroundAttribute.class).background_0.dispose();
+        Iterator<ParallaxBackground> i = getAttribute(BackgroundAttribute.class).backgroundIterator();
+
+        while(i.hasNext()){
+            i.next().dispose();
+        }
     }
 
     @Override
@@ -58,19 +65,19 @@ public class DemoScene extends Scene implements InputClient {
 
         if(event.key() == KEY_UP || event.key() == KEY_DOWN || event.key() == KEY_LEFT || event.key() == KEY_RIGHT ) {
             if (event.key() == KEY_UP) {
-                getView().setY(getView().getY() - VIEW_SPEED);
+                getCamera().move(getCamera().getX(), getCamera().getY() + VIEW_SPEED);
             }
 
             if (event.key() == KEY_DOWN) {
-                getView().setY(getView().getY() + VIEW_SPEED);
+                getCamera().move(getCamera().getX(),getCamera().getY() - VIEW_SPEED);
             }
 
             if (event.key() == KEY_LEFT) {
-                getView().setX(getView().getX() - VIEW_SPEED);
+                getCamera().move(getCamera().getX() - VIEW_SPEED, getCamera().getY());
             }
 
             if (event.key() == KEY_RIGHT) {
-                getView().setX(getView().getX() + VIEW_SPEED);
+                getCamera().move(getCamera().getX() + VIEW_SPEED, getCamera().getY());
             }
         }
     }
@@ -87,8 +94,8 @@ public class DemoScene extends Scene implements InputClient {
 
     @Override
     public void mouseScrolled(double x, double y) {
-        View v = SceneManager.getView();
-        v.resize((int)(v.getWidth() + ZOOM_SPEED * y), (int)(v.getHeight() + ZOOM_SPEED * y));
+        Camera v = SceneManager.getCamera();
+        v.resize((int)(v.getWidth() + ZOOM_SPEED * -y), (int)(v.getHeight() + ZOOM_SPEED * -y));
     }
 
     @Override

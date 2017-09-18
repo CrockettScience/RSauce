@@ -2,30 +2,57 @@
 package com.sauce.core.scene;
 
 
+import com.sauce.core.engine.ParallaxBackground;
+
+import java.util.Iterator;
+
 /**
  *
  * @author Jonathan Crockett
  */
 public class BackgroundAttribute implements Attribute {
-    public ParallaxBackground background_0;
-    public ParallaxBackground background_1;
-    public ParallaxBackground background_2;
-    public ParallaxBackground background_3;
-    public ParallaxBackground background_4;
-    public ParallaxBackground background_5;
-    public ParallaxBackground background_6;
-    public ParallaxBackground background_7;
-    public ParallaxBackground background_8;
-    public ParallaxBackground background_9;
+    public ParallaxBackground[] backgrounds = new ParallaxBackground[10];
+    public ParallaxBackground[] foregrounds = new ParallaxBackground[10];
 
-    public ParallaxBackground foreground_0;
-    public ParallaxBackground foreground_1;
-    public ParallaxBackground foreground_2;
-    public ParallaxBackground foreground_3;
-    public ParallaxBackground foreground_4;
-    public ParallaxBackground foreground_5;
-    public ParallaxBackground foreground_6;
-    public ParallaxBackground foreground_7;
-    public ParallaxBackground foreground_8;
-    public ParallaxBackground foreground_9;
+    public void setBackground(ParallaxBackground para, int index){
+        backgrounds[index] = para;
+    }
+
+    public void setForeground(ParallaxBackground para, int index){
+        foregrounds[index] = para;
+    }
+
+    public Iterator<ParallaxBackground> backgroundIterator(){
+        return new ParallaxIterator(true);
+    }
+
+    public Iterator<ParallaxBackground> foregroundIterator(){
+        return new ParallaxIterator(false);
+    }
+
+    private class ParallaxIterator implements Iterator<ParallaxBackground>{
+
+        private int current = -1;
+        private boolean type;
+
+        private ParallaxIterator(boolean forBackgrounds){
+            type = forBackgrounds;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return current != 9;
+        }
+
+        @Override
+        public ParallaxBackground next() {
+            current++;
+            if(type){
+                return backgrounds[current];
+            }
+            else{
+                return foregrounds[current];
+            }
+        }
+    }
 }

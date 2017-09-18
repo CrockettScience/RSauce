@@ -3,9 +3,7 @@ package com.sauce.core;
 import com.demo.scenes.DemoScene;
 import com.sauce.core.engine.Engine;
 import com.sauce.core.scene.SceneManager;
-import com.sauce.core.scene.View;
-import com.sauce.input.InputServer;
-import com.util.Vector2DDouble;
+import com.sauce.core.scene.Camera;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -66,7 +64,7 @@ public class Main{
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
         // Create the window
-        window = glfwCreateWindow(Project.EXTERNAL_WIDTH, Project.EXTERNAL_HEIGHT, Project.NAME, NULL, NULL);
+        window = glfwCreateWindow(Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT, Project.NAME, NULL, NULL);
 
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
@@ -108,7 +106,7 @@ public class Main{
         glClearColor(0.0f, 0.0f, 0.5f, 0.0f);
 
         // Setup the Viewport
-        glViewport(0, 0, Project.EXTERNAL_WIDTH, Project.EXTERNAL_HEIGHT);
+        glViewport(0, 0, Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT);
 
         // Set up blending function
         glDisable(GL_DEPTH_TEST);
@@ -119,12 +117,12 @@ public class Main{
         // Setup our Matrix
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        glOrtho(0.0, Project.EXTERNAL_WIDTH, 0.0, Project.EXTERNAL_HEIGHT, -1.0, 1.0);
+        glOrtho(0.0, Project.SCREEN_WIDTH, 0.0, Project.SCREEN_HEIGHT, -1.0, 1.0);
         glMatrixMode(GL_MODELVIEW);
 
 
         // Set the view, scene, and engine
-        SceneManager.setView(new View(0, 0, Project.INTERNAL_WIDTH, Project.INTERNAL_HEIGHT, 0, 0));
+        SceneManager.setCamera(new Camera(0, 0, Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT, 0, 0));
         SceneManager.setScene(new DemoScene());
 
         Engine engine = Engine.getEngine();

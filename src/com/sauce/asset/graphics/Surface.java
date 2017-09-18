@@ -1,7 +1,8 @@
 package com.sauce.asset.graphics;
 
-import com.sauce.core.Main;
 import com.sauce.core.Project;
+import com.sauce.core.scene.SceneManager;
+import com.util.Vector2D;
 
 import static org.lwjgl.opengl.EXTFramebufferObject.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -51,7 +52,7 @@ public class Surface extends DrawableAsset {
 
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        glOrtho(0.0, Project.EXTERNAL_WIDTH, 0.0, Project.EXTERNAL_HEIGHT, -1.0, 1.0);
+        glOrtho(0.0, SceneManager.getCamera().getWidth(), 0.0, SceneManager.getCamera().getHeight(), -1.0, 1.0);
         glMatrixMode(GL_MODELVIEW);
     }
 
@@ -74,6 +75,10 @@ public class Surface extends DrawableAsset {
     @Override
     protected int textureID() {
         return texID;
+    }
+
+    protected int getHandle(){
+        return fboHandle;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.sauce.asset.graphics;
 
+import com.util.Vector2D;
+
 import java.nio.ByteBuffer;
 
 /**
@@ -8,18 +10,16 @@ import java.nio.ByteBuffer;
 public abstract class DrawableAsset {
 
     // Properties
-    private int w;
-    private int h;
+    protected int w;
+    protected int h;
     private int absW;
     private int absH;
-    private float angle = 0.0f;
-    private float xScale = 1.0f;
-    private float yScale = 1.0f;
+    protected float angle = 0.0f;
+    protected float xScale = 1.0f;
+    protected float yScale = 1.0f;
     private boolean staticMode = false;
 
-    // Precomputed Values
-    private int halfWidth;
-    private int halfHeight;
+    protected Vector2D origin = new Vector2D(0, 0);
 
     public DrawableAsset(int width, int height, int absWidth, int absHeight){
         this.w = width;
@@ -27,9 +27,6 @@ public abstract class DrawableAsset {
 
         this.absW = absWidth;
         this.absH = absHeight;
-
-        halfWidth = width / 2;
-        halfHeight = height / 2;
     }
 
     public DrawableAsset(){}
@@ -40,9 +37,6 @@ public abstract class DrawableAsset {
 
         absW = absWidth;
         absH = absHeight;
-
-        halfWidth = width / 2;
-        halfHeight = height / 2;
     }
 
     public int width(){
@@ -85,12 +79,12 @@ public abstract class DrawableAsset {
         return yScale;
     }
 
-    int halfwidth(){
-        return halfWidth;
+    public Vector2D getOrigin(){
+        return origin;
     }
 
-    int halfHeight(){
-        return halfHeight;
+    public void setOrigin(Vector2D newOrigin){
+        origin = newOrigin;
     }
 
     protected abstract float[] regionCoordinates();
