@@ -4,6 +4,7 @@ import com.sauce.core.Project;
 import com.sauce.core.engine.BackBuffer;
 import com.sauce.core.engine.DrawComponent;
 import com.sauce.core.engine.Entity;
+import com.sauce.util.ogl.OGLCoordinateSystem;
 import com.util.RSauceLogger;
 import com.util.Vector2D;
 import com.util.structures.nonsaveable.Set;
@@ -75,10 +76,7 @@ public class Camera {
     }
 
     private void reAdjustCoordinateSystem(){
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(x, width + x, y, height + y, -1.0, 1.0);
-        glMatrixMode(GL_MODELVIEW);
+        OGLCoordinateSystem.setCoordinateState(x, y, width, height);
     }
 
     public int getX() {

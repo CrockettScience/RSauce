@@ -4,6 +4,7 @@ import com.demo.scenes.DemoScene;
 import com.sauce.core.engine.Engine;
 import com.sauce.core.scene.SceneManager;
 import com.sauce.core.scene.Camera;
+import com.sauce.util.ogl.OGLCoordinateSystem;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -90,6 +91,8 @@ public class Main{
         // Enable v-sync
         glfwSwapInterval(1);
 
+        // Activate default sound device
+
         // Make the window visible
         glfwShowWindow(window);
     }
@@ -114,14 +117,11 @@ public class Main{
 
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        // Setup our Matrix
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(0.0, Project.SCREEN_WIDTH, 0.0, Project.SCREEN_HEIGHT, -1.0, 1.0);
-        glMatrixMode(GL_MODELVIEW);
+        // Setup our Coordinate System
+        OGLCoordinateSystem.setCoordinateState(0, 0, Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT);
 
 
-        // Set the view, scene, and engine
+        // Set the camera, scene, and engine
         SceneManager.setCamera(new Camera(0, 0, Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT, 0, 0));
         SceneManager.setScene(new DemoScene());
 

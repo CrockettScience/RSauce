@@ -1,8 +1,7 @@
 package com.sauce.asset.graphics;
 
-import com.sauce.core.Project;
 import com.sauce.core.scene.SceneManager;
-import com.util.Vector2D;
+import com.sauce.util.ogl.OGLCoordinateSystem;
 
 import static org.lwjgl.opengl.EXTFramebufferObject.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -38,10 +37,8 @@ public class Surface extends DrawableAsset {
         glPushAttrib(GL_VIEWPORT_BIT);
         glViewport(0,0, width, height);
 
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(0.0, width, 0.0, height, -1.0, 1.0);
-        glMatrixMode(GL_MODELVIEW);
+        OGLCoordinateSystem.pushCoordinateState();
+        OGLCoordinateSystem.setCoordinateState(0, 0, width, height);
 
         glClear(GL_COLOR_BUFFER_BIT);
     }
@@ -50,12 +47,7 @@ public class Surface extends DrawableAsset {
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
         glPopAttrib();
 
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(SceneManager.getCamera().getX(), SceneManager.getCamera().getX() + SceneManager.getCamera().getWidth(),
-                SceneManager.getCamera().getY(), SceneManager.getCamera().getY() + SceneManager.getCamera().getHeight(),
-                -1.0, 1.0);
-        glMatrixMode(GL_MODELVIEW);
+        OGLCoordinateSystem.popCoordinateState();
     }
 
     public void dispose(){
