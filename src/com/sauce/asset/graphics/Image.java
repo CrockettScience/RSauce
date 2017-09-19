@@ -1,70 +1,39 @@
 package com.sauce.asset.graphics;
 
-import org.lwjgl.*;
+
+import com.sauce.util.io.GraphicsUtil;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_RGBA;
-import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
-import static org.lwjgl.stb.STBImage.*;
+import static com.sauce.util.io.ResourceUtil.*;
+import static com.sauce.util.io.GraphicsUtil.*;
 
 import java.io.*;
-import java.nio.ByteBuffer;
-import java.nio.*;
-import java.nio.channels.*;
-import java.nio.file.*;
 
 /**
  * Created by John Crockett.
  */
-public class Image extends DrawableAsset {
+public class Image extends Graphic {
 
     // Properties
-    private ByteBuffer image;
+    private IOImage image;
     private int components;
     private int texID = glGenTextures();
 
     public Image(String imagePath){
-        ByteBuffer buffer;
+        IOResource resource;
 
         try{
-            buffer = ioResourceToByteBuffer(imagePath);
+            resource = loadResource(imagePath);
         } catch(IOException e){
             throw new RuntimeException();
         }
 
-        IntBuffer w = BufferUtils.createIntBuffer(1);
-        IntBuffer h = BufferUtils.createIntBuffer(1);
-        IntBuffer c = BufferUtils.createIntBuffer(1);
+        ImageInfo info = getImageInfo(resource);
 
-        if (!stbi_info_from_memory(buffer, w, h, c)) {
-            throw new RuntimeException("Failed to read image information: " + stbi_failure_reason());
-        }
+        image = ioResourceToImage(resource, info);
+        components = info.getComponents();
+        resize(info.getWidth(), info.getHeight(), info.getWidth(), info.getHeight());
 
-        image = stbi_load_from_memory(buffer, w, h, c, 0);
-        if(image == null){
-            throw new RuntimeException("Failed to load image: " + stbi_failure_reason());
-        }
-
-        resize(w.get(0), h.get(0), w.get(0), h.get(0));
-        components = c.get(0);
-
-    }
-
-    private static ByteBuffer ioResourceToByteBuffer(String resource) throws IOException {
-        ByteBuffer buffer;
-
-        Path path = Paths.get(resource);
-        if (Files.isReadable(path)) {
-            try (SeekableByteChannel fc = Files.newByteChannel(path)) {
-                buffer = BufferUtils.createByteBuffer((int)fc.size() + 1);
-                while (fc.read(buffer) != -1) {}
-            }
-        } else {
-            throw new IOException();
-        }
-
-        buffer.flip();
-        return buffer;
     }
 
     @Override
@@ -80,19 +49,12 @@ public class Image extends DrawableAsset {
 
     @Override
     protected int textureID() {
-        glBindTexture(GL_TEXTURE_2D, texID);
-
-        if (components() == 3) {
-            if ((absWidth() & 3) != 0) {
-                glPixelStorei(GL_UNPACK_ALIGNMENT, 2 - (absWidth() & 1));
-            }
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, absWidth(), absHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-        } else {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, absWidth(), absHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
-
-        }
-
         return texID;
+    }
+
+    @Override
+    protected IOImage getIOImage() {
+        return image;
     }
 
     @Override

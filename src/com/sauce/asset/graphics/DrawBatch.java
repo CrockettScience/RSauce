@@ -1,9 +1,9 @@
 package com.sauce.asset.graphics;
 
 import com.sauce.core.Project;
-import com.sauce.core.scene.SceneManager;
 import com.util.structures.nonsaveable.Queue;
 import com.util.Vector2D;
+import static com.sauce.util.io.GraphicsUtil.*;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -15,7 +15,7 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class DrawBatch {
 
-    private Queue<DrawableAsset> images;
+    private Queue<Graphic> images;
     private Queue<Vector2D> coords;
 
     public DrawBatch(){
@@ -23,13 +23,13 @@ public class DrawBatch {
         coords = new Queue<>();
     }
 
-    public void add(DrawableAsset image, int x, int y){
+    public void add(Graphic image, int x, int y){
         images.enqueue(image);
         coords.enqueue(new Vector2D(x, y));
     }
 
     public void renderBatch(){
-        DrawableAsset image;
+        Graphic image;
         Vector2D coord;
 
         while(!images.isEmpty()){
@@ -37,6 +37,9 @@ public class DrawBatch {
             coord = coords.dequeue();
 
             glBindTexture(GL_TEXTURE_2D, image.textureID());
+
+            if(image.getIOImage() != null)
+                applyIOImageForDrawing(image.getIOImage(), image.absWidth(), image.absHeight(), image.components());
 
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Project.INTERPOLATION ? GL_LINEAR : GL_NEAREST);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Project.INTERPOLATION ? GL_LINEAR : GL_NEAREST);
@@ -61,7 +64,7 @@ public class DrawBatch {
 
     }
 
-    private void renderImage(DrawableAsset image, Vector2D coord){
+    private void renderImage(Graphic image, Vector2D coord){
         float[] texCoords = image.regionCoordinates();
         glBegin(GL_QUADS);
         {

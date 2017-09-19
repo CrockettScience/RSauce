@@ -15,6 +15,7 @@ import com.util.structures.special.SortedArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 
+import static com.sauce.util.io.GraphicsUtil.applyIOImageForDrawing;
 import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
 import static org.lwjgl.opengl.GL11.*;
 
@@ -156,6 +157,8 @@ public final class Engine {
 
                     glBindTexture(GL_TEXTURE_2D, back.texID());
 
+                    applyIOImageForDrawing(back.getParallaxIOImage(), back.absWidth(), back.absHeight(), back.getParallaxComponents());
+
                     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
@@ -215,6 +218,8 @@ public final class Engine {
                     fore.update(delta);
 
                     glBindTexture(GL_TEXTURE_2D, fore.texID());
+
+                    applyIOImageForDrawing(fore.getParallaxIOImage(), fore.absWidth(), fore.absHeight(), fore.getParallaxComponents());
 
                     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);

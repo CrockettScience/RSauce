@@ -1,11 +1,11 @@
 package com.sauce.asset.graphics;
 
-import com.sauce.core.scene.SceneManager;
+import com.sauce.util.io.GraphicsUtil;
 
 /**
  * Created by John Crockett.
  */
-public class TiledTexture extends DrawableAsset {
+public class TiledTexture extends Graphic {
     private Image image;
     private final int tileWidth;
     private final int tileHeight;
@@ -46,6 +46,11 @@ public class TiledTexture extends DrawableAsset {
     @Override
     protected int textureID() {
         return image.textureID();
+    }
+
+    @Override
+    protected GraphicsUtil.IOImage getIOImage() {
+        return image.getIOImage();
     }
 
     @Override

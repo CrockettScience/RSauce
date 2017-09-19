@@ -1,6 +1,6 @@
 package com.sauce.asset.graphics;
 
-import com.sauce.core.scene.SceneManager;
+import com.sauce.util.io.GraphicsUtil;
 import com.sauce.util.ogl.OGLCoordinateSystem;
 
 import static org.lwjgl.opengl.EXTFramebufferObject.*;
@@ -10,7 +10,7 @@ import static org.lwjgl.opengl.GL11.*;
  * Created by John Crockett.
  * A wrapper object that represents a GL_FRAMEBUFFER.
  */
-public class Surface extends DrawableAsset {
+public class Surface extends Graphic {
 
     private int fboHandle;
     private int width;
@@ -69,6 +69,11 @@ public class Surface extends DrawableAsset {
     @Override
     protected int textureID() {
         return texID;
+    }
+
+    @Override
+    protected GraphicsUtil.IOImage getIOImage() {
+        return null;
     }
 
     protected int getHandle(){

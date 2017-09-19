@@ -1,5 +1,6 @@
 package com.sauce.asset.graphics;
 
+import com.sauce.util.io.GraphicsUtil;
 import com.util.Vector2D;
 
 import java.nio.ByteBuffer;
@@ -7,7 +8,7 @@ import java.nio.ByteBuffer;
 /**
  * Created by John Crockett.
  */
-public abstract class DrawableAsset {
+public abstract class Graphic {
 
     // Properties
     protected int w;
@@ -21,7 +22,7 @@ public abstract class DrawableAsset {
 
     protected Vector2D origin = new Vector2D(0, 0);
 
-    public DrawableAsset(int width, int height, int absWidth, int absHeight){
+    public Graphic(int width, int height, int absWidth, int absHeight){
         this.w = width;
         this.h = height;
 
@@ -29,7 +30,7 @@ public abstract class DrawableAsset {
         this.absH = absHeight;
     }
 
-    public DrawableAsset(){}
+    public Graphic(){}
 
     protected final void resize(int width, int height, int absWidth, int absHeight){
         w = width;
@@ -92,6 +93,8 @@ public abstract class DrawableAsset {
     protected abstract int components();
 
     protected abstract int textureID();
+
+    protected abstract GraphicsUtil.IOImage getIOImage();
 
     protected void setStaticMode(boolean mode){
         staticMode = mode;

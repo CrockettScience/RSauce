@@ -1,21 +1,21 @@
 package com.sauce.core.engine;
 
-import com.sauce.asset.graphics.DrawableAsset;
+import com.sauce.asset.graphics.Graphic;
 import com.util.Vector3D;
 
 /**
  * Created by John Crockett.
  */
 public class DrawComponent implements Component {
-    private DrawableAsset image;
+    private Graphic image;
     private Vector3D position;
 
-    public DrawComponent(DrawableAsset asset, int x, int y, int z){
+    public DrawComponent(Graphic asset, int x, int y, int z){
         image = asset;
         position = new Vector3D(x, y, z);
     }
 
-    public DrawableAsset getImage(){
+    public Graphic getImage(){
         return image;
     }
 

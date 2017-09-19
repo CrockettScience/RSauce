@@ -5,6 +5,7 @@ import com.sauce.core.scene.Camera;
 import com.sauce.core.scene.CameraChangeSubscriber;
 import com.sauce.core.scene.Scene;
 import com.sauce.core.scene.SceneManager;
+import com.sauce.util.io.GraphicsUtil;
 import com.util.RSauceLogger;
 import com.util.Vector2D;
 
@@ -100,6 +101,14 @@ public class ParallaxBackground extends TiledTexture implements CameraChangeSubs
 
     int texID(){
         return textureID();
+    }
+
+    int getParallaxComponents(){
+        return components();
+    }
+
+    GraphicsUtil.IOImage getParallaxIOImage(){
+        return getIOImage();
     }
 
     @Override

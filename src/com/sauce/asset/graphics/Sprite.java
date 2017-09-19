@@ -1,5 +1,6 @@
 package com.sauce.asset.graphics;
 
+import com.sauce.util.io.GraphicsUtil;
 import com.util.structures.nonsaveable.ArrayGrid;
 import com.util.structures.nonsaveable.ArrayList;
 import com.util.structures.nonsaveable.Map;
@@ -8,7 +9,7 @@ import com.util.Vector2D;
 /**
  * Created by John Crockett.
  */
-public class Sprite extends DrawableAsset{
+public class Sprite extends Graphic {
 
     // Sprite Properties
     private Image source;
@@ -119,5 +120,10 @@ public class Sprite extends DrawableAsset{
     @Override
     protected int textureID() {
         return source.textureID();
+    }
+
+    @Override
+    protected GraphicsUtil.IOImage getIOImage() {
+        return source.getIOImage();
     }
 }
