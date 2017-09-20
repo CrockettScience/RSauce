@@ -289,7 +289,7 @@ public final class Engine {
 
         glPopMatrix();
 
-        glfwSwapBuffers(Main.LOOP.window);
+        glfwSwapBuffers(Main.window);
     }
 
     private EntitySet onlyEntitiesWithComponent(Class<? extends Component> c){

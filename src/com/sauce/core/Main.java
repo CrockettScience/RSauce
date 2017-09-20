@@ -7,6 +7,9 @@ import com.sauce.core.scene.Camera;
 import com.sauce.util.ogl.OGLCoordinateSystem;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
+import org.lwjgl.openal.AL;
+import org.lwjgl.openal.ALC;
+import org.lwjgl.openal.ALCCapabilities;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
 
@@ -14,6 +17,10 @@ import java.nio.*;
 
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.openal.AL10.alDeleteBuffers;
+import static org.lwjgl.openal.AL10.alDeleteSources;
+import static org.lwjgl.openal.ALC10.*;
+import static org.lwjgl.openal.EXTThreadLocalContext.alcSetThreadContext;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
@@ -28,107 +35,103 @@ public class Main{
 
     // The window handle
     public static long window;
+
+    private static long audioDevice;
+    private static long audioContext;
     private static boolean running = true;
 
-    // The game loop handle
-    public static Main LOOP = new Main();
-
-    private void run() {
+    public static void main(String[] args) {
         System.out.println("LWJGL " + Version.getVersion() + "!");
         System.out.println("RSauce " + ENGINE_VERSION + "!");
 
-        init();
-        loop();
+        initGLFW();
+        initOpenGL();
+        initOpenAL();
 
-        // Free the window callbacks and destroy the window
+        loop(initEngine());
+
+        alcSetThreadContext(NULL);
+        alcDestroyContext(audioContext);
+        alcCloseDevice(audioDevice);
+
         glfwFreeCallbacks(window);
         glfwDestroyWindow(window);
-
-        // Terminate GLFW and free the error callback
-        glfwTerminate();
         glfwSetErrorCallback(null).free();
+        glfwTerminate();
+
     }
 
-    private void init() {
-        // Setup an error callback. The default implementation
-        // will print the error message in System.err.
+    private static void initGLFW() {
         GLFWErrorCallback.createPrint(System.out).set();
 
-        // Initialize GLFW. Most GLFW functions will not work before doing this.
         if ( !glfwInit() )
             throw new IllegalStateException("Unable to initialize GLFW");
 
-        // Configure GLFW
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // the window will be resizable
 
-        // Get the resolution of the primary monitor
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
-        // Create the window
         window = glfwCreateWindow(Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT, Project.NAME, NULL, NULL);
 
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
 
-        // Get the thread stack and push a new frame
         try ( MemoryStack stack = stackPush() ) {
             IntBuffer pWidth = stack.mallocInt(1); // int*
             IntBuffer pHeight = stack.mallocInt(1); // int*
 
-            // Get the window size passed to glfwCreateWindow
             glfwGetWindowSize(window, pWidth, pHeight);
 
-            // Center the window
             glfwSetWindowPos(
                     window,
                     (vidmode.width() - pWidth.get(0)) / 2,
                     (vidmode.height() - pHeight.get(0)) / 2
             );
-        } // the stack frame is popped automatically
+        }
 
-        // Make the OpenGL context current
         glfwMakeContextCurrent(window);
-        // Enable v-sync
         glfwSwapInterval(1);
-
-        // Activate default sound device
-
-        // Make the window visible
         glfwShowWindow(window);
     }
 
-    private void loop() {
-        // This line is critical for LWJGL's interoperation with GLFW's
-        // OpenGL context, or any context that is managed externally.
-        // LWJGL detects the context that is current in the current thread,
-        // creates the GLCapabilities instance and makes the OpenGL
-        // bindings available for use.
+    private static void initOpenGL(){
         GL.createCapabilities();
 
-        // Set the clear color
         glClearColor(0.0f, 0.0f, 0.5f, 0.0f);
 
-        // Setup the Viewport
         glViewport(0, 0, Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT);
-
-        // Set up blending function
         glDisable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
-
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        // Setup our Coordinate System
         OGLCoordinateSystem.setCoordinateState(0, 0, Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT);
+    }
 
+    private static void initOpenAL(){
+        audioDevice = alcOpenDevice((ByteBuffer) null);
+        if (audioDevice == NULL) {
+            throw new IllegalStateException("Failed to open the default device.");
+        }
 
-        // Set the camera, scene, and engine
+        ALCCapabilities deviceCaps = ALC.createCapabilities(audioDevice);
+
+        audioContext = alcCreateContext(audioDevice, (IntBuffer) null);
+        if (audioContext == NULL) {
+            throw new IllegalStateException("Failed to create an OpenAL context.");
+        }
+
+        alcSetThreadContext(audioContext);
+        AL.createCapabilities(deviceCaps);
+    }
+
+    private static Engine initEngine(){
         SceneManager.setCamera(new Camera(0, 0, Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT, 0, 0));
         SceneManager.setScene(new DemoScene());
 
-        Engine engine = Engine.getEngine();
+        return Engine.getEngine();
+    }
 
-        // Run the rendering loop until the user has attempted to close
-        // the window or has pressed the ESCAPE key.
+    private static void loop(Engine engine) {
         long current;
         long last = System.nanoTime();
 
@@ -147,10 +150,6 @@ public class Main{
 
     public static void quitAtEndOfCycle(){
         running = false;
-    }
-
-    public static void main(String[] args) {
-        LOOP.run();
     }
 
 }
