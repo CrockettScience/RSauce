@@ -72,7 +72,7 @@ public class Surface extends Graphic {
     }
 
     @Override
-    protected GraphicsUtil.IOGraphic getIOImage() {
+    public GraphicsUtil.IOGraphic getIOImage() {
         return null;
     }
 

@@ -123,7 +123,7 @@ public class Sprite extends Graphic {
     }
 
     @Override
-    protected GraphicsUtil.IOGraphic getIOImage() {
+    public GraphicsUtil.IOGraphic getIOImage() {
         return source.getIOImage();
     }
 }

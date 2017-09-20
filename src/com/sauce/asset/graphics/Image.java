@@ -51,7 +51,7 @@ public class Image extends Graphic {
     }
 
     @Override
-    protected IOGraphic getIOImage() {
+    public IOGraphic getIOImage() {
         return image;
     }
 

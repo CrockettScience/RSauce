@@ -49,7 +49,7 @@ public class TiledTexture extends Graphic {
     }
 
     @Override
-    protected GraphicsUtil.IOGraphic getIOImage() {
+    public GraphicsUtil.IOGraphic getIOImage() {
         return image.getIOImage();
     }
 
