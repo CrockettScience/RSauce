@@ -12,8 +12,8 @@ import static org.lwjgl.stb.STBImage.stbi_load_from_memory;
 
 public class GraphicsUtil {
 
-    public static IOImage ioResourceToImage(ResourceUtil.IOResource resource, ImageInfo info){
-        IOImage image = new IOImage(stbi_load_from_memory(resource.buffer, info.width, info.height, info.components, 0));
+    public static IOGraphic ioResourceToImage(ResourceUtil.IOResource resource, GraphicInfo info){
+        IOGraphic image = new IOGraphic(stbi_load_from_memory(resource.buffer, info.width, info.height, info.components, 0), info);
 
         if(image.buffer == null){
             throw new RuntimeException("Failed to load image: " + stbi_failure_reason());
@@ -22,12 +22,12 @@ public class GraphicsUtil {
         return image;
     }
 
-    public static ImageInfo getImageInfo(ResourceUtil.IOResource resource){
-        return new ImageInfo(resource.buffer);
+    public static GraphicInfo getImageInfo(ResourceUtil.IOResource resource){
+        return new GraphicInfo(resource.buffer);
 
     }
 
-    public static void applyIOImageForDrawing(IOImage image, int width, int height, int components){
+    public static void applyIOImageForDrawing(IOGraphic image, int width, int height, int components){
 
         if (components == 3) {
             if ((width & 3) != 0) {
@@ -41,12 +41,12 @@ public class GraphicsUtil {
 
     }
 
-    public static class ImageInfo {
+    public static class GraphicInfo {
         private IntBuffer width;
         private IntBuffer height;
         private IntBuffer components;
 
-        private ImageInfo(ByteBuffer buffer){
+        private GraphicInfo(ByteBuffer buffer){
 
             width = BufferUtils.createIntBuffer(1);
             height = BufferUtils.createIntBuffer(1);
@@ -70,10 +70,21 @@ public class GraphicsUtil {
         }
     }
 
-    public static class IOImage extends ResourceUtil.IOResource{
+    public static class IOGraphic extends ResourceUtil.IOResource{
 
-        private IOImage(ByteBuffer aBuffer) {
+        private GraphicInfo graphicInfo;
+
+        private IOGraphic(ByteBuffer aBuffer, GraphicInfo info) {
             super(aBuffer);
+            graphicInfo = info;
+        }
+
+        public GraphicInfo getGraphicInfo() {
+            return graphicInfo;
+        }
+
+        public void setGraphicInfo(GraphicInfo graphicInfo) {
+            this.graphicInfo = graphicInfo;
         }
     }
 }

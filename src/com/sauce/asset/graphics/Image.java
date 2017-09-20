@@ -1,8 +1,6 @@
 package com.sauce.asset.graphics;
 
 
-import com.sauce.util.io.GraphicsUtil;
-
 import static org.lwjgl.opengl.GL11.*;
 import static com.sauce.util.io.ResourceUtil.*;
 import static com.sauce.util.io.GraphicsUtil.*;
@@ -15,7 +13,7 @@ import java.io.*;
 public class Image extends Graphic {
 
     // Properties
-    private IOImage image;
+    private IOGraphic image;
     private int components;
     private int texID = glGenTextures();
 
@@ -28,7 +26,7 @@ public class Image extends Graphic {
             throw new RuntimeException();
         }
 
-        ImageInfo info = getImageInfo(resource);
+        GraphicInfo info = getImageInfo(resource);
 
         image = ioResourceToImage(resource, info);
         components = info.getComponents();
@@ -53,7 +51,7 @@ public class Image extends Graphic {
     }
 
     @Override
-    protected IOImage getIOImage() {
+    protected IOGraphic getIOImage() {
         return image;
     }
 

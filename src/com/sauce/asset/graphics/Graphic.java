@@ -3,8 +3,6 @@ package com.sauce.asset.graphics;
 import com.sauce.util.io.GraphicsUtil;
 import com.util.Vector2D;
 
-import java.nio.ByteBuffer;
-
 /**
  * Created by John Crockett.
  */
@@ -94,7 +92,7 @@ public abstract class Graphic {
 
     protected abstract int textureID();
 
-    protected abstract GraphicsUtil.IOImage getIOImage();
+    public abstract GraphicsUtil.IOGraphic getIOImage();
 
     protected void setStaticMode(boolean mode){
         staticMode = mode;
