@@ -6,8 +6,23 @@ import static org.lwjgl.openal.AL10.alSourcePlay;
 
 public class Music extends Audio {
 
-    public Music(String fileSource) {
+    private int loopTagSample;
+    private float loopTagTime;
+
+    public Music(String fileSource, float loopTagSeconds) {
         super(fileSource);
+
+        loopTagTime = loopTagSeconds;
+    }
+
+    @Override
+    protected void loadAudio() {
+        super.loadAudio();
+
+        int samples = getIOAudio().getAudioInfo().getLengthSamples();
+        float seconds = getIOAudio().getAudioInfo().getLengthSeconds();
+
+        loopTagSample = (int)Math.floor((loopTagTime / seconds) * samples);
     }
 
     @Override
@@ -18,7 +33,7 @@ public class Music extends Audio {
             int buffer = alSourceUnqueueBuffers(getSource());
 
             if (!stream(buffer)) {
-                rewind();
+                seek(loopTagSample);
 
                 if (!stream(buffer)) {
                     return false;
@@ -32,5 +47,21 @@ public class Music extends Audio {
         }
 
         return true;
+    }
+
+    public float getElapsedTime() {
+        return super.getProgressTime(getProgress());
+    }
+
+    @Override
+    public void rewind(){
+        super.rewind();
+    }
+
+    public void seek(float seekTime){
+        int samples = getIOAudio().getAudioInfo().getLengthSamples();
+        float seconds = getIOAudio().getAudioInfo().getLengthSeconds();
+
+        seek((int)Math.floor((seekTime / seconds) * samples));
     }
 }

@@ -10,7 +10,6 @@ import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALCCapabilities;
 
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.openal.AL10.alDeleteBuffers;
@@ -18,7 +17,6 @@ import static org.lwjgl.openal.AL10.alGenBuffers;
 import static org.lwjgl.openal.AL10.alGenSources;
 import static org.lwjgl.openal.ALC10.*;
 import static org.lwjgl.openal.EXTThreadLocalContext.alcSetThreadContext;
-import static org.lwjgl.stb.STBVorbis.stb_vorbis_get_info;
 import static org.lwjgl.stb.STBVorbis.stb_vorbis_stream_length_in_samples;
 import static org.lwjgl.stb.STBVorbis.stb_vorbis_stream_length_in_seconds;
 import static org.lwjgl.system.MemoryUtil.NULL;

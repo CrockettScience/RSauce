@@ -47,7 +47,7 @@ public class DemoScene extends Scene implements InputClient {
         bind(this);
 
         // Load irritating loop
-        irritatingSong = new Music(Project.ASSET_ROOT + "Patriarchy.ogg");
+        irritatingSong = new Music(Project.ASSET_ROOT + "Patriarchy.ogg", 21.391f);
     }
 
     @Override

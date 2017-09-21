@@ -71,56 +71,28 @@ public class AudioUtil {
             return handle;
         }
 
-        public void setHandle(long handle) {
-            this.handle = handle;
-        }
-
         public int getChannels() {
             return channels;
-        }
-
-        public void setChannels(int channels) {
-            this.channels = channels;
         }
 
         public int getSampleRate() {
             return sampleRate;
         }
 
-        public void setSampleRate(int sampleRate) {
-            this.sampleRate = sampleRate;
-        }
-
         public int getFormat() {
             return format;
-        }
-
-        public void setFormat(int format) {
-            this.format = format;
         }
 
         public int getLengthSamples() {
             return lengthSamples;
         }
 
-        public void setLengthSamples(int lengthSamples) {
-            this.lengthSamples = lengthSamples;
-        }
-
         public float getLengthSeconds() {
             return lengthSeconds;
         }
 
-        public void setLengthSeconds(float lengthSeconds) {
-            this.lengthSeconds = lengthSeconds;
-        }
-
         public ShortBuffer getPcm() {
             return pcm;
-        }
-
-        public void setPcm(ShortBuffer pcm) {
-            this.pcm = pcm;
         }
     }
 

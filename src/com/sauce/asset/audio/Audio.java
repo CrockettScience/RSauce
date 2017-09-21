@@ -24,7 +24,7 @@ public abstract class Audio {
         fileName = fileSource;
     }
 
-    void loadAudio(){
+    protected void loadAudio(){
         IOResource resource;
         try {
             resource = loadResource(fileName);
