@@ -17,6 +17,7 @@ public abstract class Audio {
     private String fileName;
 
     private IOAudio audio;
+    private int source;
     private int samplesLeft;
     private boolean removeMe = false;
 
@@ -33,6 +34,7 @@ public abstract class Audio {
         }
 
         audio = ioResourceToAudio(resource, getAudioInfo(resource));
+        source = alGenSources();
 
         samplesLeft = audio.getAudioInfo().getLengthSamples();
     }
@@ -89,7 +91,7 @@ public abstract class Audio {
         samplesLeft = audio.getAudioInfo().getLengthSamples() - sample_number;
     }
 
-    protected boolean play(int source, IntBuffer buffers) {
+    protected boolean play(IntBuffer buffers) {
         for (int i = 0; i < buffers.limit(); i++) {
             if (!stream(buffers.get(i))) {
                 return false;
@@ -103,6 +105,10 @@ public abstract class Audio {
     }
 
     protected abstract boolean update();
+
+    protected int getSource(){
+        return source;
+    }
 
     public void dispose(){
         stb_vorbis_close(audio.getAudioInfo().getHandle());

@@ -1,6 +1,5 @@
 package com.sauce.asset.audio;
 
-import static com.sauce.asset.audio.AudioThread.getSource;
 import static org.lwjgl.openal.AL10.*;
 import static org.lwjgl.openal.AL10.alSourcePlay;
 

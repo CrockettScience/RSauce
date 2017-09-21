@@ -7,7 +7,7 @@ package com.sauce.core;
 public class Project {
     // Project Information
     public static final String NAME = "Sauce";
-    public static final String ENGINE_VERSION = "0.2.7";
+    public static final String ENGINE_VERSION = "0.2.8";
     public static final String PROJECT_VERSION = "0.0.0";
     public static final String ASSET_ROOT = "C:\\Users\\User\\Documents\\RSauce\\assets\\";
 

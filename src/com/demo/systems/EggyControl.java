@@ -1,7 +1,11 @@
 package com.demo.systems;
 
 import com.demo.entities.Eggy;
+import com.sauce.asset.audio.Audio;
+import com.sauce.asset.audio.AudioThread;
+import com.sauce.asset.audio.Effect;
 import com.sauce.asset.graphics.Sprite;
+import com.sauce.core.Project;
 import com.sauce.core.engine.DrawComponent;
 import com.sauce.core.engine.Engine;
 import com.sauce.core.engine.StepSystem;
@@ -11,6 +15,7 @@ import static com.sauce.input.InputServer.*;
 
 public class EggyControl extends StepSystem {
 
+    private Audio step = new Effect(Project.ASSET_ROOT + "blip.ogg");
     private Map<Eggy, DrawComponent> components = new Map<>();
 
     public EggyControl(int priority, Eggy eggy, DrawComponent eggyDrawComponent){
@@ -23,6 +28,7 @@ public class EggyControl extends StepSystem {
 
     }
 
+    private int totalDelta = 0;
     @Override
     public void update(int delta) {
         for(DrawComponent eggy : components.valueSet()) {
@@ -46,9 +52,20 @@ public class EggyControl extends StepSystem {
                     eggy.setX(eggy.getX() + 20 * (isKeyPressed(KEY_LEFT_SHIFT) ? 2 : 1));
                     ((Sprite) eggy.getImage()).setAnimationState("right");
                 }
-            } else
+                // 8fps
+                if(totalDelta >= 125){
+                    AudioThread.enqueue(step);
+                    totalDelta = 0;
+                }
+
+                totalDelta += delta;
+            } else {
                 ((Sprite) eggy.getImage()).setAnimationState("idle");
+                totalDelta = 0;
+            }
         }
+
+
     }
 
     public boolean removeEggy(Eggy eggy){

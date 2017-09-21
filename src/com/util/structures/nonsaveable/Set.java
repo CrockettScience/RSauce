@@ -120,37 +120,37 @@ public class Set<T> implements Iterable<T> {
     }
 
     protected boolean add(SetEntry<T> entry) {
-        int currentPos = findPos(entry.element);
+        int pos = findPos(entry.element);
 
-        if (entryTable[currentPos] != null) {
-            SetEntry i = entryTable[currentPos];
+        if(entryTable[pos] == null){
+            entryTable[pos] = entry;
+            occupied++;
+            currentSize++;
 
-            while (i.next != null && !i.element.equals(entry.element))
-                i = i.next;
+            if(occupied >= entryTable.length)
+                rehash();
 
-            if (i.element.equals(entry.element)) {
-                if (i.isActive)
-                    return false;
-                else {
-                    i.element = entry.element;
+            return true;
+        } else{
+            SetEntry<T> currentEntry = entryTable[pos];
+            while(true){
+                if(currentEntry.next == null){
+                    currentEntry.next = entry;
                     currentSize++;
                     return true;
                 }
-            } else
-                occupied++;
 
-            i.next = entry;
-            currentSize++;
-        } else {
-            occupied++;
-            entryTable[currentPos] = entry;
-            currentSize++;
+                if(!currentEntry.isActive){
+                    currentEntry.isActive = true;
+                    currentEntry.element = entry.element;
+                    currentSize++;
+                    return true;
+                }
+
+                currentEntry = currentEntry.next;
+            }
+
         }
-
-        if (occupied > entryTable.length)
-            rehash();
-
-        return true;
     }
 
     public T remove(T e) {
@@ -159,7 +159,7 @@ public class Set<T> implements Iterable<T> {
         if (entryTable[currentPos] != null) {
             SetEntry<T> i = entryTable[currentPos];
 
-            while (i.next != null) {
+            while (i != null) {
                 if (i.element.equals(e) && i.isActive) {
                     i.isActive = false;
                     currentSize--;
@@ -239,7 +239,7 @@ public class Set<T> implements Iterable<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return (Iterator<T>) new SetIterator();
+        return new SetIterator();
     }
 
     protected class SetEntry<T> {
@@ -253,23 +253,48 @@ public class Set<T> implements Iterable<T> {
         }
     }
 
-    private class SetIterator implements Iterator {
+    private class SetIterator implements Iterator<T> {
         private int current = 0;
+        private int currentChainIndex = 0;
 
         @Override
         public boolean hasNext() {
-            while (Set.this.entryTable[current] == null) {
-                current++;
-                if (current >= Set.this.entryTable.length)
+            while(true){
+                if (current >= entryTable.length)
                     return false;
+
+                if(entryTable[current] != null){
+                    SetEntry<T> entry = entryTable[current];
+
+                    for(int i = 0; i < currentChainIndex; i++){
+                        entry = entry.next;
+                        if(entry != null && !entry.isActive && i == currentChainIndex - 1)
+                            currentChainIndex++;
+                    }
+
+                    if(entry != null)
+                        return true;
+
+                }
+
+                current++;
+                currentChainIndex = 0;
             }
 
-            return true;
         }
 
         @Override
-        public Object next() {
-            return Set.this.entryTable[current++].element;
+        public T next() {
+            SetEntry<T> entry = entryTable[current];
+
+            for(int i = 0; i < currentChainIndex; i++){
+                entry = entry.next;
+            }
+
+            currentChainIndex++;
+
+            return entry.element;
+
         }
     }
 }
