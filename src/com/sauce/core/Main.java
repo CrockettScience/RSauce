@@ -1,6 +1,7 @@
 package com.sauce.core;
 
 import com.demo.scenes.DemoScene;
+import com.sauce.asset.audio.AudioThread;
 import com.sauce.core.engine.Engine;
 import com.sauce.core.scene.SceneManager;
 import com.sauce.core.scene.Camera;
@@ -17,8 +18,6 @@ import java.nio.*;
 
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.openal.AL10.alDeleteBuffers;
-import static org.lwjgl.openal.AL10.alDeleteSources;
 import static org.lwjgl.openal.ALC10.*;
 import static org.lwjgl.openal.EXTThreadLocalContext.alcSetThreadContext;
 import static org.lwjgl.opengl.GL11.*;
@@ -36,8 +35,6 @@ public class Main{
     // The window handle
     public static long window;
 
-    private static long audioDevice;
-    private static long audioContext;
     private static boolean running = true;
 
     public static void main(String[] args) {
@@ -50,9 +47,7 @@ public class Main{
 
         loop(initEngine());
 
-        alcSetThreadContext(NULL);
-        alcDestroyContext(audioContext);
-        alcCloseDevice(audioDevice);
+        AudioThread.killAudioThread();
 
         glfwFreeCallbacks(window);
         glfwDestroyWindow(window);
@@ -67,7 +62,7 @@ public class Main{
         if ( !glfwInit() )
             throw new IllegalStateException("Unable to initialize GLFW");
 
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // the window will be resizable
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
@@ -107,21 +102,10 @@ public class Main{
         OGLCoordinateSystem.setCoordinateState(0, 0, Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT);
     }
 
+
     private static void initOpenAL(){
-        audioDevice = alcOpenDevice((ByteBuffer) null);
-        if (audioDevice == NULL) {
-            throw new IllegalStateException("Failed to open the default device.");
-        }
-
-        ALCCapabilities deviceCaps = ALC.createCapabilities(audioDevice);
-
-        audioContext = alcCreateContext(audioDevice, (IntBuffer) null);
-        if (audioContext == NULL) {
-            throw new IllegalStateException("Failed to create an OpenAL context.");
-        }
-
-        alcSetThreadContext(audioContext);
-        AL.createCapabilities(deviceCaps);
+        Thread audio = AudioThread.getAudioThread();
+        audio.start();
     }
 
     private static Engine initEngine(){

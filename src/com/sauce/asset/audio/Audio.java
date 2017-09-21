@@ -14,21 +14,30 @@ import static org.lwjgl.stb.STBVorbis.*;
 
 public abstract class Audio {
 
+    private String fileName;
+
     private IOAudio audio;
     private int samplesLeft;
+    private boolean removeMe = false;
 
     public Audio(String fileSource){
+        fileName = fileSource;
+    }
+
+    void loadAudio(){
         IOResource resource;
         try {
-            resource = loadResource(fileSource);
+            resource = loadResource(fileName);
         } catch (IOException e) {
             throw new RuntimeException("Failed to open Ogg Vorbis file.");
         }
 
         audio = ioResourceToAudio(resource, getAudioInfo(resource));
+
+        samplesLeft = audio.getAudioInfo().getLengthSamples();
     }
 
-    private boolean stream(int buffer) {
+    protected boolean stream(int buffer) {
         AudioInfo info = audio.getAudioInfo();
 
         int samples = 0;
@@ -97,5 +106,21 @@ public abstract class Audio {
 
     public void dispose(){
         stb_vorbis_close(audio.getAudioInfo().getHandle());
+    }
+
+    boolean shouldBeRemoved() {
+        return removeMe;
+    }
+
+    void removeMe() {
+        removeMe = true;
+    }
+
+    void addme(){
+        removeMe = false;
+    }
+
+    IOAudio getIOAudio(){
+        return audio;
     }
 }

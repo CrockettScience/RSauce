@@ -9,6 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static org.lwjgl.BufferUtils.createByteBuffer;
+
 public class ResourceUtil {
 
     public static IOResource loadResource(String resourcePath) throws IOException {
@@ -17,7 +19,7 @@ public class ResourceUtil {
         Path path = Paths.get(resourcePath);
         if (Files.isReadable(path)) {
             try (SeekableByteChannel fc = Files.newByteChannel(path)) {
-                buffer = BufferUtils.createByteBuffer((int)fc.size() + 1);
+                buffer = createByteBuffer((int)fc.size() + 1);
                 while (fc.read(buffer) != -1) {}
             }
         } else {
