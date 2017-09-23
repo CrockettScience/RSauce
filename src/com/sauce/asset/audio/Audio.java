@@ -39,6 +39,18 @@ public abstract class Audio {
         samplesLeft = audio.getAudioInfo().getLengthSamples();
     }
 
+    protected void loadAudio(IOAudio cachedAudio){
+        audio = cachedAudio;
+
+        source = alGenSources();
+
+        samplesLeft = audio.getAudioInfo().getLengthSamples();
+    }
+
+    public String getFileName(){
+        return fileName;
+    }
+
     protected boolean stream(int buffer) {
         AudioInfo info = audio.getAudioInfo();
 
@@ -110,7 +122,11 @@ public abstract class Audio {
         return source;
     }
 
-    public void dispose(){
+    void dispose(){
+        alDeleteSources(source);
+    }
+
+    void disposeAudioData(){
         stb_vorbis_close(audio.getAudioInfo().getHandle());
     }
 

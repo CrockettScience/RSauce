@@ -2,6 +2,7 @@ package com.sauce.asset.audio;
 
 import com.sauce.util.io.AudioUtil;
 import com.util.RSauceLogger;
+import com.util.structures.nonsaveable.Map;
 import com.util.structures.nonsaveable.Queue;
 import com.util.structures.nonsaveable.Set;
 import org.lwjgl.BufferUtils;
@@ -17,6 +18,7 @@ import static org.lwjgl.openal.AL10.alGenBuffers;
 import static org.lwjgl.openal.AL10.alGenSources;
 import static org.lwjgl.openal.ALC10.*;
 import static org.lwjgl.openal.EXTThreadLocalContext.alcSetThreadContext;
+import static org.lwjgl.stb.STBVorbis.stb_vorbis_close;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class AudioThread extends Thread {
@@ -58,14 +60,21 @@ public class AudioThread extends Thread {
         alcSetThreadContext(audioContext);
         AL.createCapabilities(deviceCaps);
 
+        Queue<OpenALPlayEntry> removalQueue = new Queue<>();
+
         try {
             while (audioRunning) {
                 // update all loaded audio
                 for (OpenALPlayEntry entry : loadedAudio) {
                     if (!entry.audio.update() || entry.audio.shouldBeRemoved()) {
-                        loadedAudio.remove(entry);
-                        entry.dispose();
+                        removalQueue.enqueue(entry);
                     }
+                }
+
+                while(!removalQueue.isEmpty()) {
+                    OpenALPlayEntry entry = removalQueue.dequeue();
+                    loadedAudio.remove(entry);
+                    entry.dispose();
                 }
 
                 if (clearAudio) {
@@ -78,7 +87,7 @@ public class AudioThread extends Thread {
                     getQueueToken();
 
                     OpenALPlayEntry entry = audioQueue.dequeue();
-                    entry.audio.loadAudio();
+                    AudioCache.getCachedAudio(entry.audio);
                     if (entry.play())
                         loadedAudio.add(entry);
                     else
@@ -142,6 +151,10 @@ public class AudioThread extends Thread {
         audioRunning = false;
     }
 
+    public static void clearAudioCache(){
+        AudioCache.clear();
+    }
+
     private static class OpenALPlayEntry{
         private IntBuffer buffer;
         private Audio audio;
@@ -159,6 +172,32 @@ public class AudioThread extends Thread {
 
         private void dispose(){
             alDeleteBuffers(buffer);
+            audio.dispose();
+            buffer = null;
+            audio = null;
+        }
+    }
+
+    private static class AudioCache{
+        private static Map<String, AudioUtil.IOAudio> cache = new Map<>();
+
+        private static void getCachedAudio(Audio a){
+            if (cache.containsKey(a.getFileName())) {
+                a.loadAudio(cache.get(a.getFileName()));
+                a.rewind();
+            }
+            else{
+                a.loadAudio();
+                cache.put(a.getFileName(), a.getIOAudio());
+            }
+        }
+
+        private static void clear(){
+            for(AudioUtil.IOAudio audio : cache.valueSet()){
+                stb_vorbis_close(audio.getAudioInfo().getHandle());
+            }
+
+            cache.clear();
         }
     }
 }

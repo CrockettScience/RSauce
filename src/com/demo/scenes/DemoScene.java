@@ -56,7 +56,6 @@ public class DemoScene extends Scene implements InputClient {
         Iterator<ParallaxBackground> i = getAttribute(BackgroundAttribute.class).backgroundIterator();
 
         AudioThread.remove(irritatingSong);
-        irritatingSong.dispose();
 
         while(i.hasNext()){
             i.next().dispose();

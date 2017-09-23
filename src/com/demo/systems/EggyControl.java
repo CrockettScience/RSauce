@@ -15,7 +15,6 @@ import static com.sauce.input.InputServer.*;
 
 public class EggyControl extends StepSystem {
 
-    private Audio step = new Effect(Project.ASSET_ROOT + "blip.ogg");
     private Map<Eggy, DrawComponent> components = new Map<>();
 
     public EggyControl(int priority, Eggy eggy, DrawComponent eggyDrawComponent){
@@ -54,7 +53,7 @@ public class EggyControl extends StepSystem {
                 }
                 // 8fps
                 if(totalDelta >= 125){
-                    AudioThread.enqueue(step);
+                    AudioThread.enqueue(new Effect(Project.ASSET_ROOT + "blip.ogg"));
                     totalDelta = 0;
                 }
 

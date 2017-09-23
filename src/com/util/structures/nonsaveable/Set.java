@@ -1,5 +1,7 @@
 package com.util.structures.nonsaveable;
 
+import org.lwjgl.system.CallbackI;
+
 import java.util.Iterator;
 
 /**
@@ -7,7 +9,7 @@ import java.util.Iterator;
  */
 
 public class Set<T> implements Iterable<T> {
-    private static final int DEFAULT_TABLE_SIZE = 101;
+    private static final int DEFAULT_TABLE_SIZE = 10;
 
     protected SetEntry<T>[] entryTable;
     private int occupied;
@@ -163,6 +165,10 @@ public class Set<T> implements Iterable<T> {
                 if (i.element.equals(e) && i.isActive) {
                     i.isActive = false;
                     currentSize--;
+
+                    if(occupied >= currentSize * 2 && occupied >= DEFAULT_TABLE_SIZE)
+                        rehash();
+
                     return i.element;
                 }
 
@@ -197,13 +203,18 @@ public class Set<T> implements Iterable<T> {
     private void rehash() {
         SetEntry[] oldArray = entryTable;
 
-        allocateArray(nextPrime(2 * currentSize));
+        allocateArray(nextPrime(Math.max(2 * currentSize, DEFAULT_TABLE_SIZE)));
         currentSize = 0;
+        occupied = 0;
 
         for (SetEntry entry : oldArray) {
-            SetEntry i = entry;
+            SetEntry<T> i = entry;
+
             while (i != null) {
-                add(i);
+
+                if(i.isActive)
+                    add(i.element);
+
                 i = i.next;
             }
         }
@@ -266,10 +277,17 @@ public class Set<T> implements Iterable<T> {
                 if(entryTable[current] != null){
                     SetEntry<T> entry = entryTable[current];
 
-                    for(int i = 0; i < currentChainIndex; i++){
-                        entry = entry.next;
-                        if(entry != null && !entry.isActive && i == currentChainIndex - 1)
+                    if(currentChainIndex == 0){
+                        while(entry != null && !entry.isActive){
                             currentChainIndex++;
+                            entry = entry.next;
+                        }
+                    }else {
+                        for (int i = 0; i < currentChainIndex; i++) {
+                            entry = entry.next;
+                            if (entry != null && !entry.isActive && i == currentChainIndex - 1)
+                                currentChainIndex++;
+                        }
                     }
 
                     if(entry != null)
