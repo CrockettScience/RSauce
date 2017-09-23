@@ -12,10 +12,10 @@ import org.lwjgl.openal.ALCCapabilities;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.lwjgl.openal.AL10.alDeleteBuffers;
 import static org.lwjgl.openal.AL10.alGenBuffers;
-import static org.lwjgl.openal.AL10.alGenSources;
 import static org.lwjgl.openal.ALC10.*;
 import static org.lwjgl.openal.EXTThreadLocalContext.alcSetThreadContext;
 import static org.lwjgl.stb.STBVorbis.stb_vorbis_close;
@@ -28,10 +28,14 @@ public class AudioThread extends Thread {
 
     private static AudioThread singletonAudioThread;
     private static Queue<OpenALPlayEntry> audioQueue = new Queue<>();
-    private static boolean audioQueueIsBeingAccessed = false;
+    private static AtomicBoolean audioQueueIsBeingAccessed = new AtomicBoolean();
     private static boolean audioRunning = true;
     private static boolean clearAudio = false;
     private static Set<OpenALPlayEntry> loadedAudio = new Set<>();
+
+    static{
+        audioQueueIsBeingAccessed.set(false);
+    }
 
     private AudioThread(){}
 
@@ -122,12 +126,12 @@ public class AudioThread extends Thread {
     }
 
     private static synchronized void getQueueToken(){
-        if(!audioQueueIsBeingAccessed)
-            audioQueueIsBeingAccessed = true;
+        if(!audioQueueIsBeingAccessed.get())
+            audioQueueIsBeingAccessed.set(true);
         else {
             try {
                 singletonAudioThread.waitThreads();
-                audioQueueIsBeingAccessed = true;
+                audioQueueIsBeingAccessed.set(true);
             } catch (InterruptedException e) {
                 throw new RuntimeException("Audio Thread was interrupted");
             }
@@ -135,7 +139,7 @@ public class AudioThread extends Thread {
     }
 
     private static void returnQueueToken(){
-        audioQueueIsBeingAccessed = false;
+        audioQueueIsBeingAccessed.set(false);
         singletonAudioThread.notifyThreads();
     }
 

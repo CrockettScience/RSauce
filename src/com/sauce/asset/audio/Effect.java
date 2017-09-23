@@ -1,12 +1,18 @@
 package com.sauce.asset.audio;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import static org.lwjgl.openal.AL10.*;
 import static org.lwjgl.openal.AL10.alSourcePlay;
 
 public class Effect extends Audio {
 
+    private AtomicBoolean stopped = new AtomicBoolean();
+
     public Effect(String fileSource) {
         super(fileSource);
+
+        stopped.set(false);
     }
 
     @Override
@@ -16,15 +22,19 @@ public class Effect extends Audio {
         for (int i = 0; i < processed; i++) {
             int buffer = alSourceUnqueueBuffers(getSource());
 
-            if (!stream(buffer)) {
+            if (!stream(buffer) || stopped.get()) {
                 removeMe();
             }
         }
 
-        if (processed == 2) {
+        if (processed == 2 && !stopped.get()) {
             alSourcePlay(getSource());
         }
 
         return true;
+    }
+
+    public void stop(){
+        stopped.set(true);
     }
 }

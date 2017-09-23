@@ -48,11 +48,18 @@ public class Music extends Audio {
         return true;
     }
 
-    public float getElapsedTime() {
-        return super.getProgressTime(getProgress());
+    private float getProgress() {
+        return 1.0f - getSamplesLeft() / (float) (getIOAudio().getAudioInfo().getLengthSamples());
     }
 
-    @Override
+    private float getProgressTime(float progress) {
+        return progress * getIOAudio().getAudioInfo().getLengthSeconds();
+    }
+
+    public float getElapsedTime() {
+        return getProgressTime(getProgress());
+    }
+
     public void rewind(){
         super.rewind();
     }

@@ -77,25 +77,9 @@ public abstract class Audio {
         return true;
     }
 
-    protected float getProgress() {
-        return 1.0f - samplesLeft / (float) (audio.getAudioInfo().getLengthSamples());
-    }
-
-    protected float getProgressTime(float progress) {
-        return progress * audio.getAudioInfo().getLengthSeconds();
-    }
-
     protected void rewind() {
         stb_vorbis_seek_start(audio.getAudioInfo().getHandle());
         samplesLeft = audio.getAudioInfo().getLengthSamples();
-    }
-
-    protected void skip(int direction) {
-        seek(Math.min(Math.max(0, stb_vorbis_get_sample_offset(audio.getAudioInfo().getHandle()) + direction * audio.getAudioInfo().getSampleRate()), audio.getAudioInfo().getLengthSamples()));
-    }
-
-    protected void skipTo(float offset0to1) {
-        seek(Math.round(audio.getAudioInfo().getLengthSamples() * offset0to1));
     }
 
     protected void seek(int sample_number) {
@@ -126,10 +110,6 @@ public abstract class Audio {
         alDeleteSources(source);
     }
 
-    void disposeAudioData(){
-        stb_vorbis_close(audio.getAudioInfo().getHandle());
-    }
-
     boolean shouldBeRemoved() {
         return removeMe;
     }
@@ -144,5 +124,9 @@ public abstract class Audio {
 
     IOAudio getIOAudio(){
         return audio;
+    }
+
+    protected int getSamplesLeft() {
+        return samplesLeft;
     }
 }
