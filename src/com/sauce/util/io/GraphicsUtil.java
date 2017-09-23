@@ -22,7 +22,7 @@ public class GraphicsUtil {
         return image;
     }
 
-    public static GraphicInfo getImageInfo(ResourceUtil.IOResource resource){
+    public static GraphicInfo getGraphicInfo(ResourceUtil.IOResource resource){
         return new GraphicInfo(resource.buffer);
 
     }

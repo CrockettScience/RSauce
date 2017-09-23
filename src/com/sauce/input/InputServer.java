@@ -1,9 +1,13 @@
 package com.sauce.input;
 
+import com.demo.systems.ControllerMapper;
 import com.sauce.core.Main;
+import com.sauce.core.engine.Engine;
 import com.util.Vector2DDouble;
 import com.util.structures.nonsaveable.ArrayList;
 import com.util.structures.special.RecyclePool;
+
+import java.nio.FloatBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -50,7 +54,6 @@ public class InputServer {
 
         glfwSetJoystickCallback((joyId, event) -> {
             dispatch(EVENT_TYPE_JOYSTICK_CONNECT, joyId, event, -1, -1, -1);
-
         });
     }
 

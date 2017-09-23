@@ -26,7 +26,7 @@ public class Image extends Graphic {
             throw new RuntimeException();
         }
 
-        GraphicInfo info = getImageInfo(resource);
+        GraphicInfo info = getGraphicInfo(resource);
 
         image = ioResourceToImage(resource, info);
         components = info.getComponents();
