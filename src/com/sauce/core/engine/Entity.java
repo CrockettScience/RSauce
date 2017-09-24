@@ -1,5 +1,6 @@
 package com.sauce.core.engine;
 
+import com.util.RSauceLogger;
 import com.util.structures.nonsaveable.Map;
 
 /**
@@ -10,7 +11,15 @@ public class Entity{
 
     public boolean addComponent(Component c){
         if(!componentMap.containsKey(c.getClass())) {
+            if(c instanceof DrawComponent) {
+                if(!((DrawComponent) c).setEntity(this)){
+                    RSauceLogger.printErrorln("The DrawComponent already belongs to another entity");
+                    return false;
+                }
+            }
+
             componentMap.put(c.getClass(), c);
+            Engine.getEngine().entityChangedComponents(this);
             return true;
         }
 
@@ -20,6 +29,7 @@ public class Entity{
     public boolean removeComponent(Class<? extends Component> cClass){
         if(componentMap.containsKey(cClass)){
             componentMap.remove(cClass);
+            Engine.getEngine().entityChangedComponents(this);
             return true;
         }
 
@@ -28,6 +38,7 @@ public class Entity{
 
     public void clearComponents(){
         componentMap.clear();
+        Engine.getEngine().entityChangedComponents(this);
     }
 
     public <T extends Component>T getComponent(Class<T> c){

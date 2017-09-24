@@ -8,6 +8,7 @@ public class BoundBox implements Component {
     private int y;
     private int width;
     private int height;
+    private int radius;
 
     public BoundBox(int posX, int posY, int wide, int high){
         x = posX;

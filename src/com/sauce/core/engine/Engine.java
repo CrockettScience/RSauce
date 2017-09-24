@@ -324,6 +324,11 @@ public final class Engine {
         }
 
         @Override
+        public boolean containsEntity(Entity e) {
+            return entities.contains(e);
+        }
+
+        @Override
         public void addQualifiedEntity(Entity ent) {
             entities.add(ent);
         }
@@ -337,6 +342,11 @@ public final class Engine {
 
         @Override
         public void entityRemovedFromEngine(Entity ent) {
+            entities.remove(ent);
+        }
+
+        @Override
+        public void entityNoLongerQualifies(Entity ent) {
             entities.remove(ent);
         }
 
@@ -359,6 +369,11 @@ public final class Engine {
         @Override
         public void removedFromEngine(Engine engine) {
             engine.unbindEntitySubscriber(this);
+        }
+
+        public void entityChangedZ(Entity ent){
+            entities.remove(ent);
+            entities.add(ent);
         }
 
         public static class ZComparator implements Comparator<Entity>{
@@ -402,6 +417,22 @@ public final class Engine {
         public Set<Entity> getSet(){
             return ents.toSet();
         }
+    }
+
+    void entityChangedComponents(Entity ent){
+        for(EntitySubscriber sub : subs){
+            if(sub.containsEntity(ent)){
+                if( !(ent.hasAll(sub.componentsToHave()) && ent.hasNone(sub.componentsNotToHave())) )
+                    sub.entityNoLongerQualifies(ent);
+            }else{
+                if(ent.hasAll(sub.componentsToHave()) && ent.hasNone(sub.componentsNotToHave()))
+                    sub.addQualifiedEntity(ent);
+            }
+        }
+    }
+
+    void entityChangedZ(Entity ent){
+        render.entityChangedZ(ent);
     }
 
 }

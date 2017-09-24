@@ -9,10 +9,20 @@ import com.util.Vector3D;
 public class DrawComponent implements Component {
     private Graphic image;
     private Vector3D position;
+    private Entity entity = null;
 
     public DrawComponent(Graphic asset, int x, int y, int z){
         image = asset;
         position = new Vector3D(x, y, z);
+    }
+
+    boolean setEntity(Entity ent){
+        if(entity == null) {
+            entity = ent;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public Graphic getImage(){
@@ -41,6 +51,8 @@ public class DrawComponent implements Component {
 
     public void setZ(int z){
         position.setZ(z);
+        Engine.getEngine().entityChangedZ(entity);
+
     }
 
 }

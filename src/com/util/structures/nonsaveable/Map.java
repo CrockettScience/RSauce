@@ -87,16 +87,16 @@ public class Map<K, V> {
         return true;
     }
 
-    public boolean remove(K key) {
+    public V remove(K key) {
         int currentPos = findPos(key);
 
         if (mapTable[currentPos] == null || !mapTable[currentPos].isActive)
-            return false;
+            return null;
 
         mapTable[currentPos].isActive = false;
         currentSize--;
 
-        return true;
+        return mapTable[currentPos].value;
     }
 
     public void clear() {
