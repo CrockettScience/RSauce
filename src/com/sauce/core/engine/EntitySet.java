@@ -11,7 +11,7 @@ import java.util.Iterator;
  * to compare entities based on their components.
  */
 class EntitySet implements Iterable<Entity>{
-    private Set<EntityEntry> entities = new Set<>();
+    private Set<Entity> entities = new Set<>();
 
     public int size() {
         return entities.size();
@@ -22,7 +22,7 @@ class EntitySet implements Iterable<Entity>{
     }
 
     public boolean add(Entity e) {
-        return entities.add(new EntityEntry(e));
+        return entities.add(e);
     }
 
     public boolean contains(Entity e){
@@ -32,9 +32,9 @@ class EntitySet implements Iterable<Entity>{
     public EntitySet onlyEntitiesWithComponent(Class<? extends Component> c) {
         EntitySet ents = new EntitySet();
 
-        for (EntityEntry ent : entities) {
-            if (ent.entity.hasComponent(c)) {
-                ents.add(ent.entity);
+        for (Entity ent : entities) {
+            if (ent.hasComponent(c)) {
+                ents.add(ent);
             }
         }
 
@@ -44,9 +44,9 @@ class EntitySet implements Iterable<Entity>{
     public EntitySet onlyEntitiesWithoutComponent(Class<? extends Component> c) {
         EntitySet ents = new EntitySet();
 
-        for (EntityEntry ent : entities) {
-            if (!ent.entity.hasComponent(c)) {
-                ents.add(ent.entity);
+        for (Entity ent : entities) {
+            if (!ent.hasComponent(c)) {
+                ents.add(ent);
             }
         }
 
@@ -54,25 +54,17 @@ class EntitySet implements Iterable<Entity>{
     }
 
     public void remove(Entity e) {
-        EntityEntry ent = entities.remove(new EntityEntry(e));
-        ent.removedFromEngine();
+        Entity ent = entities.remove(e);
     }
 
     public void clear() {
-        for(EntityEntry entry : entities){
-            entry.removedFromEngine();
-        }
         entities.clear();
-    }
-
-    public Entity[] toArray(){
-        return toArray();
     }
 
     public Set<Entity> toSet(){
         Set<Entity> ents = new Set<>();
-        for(EntityEntry entry : entities)
-            ents.add(entry.entity);
+        for(Entity ent : entities)
+            ents.add(ent);
 
         return ents;
     }
@@ -82,27 +74,4 @@ class EntitySet implements Iterable<Entity>{
         return toSet().iterator();
     }
 
-    private class EntityEntry{
-        private Entity entity;
-        private ArrayList<EntitySubscriber> subs;
-
-        private EntityEntry(Entity ent){
-            entity = ent;
-        }
-
-        private void removedFromEngine(){
-            for(EntitySubscriber sub : subs)
-                sub.entityRemovedFromEngine(entity);
-
-            entity = null;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if(!(obj instanceof EntityEntry))
-                return false;
-
-            return entity.equals((Entity) obj);
-        }
-    }
 }

@@ -2,6 +2,7 @@ package com.sauce.input;
 
 import com.demo.systems.ControllerMapper;
 import com.sauce.core.Main;
+import com.sauce.core.Project;
 import com.sauce.core.engine.Engine;
 import com.util.Vector2DDouble;
 import com.util.structures.nonsaveable.ArrayList;
@@ -49,7 +50,7 @@ public class InputServer {
         });
 
         glfwSetCursorPosCallback(Main.window, (window, x, y) -> {
-            dispatch(EVENT_TYPE_MOUSE_MOVE, -1, -1, -1, x, y);
+            dispatch(EVENT_TYPE_MOUSE_MOVE, -1, -1, -1, x, Project.SCREEN_HEIGHT - y);
         });
 
         glfwSetJoystickCallback((joyId, event) -> {
@@ -104,6 +105,10 @@ public class InputServer {
         subscribers.add(sub);
     }
 
+    public static void unbind(InputClient sub){
+        subscribers.remove(sub);
+    }
+
     public static boolean isKeyPressed(int key){
         return glfwGetKey(Main.window, key) == GLFW_PRESS;
     }
@@ -125,7 +130,7 @@ public class InputServer {
         double[] y = new double[1];
 
         glfwGetCursorPos(Main.window, x, y);
-        return new Vector2DDouble(x[0], y[0]);
+        return new Vector2DDouble(x[0], Project.SCREEN_HEIGHT - y[0]);
     }
 
     public static final int MOUSE_LEFT = GLFW_MOUSE_BUTTON_LEFT;

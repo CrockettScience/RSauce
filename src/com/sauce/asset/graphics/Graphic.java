@@ -18,14 +18,17 @@ public abstract class Graphic {
     protected float yScale = 1.0f;
     private boolean staticMode = false;
 
+    Vector2D center;
     protected Vector2D origin = new Vector2D(0, 0);
 
     public Graphic(int width, int height, int absWidth, int absHeight){
-        this.w = width;
-        this.h = height;
+        w = width;
+        h = height;
 
-        this.absW = absWidth;
-        this.absH = absHeight;
+        absW = absWidth;
+        absH = absHeight;
+
+        center = new Vector2D(w / 2, h / 2);
     }
 
     public Graphic(){}
@@ -36,6 +39,7 @@ public abstract class Graphic {
 
         absW = absWidth;
         absH = absHeight;
+        center = new Vector2D(w / 2, h / 2);
     }
 
     public int width(){

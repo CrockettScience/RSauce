@@ -7,6 +7,7 @@ import com.sauce.core.scene.BackgroundAttribute;
 import com.sauce.core.scene.Camera;
 import com.sauce.core.scene.Scene;
 import com.sauce.core.scene.SceneManager;
+import com.util.RSauceLogger;
 import com.util.structures.nonsaveable.ArrayList;
 import com.util.structures.nonsaveable.Set;
 import com.util.structures.special.PriorityMap;
@@ -54,18 +55,30 @@ public final class Engine {
         subs.remove(sub);
     }
 
-    public void add(StepSystem sys){
+    public boolean add(StepSystem sys){
+        if(steps.containsKey(sys.getClass())){
+            RSauceLogger.printWarningln("Can't add duplicate StepSystem " + sys.getClass().getName());
+            return false;
+        }
+
         steps.put(sys.getClass(), sys, sys.prio);
         sys.addedToEngine(this);
+        return true;
     }
 
-    public void add(DrawSystem sys){
+    public boolean add(DrawSystem sys){
+        if(draws.containsKey(sys.getClass())){
+            RSauceLogger.printWarningln("Can't add duplicate DrawSystem " + sys.getClass().getName());
+            return false;
+        }
         draws.put(sys.getClass(), sys, sys.prio);
         sys.addedToEngine(this);
+        return true;
     }
 
     public void add(Entity ent){
         entities.add(ent);
+        ent.addedToEngine();
 
         for(EntitySubscriber sub : subs){
             if(ent.hasAll(sub.componentsToHave()) && ent.hasNone(sub.componentsNotToHave()))
@@ -101,6 +114,12 @@ public final class Engine {
 
     public void removeEntity(Entity ent){
         entities.remove(ent);
+        ent.removedFromEngine();
+        for(EntitySubscriber sub : subs){
+            if(sub.containsEntity(ent)){
+                sub.entityRemovedFromEngine(ent);
+            }
+        }
     }
 
     public void clearSystems(){
@@ -109,7 +128,15 @@ public final class Engine {
     }
 
     public void clearEntities(){
-        entities.clear();
+        for(Entity ent : entities){
+            for(EntitySubscriber sub : subs){
+                if(sub.containsEntity(ent)){
+                    sub.entityRemovedFromEngine(ent);
+                }
+            }
+            ent.removedFromEngine();
+            ent.dispose();
+        }
     }
 
     private int timeSinceLastUpdate;
@@ -305,7 +332,7 @@ public final class Engine {
     }
 
     private static class RenderSystem extends System implements EntitySubscriber{
-        private SortedArrayList<Entity> entities = new SortedArrayList<Entity>(new ZComparator());
+        private SortedArrayList<Entity> entities = new SortedArrayList<>(new ZComparator());
         private final DrawBatch batch = new DrawBatch();
 
         public RenderSystem(int priority){
@@ -394,7 +421,7 @@ public final class Engine {
 
         public EntityQualifier all(Class<? extends Component>... components){
             if(components.length > 0) {
-                EntitySet ents = Engine.this.onlyEntitiesWithComponent(components[0]);
+                ents = Engine.this.onlyEntitiesWithComponent(components[0]);
                 for (int i = 1; i < components.length; i++) {
                     ents = ents.onlyEntitiesWithComponent(components[i]);
                 }
@@ -432,7 +459,8 @@ public final class Engine {
     }
 
     void entityChangedZ(Entity ent){
-        render.entityChangedZ(ent);
+        if(render.containsEntity(ent))
+            render.entityChangedZ(ent);
     }
 
 }

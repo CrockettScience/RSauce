@@ -28,14 +28,10 @@ public class AudioThread extends Thread {
 
     private static AudioThread singletonAudioThread;
     private static Queue<OpenALPlayEntry> audioQueue = new Queue<>();
-    private static AtomicBoolean audioQueueIsBeingAccessed = new AtomicBoolean();
+    private static boolean audioQueueIsBeingAccessed = false;
     private static boolean audioRunning = true;
     private static boolean clearAudio = false;
     private static Set<OpenALPlayEntry> loadedAudio = new Set<>();
-
-    static{
-        audioQueueIsBeingAccessed.set(false);
-    }
 
     private AudioThread(){}
 
@@ -126,12 +122,12 @@ public class AudioThread extends Thread {
     }
 
     private static synchronized void getQueueToken(){
-        if(!audioQueueIsBeingAccessed.get())
-            audioQueueIsBeingAccessed.set(true);
+        if(!audioQueueIsBeingAccessed)
+            audioQueueIsBeingAccessed = true;
         else {
             try {
                 singletonAudioThread.waitThreads();
-                audioQueueIsBeingAccessed.set(true);
+                audioQueueIsBeingAccessed = true;
             } catch (InterruptedException e) {
                 throw new RuntimeException("Audio Thread was interrupted");
             }
@@ -139,7 +135,7 @@ public class AudioThread extends Thread {
     }
 
     private static void returnQueueToken(){
-        audioQueueIsBeingAccessed.set(false);
+        audioQueueIsBeingAccessed = false;
         singletonAudioThread.notifyThreads();
     }
 

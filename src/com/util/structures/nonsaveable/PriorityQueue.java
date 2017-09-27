@@ -1,4 +1,4 @@
-package com.util.structures.special;
+package com.util.structures.nonsaveable;
 
 import java.util.NoSuchElementException;
 

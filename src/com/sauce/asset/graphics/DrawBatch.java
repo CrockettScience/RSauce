@@ -50,10 +50,10 @@ public class DrawBatch {
             glEnable(GL_TEXTURE_2D);
 
             glPushMatrix();
-            glTranslatef(coord.getX() + image.getOrigin().getX(), coord.getY() + image.getOrigin().getY(), 0);
+            glTranslatef(coord.getX() + image.center.getX(), coord.getY() + image.center.getY(), 0);
             glRotatef(image.getAngle(), 0, 0, 1);
             glScalef(image.getXScale(), -image.getYScale(), 1f);
-            glTranslatef(-coord.getX() - image.getOrigin().getX(), -coord.getY() - image.getOrigin().getY(), 0);
+            glTranslatef(-coord.getX() - image.center.getX(), -coord.getY() - image.center.getY(), 0);
 
             renderImage(image, coord);
 

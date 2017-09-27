@@ -8,6 +8,7 @@ import com.util.structures.nonsaveable.Map;
  */
 public class Entity{
     private Map<Class<? extends Component>, Component> componentMap = new Map<>();
+    private boolean isInEngine = false;
 
     public boolean addComponent(Component c){
         if(!componentMap.containsKey(c.getClass())) {
@@ -19,7 +20,7 @@ public class Entity{
             }
 
             componentMap.put(c.getClass(), c);
-            Engine.getEngine().entityChangedComponents(this);
+            notifyEngine();
             return true;
         }
 
@@ -29,7 +30,7 @@ public class Entity{
     public boolean removeComponent(Class<? extends Component> cClass){
         if(componentMap.containsKey(cClass)){
             componentMap.remove(cClass);
-            Engine.getEngine().entityChangedComponents(this);
+            notifyEngine();
             return true;
         }
 
@@ -69,6 +70,19 @@ public class Entity{
 
     protected Map<Class<? extends Component>, Component> getComponentMap(){
         return componentMap;
+    }
+
+    void addedToEngine(){
+        isInEngine = true;
+    }
+
+    void removedFromEngine(){
+        isInEngine = false;
+    }
+
+    void notifyEngine(){
+        if(isInEngine)
+            Engine.getEngine().entityChangedComponents(this);
     }
 
     public void dispose(){}

@@ -27,4 +27,8 @@ public class Vector2D {
     public void setY(int y){
         this.y = y;
     }
+
+    public static Vector2DDouble toVector2DDouble(Vector2D v){
+        return new Vector2DDouble((double) v.x, (double) v.y);
+    }
 }

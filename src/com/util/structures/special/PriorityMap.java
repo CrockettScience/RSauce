@@ -1,15 +1,13 @@
 package com.util.structures.special;
 
-import com.util.structures.nonsaveable.LinkedList;
 import com.util.structures.nonsaveable.Map;
+import com.util.structures.nonsaveable.PriorityQueue;
 import com.util.structures.nonsaveable.Queue;
 import com.util.structures.nonsaveable.Set;
 
-import java.util.Iterator;
-
 /**
  * Created by John Crockett.
- * The same as a PriorityQueue<T>, but with the functionality of Map-like linear access and modification
+ * The same as a PriorityQueue<T>, but with the functionality of Map-like linear access and modification.
  * to remove elements, user must use remove method with key. PriorityMap cycles through elements.
  */
 public class PriorityMap<K, V>{
@@ -60,14 +58,11 @@ public class PriorityMap<K, V>{
     public V next() {
         skipToNextActiveElement();
 
-        PriorityMapEntry<K, V> entry = queue.getNext();
+        PriorityMapEntry<K, V> entry = queue.removeNext();
         poolQueue.enqueue(entry);
 
-        if(isEmpty()) {
-            while(!poolQueue.isEmpty()){
-                PriorityMapEntry<K, V> poolEntry = poolQueue.dequeue();
-                put(poolEntry.key, poolEntry.value, poolEntry.priority);
-            }
+        if(queue.isEmpty()) {
+            recycle();
         }
 
         return entry.value;
@@ -98,11 +93,19 @@ public class PriorityMap<K, V>{
         return false;
     }
 
-    private void skipToNextActiveElement(){
-        while(!queue.getNext().isActive) {
-            PriorityMapEntry<K, V> entry = queue.removeNext();
-            map.remove(entry.key);
+    private void recycle(){
+        while(!poolQueue.isEmpty()){
+            queue.add(poolQueue.dequeue());
         }
+    }
+
+    private void skipToNextActiveElement(){
+        while(!queue.isEmpty() && !queue.getNext().isActive) {
+            queue.removeNext();
+        }
+
+        if(queue.isEmpty())
+            recycle();
     }
 
     private class PriorityMapEntry<KeyType, T> implements Comparable<PriorityMapEntry<KeyType, V>>{

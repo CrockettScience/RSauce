@@ -181,7 +181,7 @@ public class SortedArrayList<T> implements Iterable<T> {
 
     private void growArray() {
         T [ ] old = elements;
-        elements = (T []) new Comparable[ elements.length * 2 + 1 ];
+        elements = (T []) new Object[ elements.length * 2 + 1 ];
         for( int i = 0; i < size( ); i++ )
             elements[ i ] = old[ i ];
     }

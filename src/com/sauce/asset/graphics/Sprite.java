@@ -55,7 +55,7 @@ public class Sprite extends Graphic {
             i = 0;
         }
 
-        fpms = 1000 / fps;
+        fpms = fps == 0 ? 0 : 1000 / fps;
 
         resize(source.width() / cellsInRow, source.height() / cellsInColumn, source.width(), source.height());
     }

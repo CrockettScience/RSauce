@@ -1,10 +1,12 @@
 package com.demo.scenes;
 
 import com.demo.entities.Eggy;
+import com.demo.systems.CollisionTest;
 import com.sauce.asset.audio.AudioThread;
 import com.sauce.asset.audio.Music;
 import com.sauce.core.Main;
 import com.sauce.core.Project;
+import com.sauce.core.engine.Engine;
 import com.sauce.core.engine.Entity;
 import com.sauce.core.engine.ParallaxBackground;
 import com.sauce.core.scene.*;
@@ -26,12 +28,14 @@ public class DemoScene extends Scene implements InputClient {
     private static final int VIEW_SPEED = 50;
     private static final int ZOOM_SPEED = 100;
 
+
+
     @Override
     protected void loadResources() {
         // Setup Eggy
-        Entity eggy1 = new Eggy(16, 16, SceneManager.getCamera().getWidth() / 2, SceneManager.getCamera().getHeight() / 2, 0);
+        Entity eggy1 = new Eggy(16, 16, Project.SCREEN_WIDTH / 2, Project.SCREEN_HEIGHT / 2, 0);
 
-        putEntity("eggy1", eggy1);
+        putEntity("eggy", eggy1);
 
         // Setup Background
         BackgroundAttribute attr = new BackgroundAttribute();
@@ -57,7 +61,7 @@ public class DemoScene extends Scene implements InputClient {
 
     @Override
     protected void sceneMain() {
-        activateEntity("eggy1");
+        activateEntity("eggy");
     }
 
     @Override
@@ -83,6 +87,9 @@ public class DemoScene extends Scene implements InputClient {
                 getCamera().move(getCamera().getX() + VIEW_SPEED, getCamera().getY());
             }
         }
+
+        if(event.key() == KEY_ENTER)
+            Engine.getEngine().add(new CollisionTest(0, (Eggy) getEntity("eggy")));
     }
 
     @Override

@@ -17,8 +17,9 @@ public class LinkedList<T> implements Iterable<T> {
         header = new LinkedListNode();
         footer = new LinkedListNode();
 
+        footer.prev = header;
         header.next = footer;
-        footer.next = header;
+        size = 0;
     }
 
     public final void clear() {
@@ -29,6 +30,7 @@ public class LinkedList<T> implements Iterable<T> {
         }
         footer.prev = header;
         header.next = footer;
+        size = 0;
 
     }
 
@@ -56,6 +58,7 @@ public class LinkedList<T> implements Iterable<T> {
         node.next = footer;
         footer.prev.next = node;
         footer.prev = node;
+        size++;
     }
 
     public T remove(int i) {
@@ -122,7 +125,7 @@ public class LinkedList<T> implements Iterable<T> {
 
         @Override
         public boolean hasNext() {
-            return current != LinkedList.this.footer;
+            return current != footer;
         }
 
         @Override

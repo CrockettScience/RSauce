@@ -23,7 +23,7 @@ public class Queue<T> {
 
     public void enqueue(T element) {
         last.data = element;
-        last.next = new QueueNode<T>(null, null);
+        last.next = new QueueNode<>(null, null);
         last = last.next;
         size++;
     }
