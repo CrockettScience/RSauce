@@ -28,12 +28,10 @@ public class DemoScene extends Scene implements InputClient {
     private static final int VIEW_SPEED = 50;
     private static final int ZOOM_SPEED = 100;
 
-
-
     @Override
     protected void loadResources() {
         // Setup Eggy
-        Entity eggy1 = new Eggy(16, 16, Project.SCREEN_WIDTH / 2, Project.SCREEN_HEIGHT / 2, 0);
+        Entity eggy1 = new Eggy(16, 16, SceneManager.getCamera().getWidth() / 2, SceneManager.getCamera().getHeight() / 2, 0);
 
         putEntity("eggy", eggy1);
 
