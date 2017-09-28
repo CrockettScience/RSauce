@@ -2,10 +2,8 @@ package com.demo.scenes;
 
 import com.demo.entities.Eggy;
 import com.demo.systems.CollisionTest;
-import com.sauce.asset.audio.AudioThread;
-import com.sauce.asset.audio.Music;
 import com.sauce.core.Main;
-import com.sauce.core.Project;
+import com.Project;
 import com.sauce.core.engine.Engine;
 import com.sauce.core.engine.Entity;
 import com.sauce.core.engine.ParallaxBackground;
@@ -17,7 +15,7 @@ import java.util.Iterator;
 
 import static com.sauce.input.InputServer.*;
 
-import static com.sauce.core.Project.ASSET_ROOT;
+import static com.Project.ASSET_ROOT;
 import static com.sauce.core.scene.SceneManager.*;
 
 /**

@@ -1,6 +1,6 @@
 package com.sauce.asset.graphics;
 
-import com.sauce.core.Project;
+import com.Project;
 import com.util.structures.nonsaveable.Queue;
 import com.util.Vector2D;
 import static com.sauce.util.io.GraphicsUtil.*;

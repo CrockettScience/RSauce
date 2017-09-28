@@ -16,7 +16,6 @@ public abstract class Graphic {
     protected float angle = 0.0f;
     protected float xScale = 1.0f;
     protected float yScale = 1.0f;
-    private boolean staticMode = false;
 
     Vector2D center;
     protected Vector2D origin = new Vector2D(0, 0);
@@ -98,15 +97,7 @@ public abstract class Graphic {
 
     public abstract GraphicsUtil.IOGraphic getIOImage();
 
-    protected void setStaticMode(boolean mode){
-        staticMode = mode;
-    }
-
-    protected boolean isStatic(){
-        return staticMode;
-    }
-
-    public abstract void update(int delta);
+    public abstract void update(double delta);
 
     public abstract void dispose();
 }

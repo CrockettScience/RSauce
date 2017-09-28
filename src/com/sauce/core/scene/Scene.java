@@ -1,7 +1,6 @@
 package com.sauce.core.scene;
 
 
-import com.sauce.core.Project;
 import com.sauce.core.engine.Engine;
 import com.sauce.core.engine.Entity;
 import com.util.RSauceLogger;

@@ -10,7 +10,6 @@ import static org.lwjgl.opengl.GL11.*;
 public class BackBuffer extends Surface {
     public BackBuffer(int width, int height) {
         super(width, height);
-        setStaticMode(true);
     }
 
     public void bind(){

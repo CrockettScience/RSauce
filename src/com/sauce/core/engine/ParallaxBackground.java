@@ -21,14 +21,13 @@ public class ParallaxBackground extends TiledTexture implements CameraChangeSubs
         xScroll = xScrollFactor;
         yScroll = yScrollFactor;
 
-        setStaticMode(true);
         setOrigin(new Vector2D(w / 2, h / 2));
 
         SceneManager.subscribeToCameraChanges(this);
     }
 
     @Override
-    public void update(int delta) {
+    public void update(double delta) {
         xPos += xScroll;
         yPos += yScroll;
     }

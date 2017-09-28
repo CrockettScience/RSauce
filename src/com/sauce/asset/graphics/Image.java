@@ -56,7 +56,7 @@ public class Image extends Graphic {
     }
 
     @Override
-    public void update(int delta) {
+    public void update(double delta) {
 
     }
 

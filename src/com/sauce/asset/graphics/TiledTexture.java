@@ -54,7 +54,7 @@ public class TiledTexture extends Graphic {
     }
 
     @Override
-    public void update(int delta) {}
+    public void update(double delta) {}
 
     @Override
     public void dispose() {

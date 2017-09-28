@@ -2,7 +2,7 @@ package com.demo.systems;
 
 import com.demo.entities.Eggy;
 import com.sauce.asset.graphics.Sprite;
-import com.sauce.core.Project;
+import com.Project;
 import com.sauce.core.engine.DrawComponent;
 import com.sauce.core.engine.Engine;
 import com.sauce.core.engine.Entity;
@@ -62,7 +62,7 @@ public class CollisionTest extends StepSystem implements InputClient {
     }
 
     @Override
-    public void update(int delta) {
+    public void update(double delta) {
         if(eggy.getComponent(BoundBox.class).detectCollision(collisionButton.getComponent(BoundBox.class)))
             ((Sprite)collisionButton.getComponent(DrawComponent.class).getImage()).setAnimationState("on");
         else

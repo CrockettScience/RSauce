@@ -46,7 +46,7 @@ public class CollisionUtil {
         }
 
         @Override
-        public void update(int delta){
+        public void update(double delta){
             for(Entity ent : boxes){
                 BoundBox box = ent.getComponent(BoundBox.class);
                 BoundBox.Box inner = box.getInnerBox();

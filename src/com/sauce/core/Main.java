@@ -1,5 +1,6 @@
 package com.sauce.core;
 
+import com.Project;
 import com.demo.scenes.DemoScene;
 import com.sauce.asset.audio.AudioThread;
 import com.sauce.core.engine.Engine;
@@ -8,9 +9,6 @@ import com.sauce.core.scene.Camera;
 import com.sauce.util.ogl.OGLCoordinateSystem;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
-import org.lwjgl.openal.AL;
-import org.lwjgl.openal.ALC;
-import org.lwjgl.openal.ALCCapabilities;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
 
@@ -18,12 +16,10 @@ import java.nio.*;
 
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.openal.ALC10.*;
-import static org.lwjgl.openal.EXTThreadLocalContext.alcSetThreadContext;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
-import static com.sauce.core.Project.*;
+import static com.Project.*;
 
 /**
  * Created by John Crockett.
@@ -64,7 +60,7 @@ public class Main{
 
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-        GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+
 
         window = glfwCreateWindow(Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT, Project.NAME, NULL, NULL);
 
@@ -79,8 +75,8 @@ public class Main{
 
             glfwSetWindowPos(
                     window,
-                    (vidmode.width() - pWidth.get(0)) / 2,
-                    (vidmode.height() - pHeight.get(0)) / 2
+                    (Project.SCREEN_WIDTH - pWidth.get(0)) / 2,
+                    (Project.SCREEN_HEIGHT - pHeight.get(0)) / 2
             );
         }
 
@@ -102,7 +98,6 @@ public class Main{
         OGLCoordinateSystem.setCoordinateState(0, 0, Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT);
     }
 
-
     private static void initOpenAL(){
         Thread audio = AudioThread.getAudioThread();
         audio.start();
@@ -116,19 +111,17 @@ public class Main{
     }
 
     private static void loop(Engine engine) {
-        long current;
-        long last = System.nanoTime();
+        double current = (double) System.currentTimeMillis() / 1000.0;
+        double last = 0;
 
         while ( !glfwWindowShouldClose(window) && running) {
-            current = System.nanoTime();
-            int delta = (int) ((current - last) / 1000000);
             glClear(GL_COLOR_BUFFER_BIT); // clear the framebuffer
 
-            engine.update(delta);
+            last = current;
+            current = (double) System.currentTimeMillis() / 1000.0;
+            engine.update(current - last);
 
             glfwPollEvents();
-
-            last = current;
         }
     }
 

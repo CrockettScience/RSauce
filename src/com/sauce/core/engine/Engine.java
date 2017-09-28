@@ -2,7 +2,7 @@ package com.sauce.core.engine;
 
 import com.sauce.asset.graphics.DrawBatch;
 import com.sauce.core.Main;
-import com.sauce.core.Project;
+import com.Project;
 import com.sauce.core.scene.BackgroundAttribute;
 import com.sauce.core.scene.Camera;
 import com.sauce.core.scene.Scene;
@@ -31,11 +31,9 @@ public final class Engine {
     private ArrayList<EntitySubscriber> subs = new ArrayList<>();
     private PriorityMap<Class<? extends StepSystem>, StepSystem> steps = new PriorityMap<>();
     private PriorityMap<Class<? extends DrawSystem>, DrawSystem> draws = new PriorityMap<>();
-    private Integer fpms;
     private RenderSystem render = new RenderSystem(0);
 
     private Engine() {
-        fpms = 1000 / Project.FRAME_LIMIT;
         render.addedToEngine(this);
     }
 
@@ -139,13 +137,12 @@ public final class Engine {
         }
     }
 
-    private int timeSinceLastUpdate;
+    private double timeSinceLast;
 
-    public void update(int delta){
-
-        step(delta);
-
-        if (timeSinceLastUpdate >= fpms) {
+    public void update(double delta){
+        timeSinceLast += delta;
+        if(timeSinceLast >= 1.0 / Project.FRAME_LIMIT) {
+            step(delta);
 
             SceneManager.getCamera().getCameraBuffer().bind();
 
@@ -156,20 +153,17 @@ public final class Engine {
             SceneManager.getCamera().getCameraBuffer().unbind();
 
             swapBuffer();
-
-            timeSinceLastUpdate -= fpms;
-        } else {
-            timeSinceLastUpdate += delta;
+            timeSinceLast = 0;
         }
     }
 
-    private void step(int delta){
+    private void step(double delta){
         for (int i = 0; i < steps.size(); i++) {
             steps.next().update(delta);
         }
     }
 
-    private void preDraw(int delta){
+    private void preDraw(double delta){
         Scene scene = SceneManager.getCurrentScene();
 
         if(scene.containsAttribute(BackgroundAttribute.class)) {
@@ -223,7 +217,7 @@ public final class Engine {
         render.batch.renderBatch();
     }
 
-    private void draw(int delta){
+    private void draw(double delta){
         render.update(delta);
 
         for (int i = 0; i < draws.size(); i++) {
@@ -231,7 +225,7 @@ public final class Engine {
         }
     }
 
-    private void postDraw(int delta){
+    private void postDraw(double delta){
         Scene scene = SceneManager.getCurrentScene();
 
         if(scene.containsAttribute(BackgroundAttribute.class)) {
@@ -383,7 +377,7 @@ public final class Engine {
         }
 
         @Override
-        public void update(int delta) {
+        public void update(double delta) {
             for(Entity ent : entities){
                 DrawComponent draw = ent.getComponent(DrawComponent.class);
                 draw.getImage().update(delta);

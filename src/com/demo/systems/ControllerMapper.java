@@ -2,7 +2,6 @@ package com.demo.systems;
 
 import com.sauce.core.engine.Engine;
 import com.sauce.core.engine.StepSystem;
-import com.sauce.core.scene.ConcurrentScene;
 
 import java.nio.FloatBuffer;
 
@@ -31,7 +30,7 @@ public class ControllerMapper extends StepSystem {
     }
 
     @Override
-    public void update(int delta) {
+    public void update(double delta) {
         glfwGetJoystickButtons(joyId);
     }
 

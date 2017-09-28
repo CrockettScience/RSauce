@@ -1,11 +1,10 @@
 package com.demo.systems;
 
 import com.demo.entities.Eggy;
-import com.sauce.asset.audio.Audio;
 import com.sauce.asset.audio.AudioThread;
 import com.sauce.asset.audio.Effect;
 import com.sauce.asset.graphics.Sprite;
-import com.sauce.core.Project;
+import com.Project;
 import com.sauce.core.engine.DrawComponent;
 import com.sauce.core.engine.Engine;
 import com.sauce.core.engine.StepSystem;
@@ -29,7 +28,7 @@ public class EggyControl extends StepSystem {
 
     private int totalDelta = 0;
     @Override
-    public void update(int delta) {
+    public void update(double delta) {
         for(DrawComponent eggy : components.valueSet()) {
             if (isKeyPressed(KEY_W) || isKeyPressed(KEY_A) || isKeyPressed(KEY_S) || isKeyPressed(KEY_D)) {
                 if (isKeyPressed(KEY_W)) {

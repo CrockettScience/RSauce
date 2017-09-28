@@ -1,6 +1,6 @@
 package com.sauce.core.scene;
 
-import com.sauce.core.Project;
+import com.Project;
 import com.util.RSauceLogger;
 import com.util.structures.nonsaveable.Set;
 

@@ -1,17 +1,12 @@
 package com.sauce.input;
 
-import com.demo.systems.ControllerMapper;
 import com.sauce.core.Main;
-import com.sauce.core.Project;
-import com.sauce.core.engine.Engine;
+import com.Project;
 import com.sauce.core.scene.Camera;
 import com.sauce.core.scene.SceneManager;
-import com.util.Vector2D;
 import com.util.Vector2DDouble;
 import com.util.structures.nonsaveable.ArrayList;
 import com.util.structures.special.RecyclePool;
-
-import java.nio.FloatBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
 

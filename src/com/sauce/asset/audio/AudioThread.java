@@ -28,7 +28,7 @@ public class AudioThread extends Thread {
 
     private static AudioThread singletonAudioThread;
     private static Queue<OpenALPlayEntry> audioQueue = new Queue<>();
-    private static boolean audioQueueIsBeingAccessed = false;
+    private static volatile boolean audioQueueIsBeingAccessed = false;
     private static boolean audioRunning = true;
     private static boolean clearAudio = false;
     private static Set<OpenALPlayEntry> loadedAudio = new Set<>();
@@ -129,7 +129,7 @@ public class AudioThread extends Thread {
                 singletonAudioThread.waitThreads();
                 audioQueueIsBeingAccessed = true;
             } catch (InterruptedException e) {
-                throw new RuntimeException("Audio Thread was interrupted");
+                throw new RuntimeException("Audio Thread was interrupted and now you broke it.");
             }
         }
     }

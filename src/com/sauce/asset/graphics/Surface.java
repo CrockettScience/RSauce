@@ -81,7 +81,7 @@ public class Surface extends Graphic {
     }
 
     @Override
-    public void update(int delta) {
+    public void update(double delta) {
 
     }
 }

@@ -18,7 +18,7 @@ public class Sprite extends Graphic {
     private ArrayGrid<String> animIds;
     private Map<String, ArrayList<Vector2D>> idMap;
     private boolean loop;
-    private int fpms;
+    private double frameLimit;
 
     //Sprite State Variables;
     private Vector2D cellCoords = new Vector2D(0,0);
@@ -55,14 +55,15 @@ public class Sprite extends Graphic {
             i = 0;
         }
 
-        fpms = fps == 0 ? 0 : 1000 / fps;
+        frameLimit = 1.0 / fps;
 
         resize(source.width() / cellsInRow, source.height() / cellsInColumn, source.width(), source.height());
     }
 
-    private int timeSinceLastUpdate;
-    public void update(int delta){
-        if(timeSinceLastUpdate >= fpms) {
+    private double timeSinceLastUpdate;
+    public void update(double delta){
+        timeSinceLastUpdate += delta;
+        if(timeSinceLastUpdate >= frameLimit) {
             if (animationStateIndex >= animationState.size()) {
                 if (loop)
                     animationStateIndex = 0;
@@ -74,10 +75,7 @@ public class Sprite extends Graphic {
             cellCoords = animationState.get(animationStateIndex++);
 
 
-            timeSinceLastUpdate -= fpms;
-        }
-        else{
-            timeSinceLastUpdate += delta;
+            timeSinceLastUpdate = 0;
         }
 
     }

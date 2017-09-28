@@ -7,7 +7,7 @@ import com.sauce.core.engine.Engine;
 import com.sauce.core.engine.Entity;
 import com.util.structures.nonsaveable.ArrayGrid;
 
-import static com.sauce.core.Project.ASSET_ROOT;
+import static com.Project.ASSET_ROOT;
 
 public class Eggy extends Entity{
 

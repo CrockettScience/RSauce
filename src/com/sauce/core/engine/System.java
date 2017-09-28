@@ -11,7 +11,7 @@ abstract class System implements Comparable<System> {
     }
 
     public abstract void addedToEngine(Engine engine);
-    public abstract void update(int delta);
+    public abstract void update(double delta);
     public abstract void removedFromEngine(Engine engine);
 
     @Override

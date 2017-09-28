@@ -1,6 +1,6 @@
 package com.sauce.core.scene;
 
-import com.sauce.core.Project;
+import com.Project;
 import com.sauce.core.engine.BackBuffer;
 import com.sauce.core.engine.DrawComponent;
 import com.sauce.core.engine.Entity;
@@ -8,10 +8,6 @@ import com.sauce.util.ogl.OGLCoordinateSystem;
 import com.util.RSauceLogger;
 import com.util.Vector2D;
 import com.util.structures.nonsaveable.Set;
-
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
-import static org.lwjgl.opengl.GL11.glMatrixMode;
 
 /**
  *
