@@ -112,7 +112,7 @@ public class DemoScene extends Scene implements InputClient {
     @Override
     public void mouseScrolled(double x, double y) {
         Camera v = SceneManager.getCamera();
-        v.resize((int)(v.getWidth() + ZOOM_SPEED * -y), (int)(v.getHeight() + (ZOOM_SPEED * Project.SCREEN_HEIGHT / Project.SCREEN_WIDTH) * -y));
+        v.resize((int)(v.getWidth() + ZOOM_SPEED * -y), (int)(v.getHeight() + (ZOOM_SPEED * Project.getScreenHeight() / Project.getScreenWidth()) * -y));
     }
 
     @Override

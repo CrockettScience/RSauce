@@ -15,7 +15,7 @@ import static org.lwjgl.opengl.GL11.glMatrixMode;
 public class SceneManager{
         
     private static Scene scene;
-    private static Camera camera = new Camera(0,0, Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT, 0, 0);
+    private static Camera camera = new Camera(0,0, Project.getScreenWidth(), Project.getScreenHeight(), 0, 0);
     private static Set<CameraChangeSubscriber> cameraChangeSubscribers = new Set<>();
 
     public static Scene getCurrentScene() {

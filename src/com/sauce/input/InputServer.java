@@ -48,7 +48,7 @@ public class InputServer {
         });
 
         glfwSetCursorPosCallback(Main.window, (window, x, y) -> {
-            dispatch(EVENT_TYPE_MOUSE_MOVE, -1, -1, -1, x, Project.SCREEN_HEIGHT - y);
+            dispatch(EVENT_TYPE_MOUSE_MOVE, -1, -1, -1, x, Project.getScreenHeight() - y);
         });
 
         glfwSetJoystickCallback((joyId, event) -> {
@@ -128,14 +128,14 @@ public class InputServer {
         double[] y = new double[1];
 
         glfwGetCursorPos(Main.window, x, y);
-        return new Vector2DDouble(x[0], Project.SCREEN_HEIGHT - y[0]);
+        return new Vector2DDouble(x[0], Project.getScreenHeight() - y[0]);
     }
 
     public static Vector2DDouble mouseScenePosition(){
         Vector2DDouble screenPos = mouseScreenPosition();
         Camera cam = SceneManager.getCamera();
 
-        return new Vector2DDouble(cam.getX() + (screenPos.getX() / Project.SCREEN_WIDTH) * cam.getWidth(), cam.getY() + (screenPos.getY() / Project.SCREEN_HEIGHT) * cam.getHeight());
+        return new Vector2DDouble(cam.getX() + (screenPos.getX() / Project.getScreenWidth()) * cam.getWidth(), cam.getY() + (screenPos.getY() / Project.getScreenHeight()) * cam.getHeight());
 
     }
 

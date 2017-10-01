@@ -9,8 +9,8 @@ import com.util.Color;
 public class FontTest extends DrawSystem {
 
     private Font spider;
-    private static int X = Project.SCREEN_WIDTH / 2;
-    private static int Y = Project.SCREEN_HEIGHT / 4;
+    private static int X = Project.getScreenWidth() / 2;
+    private static int Y = Project.getScreenHeight() / 4;
 
     public FontTest(int priority) {
         super(priority);

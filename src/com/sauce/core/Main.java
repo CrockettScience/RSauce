@@ -62,7 +62,7 @@ public class Main{
 
 
 
-        window = glfwCreateWindow(Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT, Project.NAME, NULL, NULL);
+        window = glfwCreateWindow(Project.getScreenWidth(), Project.getScreenHeight(), Project.NAME, NULL, NULL);
 
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
@@ -75,8 +75,8 @@ public class Main{
 
             glfwSetWindowPos(
                     window,
-                    (Project.SCREEN_WIDTH - pWidth.get(0)) / 2,
-                    (Project.SCREEN_HEIGHT - pHeight.get(0)) / 2
+                    (Project.getScreenWidth() - pWidth.get(0)) / 2,
+                    (Project.getScreenHeight() - pHeight.get(0)) / 2
             );
         }
 
@@ -90,12 +90,12 @@ public class Main{
 
         glClearColor(0.0f, 0.0f, 0.5f, 0.0f);
 
-        glViewport(0, 0, Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT);
+        glViewport(0, 0, Project.getScreenWidth(), Project.getScreenHeight());
         glDisable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        OGLCoordinateSystem.setCoordinateState(0, 0, Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT);
+        OGLCoordinateSystem.setCoordinateState(0, 0, Project.getScreenWidth(), Project.getScreenHeight());
     }
 
     private static void initOpenAL(){
@@ -104,7 +104,7 @@ public class Main{
     }
 
     private static Engine initEngine(){
-        SceneManager.setCamera(new Camera(0, 0, Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT, 0, 0));
+        SceneManager.setCamera(new Camera(0, 0, Project.getScreenWidth(), Project.getScreenHeight(), 0, 0));
         SceneManager.setScene(new DemoScene());
 
         return Engine.getEngine();

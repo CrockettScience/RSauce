@@ -36,7 +36,7 @@ public class Camera {
         xBufferZone = xBuff;
         yBufferZone = yBuff;
 
-        cameraBuffer = new BackBuffer(Project.SCREEN_WIDTH, Project.SCREEN_HEIGHT);
+        cameraBuffer = new BackBuffer(Project.getScreenWidth(), Project.getScreenHeight());
     }
 
     void bindSubscriber(CameraChangeSubscriber sub){

@@ -141,7 +141,7 @@ public final class Engine {
 
     public void update(double delta){
         timeSinceLast += delta;
-        if(timeSinceLast >= 1.0 / Project.FRAME_LIMIT) {
+        if(timeSinceLast >= 1.0 / Project.getFrameLimit()) {
             step(delta);
 
             SceneManager.getCamera().getCameraBuffer().bind();

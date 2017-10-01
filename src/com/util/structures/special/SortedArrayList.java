@@ -54,7 +54,6 @@ public class SortedArrayList<T> implements Iterable<T> {
 
     }
 
-
     public boolean contains(Object x) {
         return findPos( x ) != NOT_FOUND;
     }
@@ -78,7 +77,7 @@ public class SortedArrayList<T> implements Iterable<T> {
         return true;
     }
 
-    public void add(int index, T element) {
+    private void add(int index, T element) {
         if(isEmpty()){
             elements[0] = element;
             size++;

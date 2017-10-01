@@ -53,8 +53,8 @@ public class DrawBatch {
             if(image.getIOImage() != null)
                 applyIOImageForDrawing(image.getIOImage(), image.absWidth(), image.absHeight(), image.components());
 
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Project.INTERPOLATION ? GL_LINEAR : GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Project.INTERPOLATION ? GL_LINEAR : GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Project.interpolation() ? GL_LINEAR : GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Project.interpolation() ? GL_LINEAR : GL_NEAREST);
 
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
