@@ -1,6 +1,7 @@
 package com.util.collision;
 
 import com.sauce.core.engine.*;
+import com.util.Color;
 import com.util.Vector2D;
 import com.util.Vector2DDouble;
 import com.util.structures.nonsaveable.LinkedList;
@@ -51,8 +52,8 @@ public class CollisionUtil {
                 BoundBox box = ent.getComponent(BoundBox.class);
                 BoundBox.Box inner = box.getInnerBox();
                 BoundBox.Box outer = box.getOuterBox();
-                quad(12, inner.getUL(), inner.getUR(), inner.getLL(), inner.getLR(), C_RED, 1);
-                quad(12, outer.getUL(), outer.getUR(), outer.getLL(), outer.getLR(), C_BLACK, 1);
+                quad(12, inner.getUL(), inner.getUR(), inner.getLL(), inner.getLR(), Color.C_RED, 1);
+                quad(12, outer.getUL(), outer.getUR(), outer.getLL(), outer.getLR(), Color.C_BLACK, 1);
             }
         }
 

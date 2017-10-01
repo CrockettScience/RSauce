@@ -83,8 +83,5 @@ public class GraphicsUtil {
             return graphicInfo;
         }
 
-        public void setGraphicInfo(GraphicInfo graphicInfo) {
-            this.graphicInfo = graphicInfo;
-        }
     }
 }

@@ -2,6 +2,9 @@ package com.demo.scenes;
 
 import com.demo.entities.Eggy;
 import com.demo.systems.CollisionTest;
+import com.demo.systems.FontTest;
+import com.sauce.asset.audio.AudioThread;
+import com.sauce.asset.audio.Music;
 import com.sauce.core.Main;
 import com.Project;
 import com.sauce.core.engine.Engine;
@@ -25,6 +28,7 @@ public class DemoScene extends Scene implements InputClient {
 
     private static final int VIEW_SPEED = 50;
     private static final int ZOOM_SPEED = 100;
+    private Music irritatingSong;
 
     @Override
     protected void loadResources() {
@@ -43,6 +47,10 @@ public class DemoScene extends Scene implements InputClient {
 
         // Bind to recieve InputEvents
         bind(this);
+
+        //Engine.getEngine().add(new FontTest(0));
+        irritatingSong = new Music(Project.ASSET_ROOT + "Patriarchy.ogg", 21.391f);
+
     }
 
     @Override
@@ -58,6 +66,7 @@ public class DemoScene extends Scene implements InputClient {
     @Override
     protected void sceneMain() {
         activateEntity("eggy");
+        AudioThread.enqueue(irritatingSong);
     }
 
     @Override

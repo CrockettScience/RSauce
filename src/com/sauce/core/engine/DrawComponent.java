@@ -1,6 +1,7 @@
 package com.sauce.core.engine;
 
 import com.sauce.asset.graphics.Graphic;
+import com.sauce.asset.scripts.Script;
 import com.util.Vector3D;
 
 /**
@@ -10,6 +11,7 @@ public class DrawComponent implements Component {
     private Graphic image;
     private Vector3D position;
     private Entity entity = null;
+    private Script<?, ?> script;
 
     public DrawComponent(Graphic asset, int x, int y, int z){
         image = asset;
@@ -23,6 +25,14 @@ public class DrawComponent implements Component {
         } else {
             return false;
         }
+    }
+
+    public void attachDrawScript(Script<?, ?> drawScript){
+        script = drawScript;
+    }
+
+    Script<?, ?> getScript(){
+        return script;
     }
 
     public Graphic getImage(){

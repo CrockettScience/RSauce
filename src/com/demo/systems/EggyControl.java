@@ -51,7 +51,7 @@ public class EggyControl extends StepSystem {
                     ((Sprite) eggy.getImage()).setAnimationState("right");
                 }
                 // 8fps
-                if(totalDelta >= 125){
+                if(totalDelta >= 1 / 8){
                     AudioThread.enqueue(new Effect(Project.ASSET_ROOT + "blip.ogg"));
                     totalDelta = 0;
                 }

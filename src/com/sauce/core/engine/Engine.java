@@ -381,7 +381,7 @@ public final class Engine {
             for(Entity ent : entities){
                 DrawComponent draw = ent.getComponent(DrawComponent.class);
                 draw.getImage().update(delta);
-                batch.add(draw.getImage(), draw.getX(), draw.getY());
+                batch.add(draw.getImage(), draw.getX(), draw.getY(), draw.getScript());
             }
 
             batch.renderBatch();

@@ -1,35 +1,150 @@
 package com.sauce.asset.fonts;
 
 import static com.sauce.util.io.FontUtil.*;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.stb.STBTruetype.*;
+import static org.lwjgl.system.MemoryStack.stackPush;
 
-import com.sauce.asset.graphics.Surface;
-import com.sauce.util.io.FontUtil;
-import com.util.structures.nonsaveable.Map;
+import com.sauce.util.io.ResourceUtil;
+import com.util.Color;
+import org.lwjgl.stb.STBTTAlignedQuad;
+import org.lwjgl.stb.STBTTBakedChar;
+import org.lwjgl.system.MemoryStack;
+
+import java.io.IOException;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
 public class Font {
-    private FontUtil.IOFont font;
-    private Map<String, LetterTexCoord> letterMap;
-    private Surface fontSurface;
+    private IOFont font;
+    private int fontHeight;
 
-    public Font(String fileName){
+    public Font(String fileName, int size){
+        fontHeight = size;
 
-    }
-
-    public Surface getText(String text){
-        return null;
-    }
-
-    private class LetterTexCoord{
-        private int x;
-        private int y;
-        private int width;
-        private int height;
-
-        private LetterTexCoord(int posX, int posY, int wide, int high){
-            x = posX;
-            y = posY;
-            width = wide;
-            height = high;
+        ResourceUtil.IOResource resource;
+        try {
+            resource = ResourceUtil.loadResource(fileName);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to open TrueType font file " + fileName);
         }
+
+        FontInfo info = getFontInfo(resource, size);
+
+        font = ioResourceToFont(resource, info);
+    }
+
+    public void renderText(String text, Color color, float xPos, float yPos){
+        int texID = glGenTextures();
+
+        glBindTexture(GL_TEXTURE_2D, texID);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, font.getFontInfo().getBmpBufferSize(), font.getFontInfo().getBmpBufferSize(), 0, GL_ALPHA, GL_UNSIGNED_BYTE, font.getFontInfo().getBitmap());
+        // ^This line is crashing us?
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+        glColor3f(color.getRed(), color.getGreen(), color.getBlue());
+
+        glEnable(GL_TEXTURE_2D);
+        renderText(font.getFontInfo().getcData(), font.getFontInfo().getBmpBufferSize(), font.getFontInfo().getBmpBufferSize(), xPos, yPos, text);
+
+        glPopMatrix();
+
+        glColor3f(1, 1, 1);
+
+    }
+
+    public float getStringWidth(String text) {
+        int width = 0;
+
+        try (MemoryStack stack = stackPush()) {
+            IntBuffer pCodePoint       = stack.mallocInt(1);
+            IntBuffer pAdvancedWidth   = stack.mallocInt(1);
+            IntBuffer pLeftSideBearing = stack.mallocInt(1);
+
+            for(int i = 0; i < text.length();){
+                i += getCP(text, text.length(), i, pCodePoint);
+                int cp = pCodePoint.get(0);
+
+                stbtt_GetCodepointHMetrics(font.getFontInfo().getRawInfo(), cp, pAdvancedWidth, pLeftSideBearing);
+                width += pAdvancedWidth.get(0);
+
+                if (i < text.length()) {
+                    getCP(text, text.length(), i, pCodePoint);
+                    width += stbtt_GetCodepointKernAdvance(font.getFontInfo().getRawInfo(), cp, pCodePoint.get(0));
+                }
+            }
+        }
+
+        return width * stbtt_ScaleForPixelHeight(font.getFontInfo().getRawInfo(), fontHeight);
+    }
+
+    public int getHeight(){
+        return fontHeight;
+    }
+
+    private void renderText(STBTTBakedChar.Buffer cdata, int BITMAP_W, int BITMAP_H, float xPos, float yPos, String text) {
+        float scale = stbtt_ScaleForPixelHeight(font.getFontInfo().getRawInfo(), fontHeight);
+
+        try (MemoryStack stack = stackPush()) {
+            IntBuffer pCodePoint = stack.mallocInt(1);
+
+            FloatBuffer x = stack.floats(0.0f);
+            FloatBuffer y = stack.floats(0.0f);
+
+            STBTTAlignedQuad q = STBTTAlignedQuad.mallocStack(stack);
+
+            int i  = 0;
+            int to = text.length();
+
+            glBegin(GL_QUADS);
+            while (i < to) {
+                i += getCP(text, to, i, pCodePoint);
+
+                int cp = pCodePoint.get(0);
+                if (cp == '\n') {
+
+                    y.put(0, y.get(0) + (font.getFontInfo().getAscent() - font.getFontInfo().getDescent() + font.getFontInfo().getLineGap()) * scale);
+                    x.put(0, 0.0f);
+
+                    continue;
+                } else if (cp < 32 || 128 <= cp) {
+                    continue;
+                }
+
+                stbtt_GetBakedQuad(cdata, BITMAP_W, BITMAP_H, cp - 32, x, y, q, true);
+                if (i < to) {
+                    getCP(text, to, i, pCodePoint);
+                    x.put(0, x.get(0) + stbtt_GetCodepointKernAdvance(font.getFontInfo().getRawInfo(), cp, pCodePoint.get(0)) * scale);
+                }
+
+                glTexCoord2f(q.s0(), q.t0());
+                glVertex2f(q.x0() + xPos, -q.y0() + yPos);
+
+                glTexCoord2f(q.s1(), q.t0());
+                glVertex2f(q.x1() + xPos, -q.y0() + yPos);
+
+                glTexCoord2f(q.s1(), q.t1());
+                glVertex2f(q.x1() + xPos, yPos);
+
+                glTexCoord2f(q.s0(), q.t1());
+                glVertex2f(q.x0() + xPos, yPos);
+            }
+            glEnd();
+        }
+    }
+
+    private static int getCP(String text, int to, int i, IntBuffer cpOut) {
+        char c1 = text.charAt(i);
+        if (Character.isHighSurrogate(c1) && i + 1 < to) {
+            char c2 = text.charAt(i + 1);
+            if (Character.isLowSurrogate(c2)) {
+                cpOut.put(0, Character.toCodePoint(c1, c2));
+                return 2;
+            }
+        }
+        cpOut.put(0, c1);
+        return 1;
     }
 }

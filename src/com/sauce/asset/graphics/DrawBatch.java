@@ -1,6 +1,7 @@
 package com.sauce.asset.graphics;
 
 import com.Project;
+import com.sauce.asset.scripts.Script;
 import com.util.structures.nonsaveable.Queue;
 import com.util.Vector2D;
 import static com.sauce.util.io.GraphicsUtil.*;
@@ -17,24 +18,35 @@ public class DrawBatch {
 
     private Queue<Graphic> images;
     private Queue<Vector2D> coords;
+    private Queue<Script<?, ?>> scripts;
 
     public DrawBatch(){
         images = new Queue<>();
         coords = new Queue<>();
+        scripts = new Queue<>();
     }
 
     public void add(Graphic image, int x, int y){
         images.enqueue(image);
         coords.enqueue(new Vector2D(x, y));
+        scripts.enqueue(null);
+    }
+
+    public void add(Graphic image, int x, int y, Script<?, ?> script){
+        images.enqueue(image);
+        coords.enqueue(new Vector2D(x, y));
+        scripts.enqueue(script);
     }
 
     public void renderBatch(){
         Graphic image;
         Vector2D coord;
+        Script<?, ?> script;
 
         while(!images.isEmpty()){
             image = images.dequeue();
             coord = coords.dequeue();
+            script = scripts.dequeue();
 
             glBindTexture(GL_TEXTURE_2D, image.textureID());
 
@@ -58,6 +70,10 @@ public class DrawBatch {
             renderImage(image, coord);
 
             glPopMatrix();
+
+            if(script != null)
+                script.execute(null);
+
 
         }
 

@@ -28,7 +28,7 @@ public class Project {
     }
 
     // Project Information
-    public static final String ENGINE_VERSION = "0.3.4 Dev 4";
+    public static final String ENGINE_VERSION = "0.3.4 Dev 5";
     public static final String NAME = "RSauce" + ENGINE_VERSION;
     public static final String PROJECT_VERSION = "0.0.0";
     public static final String ASSET_ROOT;

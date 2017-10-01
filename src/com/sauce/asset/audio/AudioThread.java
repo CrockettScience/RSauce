@@ -121,7 +121,7 @@ public class AudioThread extends Thread {
         clearAudio = true;
     }
 
-    private static synchronized void getQueueToken(){
+    private static void getQueueToken(){
         if(!audioQueueIsBeingAccessed)
             audioQueueIsBeingAccessed = true;
         else {
