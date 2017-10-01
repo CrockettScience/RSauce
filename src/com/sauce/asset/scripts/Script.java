@@ -1,12 +1,13 @@
 package com.sauce.asset.scripts;
 
 
+import com.util.RSauceLogger;
+
 /**
  *
  * @author Jonathan Crockett
  */
 public abstract class Script<ArgumentType extends Argument, ReturnType extends Return>{
-
 
     protected String scriptLog = "";
 
@@ -17,12 +18,15 @@ public abstract class Script<ArgumentType extends Argument, ReturnType extends R
             return scriptMain(args);
         }
         catch(Throwable e){
-            System.out.println("Could not execute script '" + this + "'");
+            RSauceLogger.printErrorln("An exception was thrown in Script '" + this + "':");
+            e.printStackTrace();
         }
 
         return null;
     }
 
-    public abstract String toString();
+    public final String toString(){
+        return getClass().getSimpleName();
+    }
 
 }
