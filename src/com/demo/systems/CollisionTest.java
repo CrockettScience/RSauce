@@ -29,8 +29,6 @@ public class CollisionTest extends StepSystem implements InputClient {
 
     @Override
     public void addedToEngine(Engine engine) {
-
-        collisionButton = new Entity();
         {
             ArrayGrid<String> buttonMatrix = new ArrayGrid<>(2, 1);
             {
@@ -39,6 +37,17 @@ public class CollisionTest extends StepSystem implements InputClient {
             }
 
             Sprite buttonSprite = new Sprite(Project.ASSET_ROOT + "collisionTest.png", 2, 1, buttonMatrix, false, 0);
+
+            collisionButton = new Entity() {
+                private Sprite sprite = buttonSprite;
+
+                @Override
+                public void dispose() {
+                    super.dispose();
+                    sprite.dispose();
+                }
+            };
+
             buttonSprite.setAnimationState("off");
 
             DrawComponent buttonPos = new DrawComponent(buttonSprite, eggy.getComponent(DrawComponent.class).getX(), eggy.getComponent(DrawComponent.class).getY(), eggy.getComponent(DrawComponent.class).getZ() + 1);
@@ -88,7 +97,7 @@ public class CollisionTest extends StepSystem implements InputClient {
         eggy.removeComponent(BoundBox.class);
         Engine.getEngine().removeDrawSystem(CollisionUtil.DrawBBoxWires.class);
 
-        collisionButton.getComponent(DrawComponent.class).getImage().dispose();
+        collisionButton.dispose();
 
         InputServer.unbind(this);
     }

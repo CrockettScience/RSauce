@@ -28,6 +28,6 @@ public class FontTest extends DrawSystem {
 
     @Override
     public void removedFromEngine(Engine engine) {
-
+        spider.dispose();
     }
 }

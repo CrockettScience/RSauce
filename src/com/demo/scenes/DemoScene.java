@@ -42,25 +42,27 @@ public class DemoScene extends Scene implements InputClient {
         addAttribute(attr);
 
         ParallaxBackground triangles = new ParallaxBackground(ASSET_ROOT + "bg.png", 0, 0);
-
         attr.setBackground(triangles, 0);
 
         // Bind to recieve InputEvents
         bind(this);
 
-        //Engine.getEngine().add(new FontTest(0));
+        Engine.getEngine().add(new FontTest(0));
         irritatingSong = new Music(Project.ASSET_ROOT + "Patriarchy.ogg", 21.391f);
 
     }
 
     @Override
     protected void destroyResources() {
+        getEntity("eggy").dispose();
         removeEntities();
         Iterator<ParallaxBackground> i = getAttribute(BackgroundAttribute.class).backgroundIterator();
 
         while(i.hasNext()){
             i.next().dispose();
         }
+
+        Engine.getEngine().removeDrawSystem(FontTest.class);
     }
 
     @Override
