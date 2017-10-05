@@ -213,8 +213,6 @@ public final class Engine {
                 }
             }
         }
-
-        render.batch.renderBatch();
     }
 
     private void draw(double delta){
@@ -275,8 +273,6 @@ public final class Engine {
                 }
             }
         }
-
-        render.batch.renderBatch();
     }
 
     private void swapBuffer(){

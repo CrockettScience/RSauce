@@ -1,6 +1,7 @@
 package com.sauce.core.scene;
 
 import com.Project;
+import com.sauce.util.ogl.OGLCoordinateSystem;
 import com.util.RSauceLogger;
 import com.util.structures.nonsaveable.Set;
 
@@ -49,10 +50,7 @@ public class SceneManager{
             camera.bindSubscriber(sub);
         }
 
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(0.0, camera.getWidth(), 0.0, camera.getHeight(), -1.0, 1.0);
-        glMatrixMode(GL_MODELVIEW);
+        OGLCoordinateSystem.setCoordinateState(0, 0, camera.getWidth(), camera.getHeight());
     }
 
     public static void subscribeToCameraChanges(CameraChangeSubscriber sub){
