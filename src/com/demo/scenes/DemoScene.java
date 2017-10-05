@@ -97,6 +97,13 @@ public class DemoScene extends Scene implements InputClient {
 
         if(event.key() == KEY_ENTER)
             Engine.getEngine().add(new CollisionTest(0, (Eggy) getEntity("eggy")));
+
+        if(event.key() == KEY_F && event.action() == ACTION_RELEASED){
+            if(Preferences.isFullscreen())
+                Preferences.setFullscreen(false);
+            else
+                Preferences.setFullscreen(true);
+        }
     }
 
     @Override

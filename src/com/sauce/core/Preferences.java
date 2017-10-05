@@ -11,9 +11,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.function.Consumer;
 
-import static org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor;
-import static org.lwjgl.glfw.GLFW.glfwGetVideoMode;
-import static org.lwjgl.glfw.GLFW.glfwGetVideoModes;
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.system.MemoryUtil.NULL;
 
 /**
  * Created by John Crockett.
@@ -44,16 +43,20 @@ public class Preferences {
 
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
-        setWindowedMode(vidmode.width(), vidmode.height());
-        setFullscreenMode(vidmode);
-        setFullscreen(false);
-        setInterpolation(false);
+        screenWidth = vidmode.width();
+        screenHeight = vidmode.height();
+
+        fullscreenWidth = vidmode.width();
+        fullscreenHeight = vidmode.height();
+        fullscreenRefreshRate = vidmode.refreshRate();
+
+        fullscreen = false;
 
     }
 
     // FINAL SETTINGS: Require a restart to change.
     // Project Information
-    public static final String ENGINE_VERSION = "0.3.5 Dev 7";
+    public static final String ENGINE_VERSION = "0.3.5 Dev 8";
     public static final String NAME = "RSauce" + ENGINE_VERSION;
     public static final String PROJECT_VERSION = "0.0.0";
     public static final String ASSET_ROOT;
@@ -63,7 +66,6 @@ public class Preferences {
 
     // NON-FINAL SETTINGS: Can change at runtime.
     // Graphics
-    private static boolean interpolation;
     private static boolean fullscreen;
     private static int fullscreenWidth;
     private static int fullscreenHeight;
@@ -77,24 +79,22 @@ public class Preferences {
     public static void setWindowedMode(int width, int height){
         screenWidth = width;
         screenHeight = height;
+
+        updateWindow();
     }
 
     public static void setFullscreenMode(GLFWVidMode vidmode){
         fullscreenWidth = vidmode.width();
         fullscreenHeight = vidmode.height();
         fullscreenRefreshRate = vidmode.refreshRate();
+
+        updateWindow();
     }
 
     public static void setFullscreen(boolean bool){
         fullscreen = bool;
-    }
 
-    public static void setInterpolation(boolean bool){
-        interpolation = bool;
-    }
-
-    public static boolean interpolation() {
-        return interpolation;
+        updateWindow();
     }
 
     public static boolean isFullscreen() {
@@ -123,6 +123,16 @@ public class Preferences {
 
     public static int getFrameLimit() {
         return frameLimit;
+    }
+
+    private static void updateWindow(){
+        glfwSetWindowMonitor(
+                Main.getWindowHandle(),
+                fullscreen ? glfwGetPrimaryMonitor() : NULL,
+                0,0,
+                fullscreen ? fullscreenWidth : screenWidth,
+                fullscreen ? fullscreenHeight : screenHeight,
+                fullscreenRefreshRate);
     }
 
     public static class SupportedVideoModes{
