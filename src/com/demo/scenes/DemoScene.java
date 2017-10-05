@@ -1,6 +1,6 @@
 package com.demo.scenes;
 
-import com.Preferences;
+import com.sauce.core.Preferences;
 import com.demo.entities.Eggy;
 import com.demo.systems.CollisionTest;
 import com.demo.systems.FontTest;
@@ -18,7 +18,7 @@ import java.util.Iterator;
 
 import static com.sauce.input.InputServer.*;
 
-import static com.Preferences.ASSET_ROOT;
+import static com.sauce.core.Preferences.ASSET_ROOT;
 import static com.sauce.core.scene.SceneManager.*;
 
 /**

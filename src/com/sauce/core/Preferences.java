@@ -1,5 +1,6 @@
-package com;
+package com.sauce.core;
 
+import com.sauce.util.misc.Ini;
 import com.util.RSauceLogger;
 import com.util.structures.special.SortedArrayList;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -8,7 +9,6 @@ import javax.swing.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Comparator;
 import java.util.function.Consumer;
 
 import static org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor;
@@ -44,17 +44,16 @@ public class Preferences {
 
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
-        screenWidth = vidmode.width();
-        screenHeight = vidmode.height();
+        setWindowedMode(vidmode.width(), vidmode.height());
+        setFullscreenMode(vidmode);
+        setFullscreen(false);
+        setInterpolation(false);
 
-        fullscreenWidth = vidmode.width();
-        fullscreenHeight = vidmode.height();
-        fullscreenRefreshRate = vidmode.refreshRate();
     }
 
     // FINAL SETTINGS: Require a restart to change.
     // Project Information
-    public static final String ENGINE_VERSION = "0.3.5 Dev 5";
+    public static final String ENGINE_VERSION = "0.3.5 Dev 6";
     public static final String NAME = "RSauce" + ENGINE_VERSION;
     public static final String PROJECT_VERSION = "0.0.0";
     public static final String ASSET_ROOT;
@@ -64,8 +63,8 @@ public class Preferences {
 
     // NON-FINAL SETTINGS: Can change at runtime.
     // Graphics
-    private static boolean interpolation = false;
-    private static boolean fullscreen = false;
+    private static boolean interpolation;
+    private static boolean fullscreen;
     private static int fullscreenWidth;
     private static int fullscreenHeight;
     private static int fullscreenRefreshRate;
@@ -74,6 +73,25 @@ public class Preferences {
 
     // Other
     private static int frameLimit = 60;
+
+    public static void setWindowedMode(int width, int height){
+        screenWidth = width;
+        screenHeight = height;
+    }
+
+    public static void setFullscreenMode(GLFWVidMode vidmode){
+        fullscreenWidth = vidmode.width();
+        fullscreenHeight = vidmode.height();
+        fullscreenRefreshRate = vidmode.refreshRate();
+    }
+
+    public static void setFullscreen(boolean bool){
+        fullscreen = bool;
+    }
+
+    public static void setInterpolation(boolean bool){
+        interpolation = bool;
+    }
 
     public static boolean interpolation() {
         return interpolation;

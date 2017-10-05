@@ -1,6 +1,5 @@
 package com.sauce.core;
 
-import com.Preferences;
 import com.demo.scenes.DemoScene;
 import com.sauce.asset.audio.AudioThread;
 import com.sauce.core.engine.Engine;
@@ -19,7 +18,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
-import static com.Preferences.*;
+import static com.sauce.core.Preferences.*;
 
 /**
  * Created by John Crockett.
@@ -29,7 +28,7 @@ import static com.Preferences.*;
 public class Main{
 
     // The window handle
-    public static long window;
+    private static long window;
 
     private static boolean running = true;
 
@@ -60,9 +59,7 @@ public class Main{
 
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-
-
-        window = glfwCreateWindow(Preferences.getScreenWidth(), Preferences.getScreenHeight(), Preferences.NAME, NULL, NULL);
+        window = glfwCreateWindow(Preferences.getScreenWidth(), Preferences.getScreenHeight(), Preferences.NAME, Preferences.isFullscreen() ? GLFW.glfwGetPrimaryMonitor() : NULL, NULL);
 
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
@@ -112,7 +109,7 @@ public class Main{
 
     private static void loop(Engine engine) {
         double current = (double) System.currentTimeMillis() / 1000.0;
-        double last = 0;
+        double last;
 
         while ( !glfwWindowShouldClose(window) && running) {
             glClear(GL_COLOR_BUFFER_BIT); // clear the framebuffer
@@ -123,6 +120,10 @@ public class Main{
 
             glfwPollEvents();
         }
+    }
+
+    public static long getWindowHandle(){
+        return window;
     }
 
     public static void quitAtEndOfCycle(){

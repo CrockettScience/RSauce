@@ -1,4 +1,4 @@
-package com;
+package com.sauce.util.misc;
 import com.util.RSauceLogger;
 
 import java.io.File;

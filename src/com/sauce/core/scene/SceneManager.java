@@ -1,6 +1,6 @@
 package com.sauce.core.scene;
 
-import com.Preferences;
+import com.sauce.core.Preferences;
 import com.sauce.util.ogl.OGLCoordinateSystem;
 import com.util.RSauceLogger;
 import com.util.structures.nonsaveable.Set;

@@ -1,6 +1,6 @@
 package com.demo.systems;
 
-import com.Preferences;
+import com.sauce.core.Preferences;
 import com.demo.entities.Eggy;
 import com.sauce.asset.audio.AudioThread;
 import com.sauce.asset.audio.Effect;

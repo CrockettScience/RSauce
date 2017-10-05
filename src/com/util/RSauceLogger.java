@@ -1,6 +1,6 @@
 package com.util;
 
-import com.Preferences;
+import com.sauce.core.Preferences;
 
 /**
  * Utility logging and printing class for RSauce

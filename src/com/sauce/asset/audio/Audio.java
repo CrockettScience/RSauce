@@ -1,6 +1,6 @@
 package com.sauce.asset.audio;
 
-import com.Preferences;
+import com.sauce.core.Preferences;
 
 import java.io.IOException;
 import java.nio.IntBuffer;

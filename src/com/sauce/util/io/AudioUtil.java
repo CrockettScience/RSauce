@@ -1,6 +1,6 @@
 package com.sauce.util.io;
 
-import com.Preferences;
+import com.sauce.core.Preferences;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.stb.STBVorbisInfo;
 

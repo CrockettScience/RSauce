@@ -1,6 +1,6 @@
 package com.sauce.core.scene;
 
-import com.Preferences;
+import com.sauce.core.Preferences;
 import com.sauce.core.engine.BackBuffer;
 import com.sauce.core.engine.DrawComponent;
 import com.sauce.core.engine.Entity;

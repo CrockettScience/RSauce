@@ -1,6 +1,6 @@
 package com.demo.systems;
 
-import com.Preferences;
+import com.sauce.core.Preferences;
 import com.sauce.asset.fonts.Font;
 import com.sauce.core.engine.DrawSystem;
 import com.sauce.core.engine.Engine;

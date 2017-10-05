@@ -1,6 +1,6 @@
 package com.sauce.core.engine;
 
-import com.Preferences;
+import com.sauce.core.Preferences;
 import com.sauce.asset.graphics.DrawBatch;
 import com.sauce.core.Main;
 import com.sauce.core.scene.BackgroundAttribute;
@@ -306,7 +306,7 @@ public final class Engine {
 
         glPopMatrix();
 
-        glfwSwapBuffers(Main.window);
+        glfwSwapBuffers(Main.getWindowHandle());
     }
 
     private EntitySet onlyEntitiesWithComponent(Class<? extends Component> c){

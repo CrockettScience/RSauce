@@ -2,7 +2,7 @@ package com.demo.systems;
 
 import com.demo.entities.Eggy;
 import com.sauce.asset.graphics.Sprite;
-import com.Preferences;
+import com.sauce.core.Preferences;
 import com.sauce.core.engine.DrawComponent;
 import com.sauce.core.engine.Engine;
 import com.sauce.core.engine.Entity;

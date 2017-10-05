@@ -1,6 +1,6 @@
 package com.sauce.asset.graphics;
 
-import com.Preferences;
+import com.sauce.core.Preferences;
 import com.sauce.asset.scripts.Script;
 import com.util.structures.nonsaveable.Queue;
 import com.util.Vector2D;

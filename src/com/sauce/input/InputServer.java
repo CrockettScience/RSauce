@@ -1,7 +1,7 @@
 package com.sauce.input;
 
 import com.sauce.core.Main;
-import com.Preferences;
+import com.sauce.core.Preferences;
 import com.sauce.core.scene.Camera;
 import com.sauce.core.scene.SceneManager;
 import com.util.Vector2DDouble;
@@ -30,24 +30,24 @@ public class InputServer {
     };
 
     static{
-        glfwSetKeyCallback(Main.window, (window, key, scanCode, action, mods) -> {
+        glfwSetKeyCallback(Main.getWindowHandle(), (window, key, scanCode, action, mods) -> {
             if(action != GLFW_REPEAT)
                 dispatch(EVENT_TYPE_KEY, key, action, mods, -1, -1);
         });
 
-        glfwSetCharCallback(Main.window, (window, character) -> {
+        glfwSetCharCallback(Main.getWindowHandle(), (window, character) -> {
             dispatch(EVENT_TYPE_TEXT, character,-1,-1, -1, -1);
         });
 
-        glfwSetMouseButtonCallback(Main.window, (window, button, action, mods) -> {
+        glfwSetMouseButtonCallback(Main.getWindowHandle(), (window, button, action, mods) -> {
             dispatch(EVENT_TYPE_MOUSE_BUTTON, button, action, mods, -1, -1);
         });
 
-        glfwSetScrollCallback(Main.window, (window, x, y) -> {
+        glfwSetScrollCallback(Main.getWindowHandle(), (window, x, y) -> {
             dispatch(EVENT_TYPE_MOUSE_SCROLL, -1, -1, -1, x, y);
         });
 
-        glfwSetCursorPosCallback(Main.window, (window, x, y) -> {
+        glfwSetCursorPosCallback(Main.getWindowHandle(), (window, x, y) -> {
             dispatch(EVENT_TYPE_MOUSE_MOVE, -1, -1, -1, x, Preferences.getScreenHeight() - y);
         });
 
@@ -108,26 +108,26 @@ public class InputServer {
     }
 
     public static boolean isKeyPressed(int key){
-        return glfwGetKey(Main.window, key) == GLFW_PRESS;
+        return glfwGetKey(Main.getWindowHandle(), key) == GLFW_PRESS;
     }
 
     public static boolean isKeyReleased(int key){
-        return glfwGetKey(Main.window, key) == GLFW_RELEASE;
+        return glfwGetKey(Main.getWindowHandle(), key) == GLFW_RELEASE;
     }
 
     public static boolean isButtonPressed(int button){
-        return glfwGetMouseButton(Main.window, button) == GLFW_PRESS;
+        return glfwGetMouseButton(Main.getWindowHandle(), button) == GLFW_PRESS;
     }
 
     public static boolean isButtonReleased(int button){
-        return glfwGetMouseButton(Main.window, button) == GLFW_RELEASE;
+        return glfwGetMouseButton(Main.getWindowHandle(), button) == GLFW_RELEASE;
     }
 
     public static Vector2DDouble mouseScreenPosition(){
         double[] x = new double[1];
         double[] y = new double[1];
 
-        glfwGetCursorPos(Main.window, x, y);
+        glfwGetCursorPos(Main.getWindowHandle(), x, y);
         return new Vector2DDouble(x[0], Preferences.getScreenHeight() - y[0]);
     }
 
