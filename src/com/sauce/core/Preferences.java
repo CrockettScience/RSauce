@@ -20,9 +20,15 @@ import static org.lwjgl.system.MemoryUtil.NULL;
  */
 public class Preferences {
 
+    // Project CONSTANTS
+    public static final String ENGINE_VERSION = "0.3.6";
+    public static final String NAME = "RSauce " + ENGINE_VERSION;
+    public static final String PROJECT_VERSION = "0.0.0";
+
     // Dev Settings
     public static final boolean DEBUG = false;
     private static final Path DEV_INI_PATH = Paths.get(System.getProperty("user.home"), "RSauce Dev");
+    private static final Path PROJ_INI_PATH = Paths.get(System.getProperty("user.home"), NAME + " " + PROJECT_VERSION);
 
     static {
         Ini dev = new Ini(DEV_INI_PATH, "dev");
@@ -39,30 +45,52 @@ public class Preferences {
 
         ASSET_ROOT = dev.read("PATHS", "Repository", Paths.get(System.getProperty("user.home"), "RSauce").toString()) + "\\assets\\";
 
+        Ini proj = new Ini(PROJ_INI_PATH, NAME);
+        {
+            GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+
+            if (proj.isEmpty() ||
+                    !(proj.readInt("GRAPHICS", "WindowWidth", -1) == vidmode.width() &&
+                            proj.readInt("GRAPHICS", "WindowHeight", -1) == vidmode.height()) &&
+                            proj.readInt("GRAPHICS", "RefreshRate", -1) == vidmode.refreshRate()) {
+
+                proj.write("GRAPHICS", "WindowWidth", String.valueOf(vidmode.width()));
+                proj.write("GRAPHICS", "WindowHeight", String.valueOf(vidmode.height()));
+
+                proj.write("GRAPHICS", "FullScreen", "false");
+
+                proj.write("GRAPHICS", "FullScreenWidth", String.valueOf(vidmode.width()));
+                proj.write("GRAPHICS", "FullScreenHeight", String.valueOf(vidmode.height()));
+                proj.write("GRAPHICS", "RefreshRate", String.valueOf(vidmode.refreshRate()));
+
+                proj.write("GRAPHICS", "FrameLimit", String.valueOf(vidmode.refreshRate()));
+
+                proj.write("AUDIO", "BufferSize", "4096");
+
+                proj.save();
+            }
+        }
+
+        screenWidth = proj.readInt("GRAPHICS", "WindowWidth", -1);
+        screenHeight = proj.readInt("GRAPHICS", "WindowHeight", -1);
+
+        fullscreenWidth = proj.readInt("GRAPHICS", "FullScreenWidth", -1);
+        fullscreenHeight = proj.readInt("GRAPHICS", "FullScreenHeight", -1);
+        fullscreenRefreshRate = proj.readInt("GRAPHICS", "RefreshRate", -1);
+
+        fullscreen = proj.readBool("GRAPHICS", "FullScreen", false);
+
+        AUDIO_BUFFER_SIZE = proj.readInt("AUDIO", "BufferSize", 4096);
+
         SupportedVideoModes.addModes(glfwGetVideoModes(glfwGetPrimaryMonitor()));
-
-        GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-
-        screenWidth = vidmode.width();
-        screenHeight = vidmode.height();
-
-        fullscreenWidth = vidmode.width();
-        fullscreenHeight = vidmode.height();
-        fullscreenRefreshRate = vidmode.refreshRate();
-
-        fullscreen = false;
 
     }
 
     // FINAL SETTINGS: Require a restart to change.
-    // Project Information
-    public static final String ENGINE_VERSION = "0.3.5 Dev 8";
-    public static final String NAME = "RSauce" + ENGINE_VERSION;
-    public static final String PROJECT_VERSION = "0.0.0";
     public static final String ASSET_ROOT;
 
     // Audio
-    public static final int AUDIO_BUFFER_SIZE = 4096;
+    public static final int AUDIO_BUFFER_SIZE;
 
     // NON-FINAL SETTINGS: Can change at runtime.
     // Graphics
@@ -76,9 +104,16 @@ public class Preferences {
     // Other
     private static int frameLimit = 60;
 
-    public static void setWindowedMode(int width, int height){
+    public static void setWindowedSize(int width, int height){
         screenWidth = width;
         screenHeight = height;
+
+        Ini proj = new Ini(PROJ_INI_PATH, NAME);
+
+        proj.write("GRAPHICS", "WindowWidth", String.valueOf(width));
+        proj.write("GRAPHICS", "WindowHeight", String.valueOf(height));
+
+        proj.save();
 
         updateWindow();
     }
@@ -88,11 +123,25 @@ public class Preferences {
         fullscreenHeight = vidmode.height();
         fullscreenRefreshRate = vidmode.refreshRate();
 
+        Ini proj = new Ini(PROJ_INI_PATH, NAME);
+
+        proj.write("GRAPHICS", "FullScreenWidth", String.valueOf(vidmode.width()));
+        proj.write("GRAPHICS", "FullScreenHeight", String.valueOf(vidmode.height()));
+        proj.write("GRAPHICS", "RefreshRate", String.valueOf(vidmode.refreshRate()));
+
+        proj.save();
+
         updateWindow();
     }
 
     public static void setFullscreen(boolean bool){
         fullscreen = bool;
+
+        Ini proj = new Ini(PROJ_INI_PATH, NAME);
+
+        proj.write("GRAPHICS", "FullScreen", String.valueOf(bool));
+
+        proj.save();
 
         updateWindow();
     }
