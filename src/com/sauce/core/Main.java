@@ -40,14 +40,17 @@ public class Main{
         initOpenGL();
         initOpenAL();
 
-        loop(initEngine());
+        try {
+            loop(initEngine());
+        }
+        finally {
+            AudioThread.killAudioThread();
 
-        AudioThread.killAudioThread();
-
-        glfwFreeCallbacks(window);
-        glfwDestroyWindow(window);
-        glfwSetErrorCallback(null).free();
-        glfwTerminate();
+            glfwFreeCallbacks(window);
+            glfwDestroyWindow(window);
+            glfwSetErrorCallback(null).free();
+            glfwTerminate();
+        }
 
     }
 

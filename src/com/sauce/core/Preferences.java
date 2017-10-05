@@ -53,7 +53,7 @@ public class Preferences {
 
     // FINAL SETTINGS: Require a restart to change.
     // Project Information
-    public static final String ENGINE_VERSION = "0.3.5 Dev 6";
+    public static final String ENGINE_VERSION = "0.3.5 Dev 7";
     public static final String NAME = "RSauce" + ENGINE_VERSION;
     public static final String PROJECT_VERSION = "0.0.0";
     public static final String ASSET_ROOT;
