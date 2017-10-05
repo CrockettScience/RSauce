@@ -6,6 +6,8 @@ import org.lwjgl.glfw.GLFWVidMode;
 
 import javax.swing.*;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.function.Consumer;
 
@@ -19,13 +21,24 @@ import static org.lwjgl.glfw.GLFW.glfwGetVideoModes;
  */
 public class Preferences {
 
-    static {
-        JFileChooser assetChooser = new JFileChooser();
-        assetChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        assetChooser.setDialogTitle("RSauce Dev Initialization: Set Asset Source Directory");
-        assetChooser.showOpenDialog(null);
+    // Dev Settings
+    public static final boolean DEBUG = false;
+    private static final Path DEV_INI_PATH = Paths.get(System.getProperty("user.home"), "RSauce Dev");
 
-        ASSET_ROOT = assetChooser.getSelectedFile().getPath() + "/";
+    static {
+        Ini dev = new Ini(DEV_INI_PATH, "dev");
+        if(dev.isEmpty()) {
+            JFileChooser assetChooser = new JFileChooser();
+            assetChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            assetChooser.setDialogTitle("RSauce Dev Initialization: Set Repository Directory");
+            assetChooser.showOpenDialog(null);
+
+            dev.write("PATHS", "Repository", assetChooser.getSelectedFile().getPath() + "/");
+
+            dev.save();
+        }
+
+        ASSET_ROOT = dev.read("PATHS", "Repository", Paths.get(System.getProperty("user.home"), "RSauce").toString()) + "\\assets\\";
 
         SupportedVideoModes.addModes(glfwGetVideoModes(glfwGetPrimaryMonitor()));
 
@@ -41,16 +54,13 @@ public class Preferences {
 
     // FINAL SETTINGS: Require a restart to change.
     // Project Information
-    public static final String ENGINE_VERSION = "0.3.5 Dev 4";
+    public static final String ENGINE_VERSION = "0.3.5 Dev 5";
     public static final String NAME = "RSauce" + ENGINE_VERSION;
     public static final String PROJECT_VERSION = "0.0.0";
     public static final String ASSET_ROOT;
 
     // Audio
     public static final int AUDIO_BUFFER_SIZE = 4096;
-
-    // Dev Settings
-    public static final boolean DEBUG = false;
 
     // NON-FINAL SETTINGS: Can change at runtime.
     // Graphics
