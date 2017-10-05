@@ -22,7 +22,7 @@ public class Preferences {
     static {
         JFileChooser assetChooser = new JFileChooser();
         assetChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        assetChooser.setDialogTitle("RSauce Initialization: Set Source Directory");
+        assetChooser.setDialogTitle("RSauce Dev Initialization: Set Asset Source Directory");
         assetChooser.showOpenDialog(null);
 
         ASSET_ROOT = assetChooser.getSelectedFile().getPath() + "/";
@@ -41,13 +41,16 @@ public class Preferences {
 
     // FINAL SETTINGS: Require a restart to change.
     // Project Information
-    public static final String ENGINE_VERSION = "0.3.5 Dev 3";
+    public static final String ENGINE_VERSION = "0.3.5 Dev 4";
     public static final String NAME = "RSauce" + ENGINE_VERSION;
     public static final String PROJECT_VERSION = "0.0.0";
     public static final String ASSET_ROOT;
 
     // Audio
     public static final int AUDIO_BUFFER_SIZE = 4096;
+
+    // Dev Settings
+    public static final boolean DEBUG = false;
 
     // NON-FINAL SETTINGS: Can change at runtime.
     // Graphics
