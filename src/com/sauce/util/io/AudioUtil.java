@@ -1,6 +1,6 @@
 package com.sauce.util.io;
 
-import com.Project;
+import com.Preferences;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.stb.STBVorbisInfo;
 
@@ -53,7 +53,7 @@ public class AudioUtil {
             this.lengthSamples = stb_vorbis_stream_length_in_samples(handle);
             this.lengthSeconds = stb_vorbis_stream_length_in_seconds(handle);
 
-            this.pcm = BufferUtils.createShortBuffer(Project.AUDIO_BUFFER_SIZE);
+            this.pcm = BufferUtils.createShortBuffer(Preferences.AUDIO_BUFFER_SIZE);
         }
 
         private static int getFormat(int channels) {

@@ -15,9 +15,9 @@ import static org.lwjgl.glfw.GLFW.glfwGetVideoModes;
 
 /**
  * Created by John Crockett.
- * Global Project Settings Object
+ * Global Preferences Object
  */
-public class Project {
+public class Preferences {
 
     static {
         JFileChooser assetChooser = new JFileChooser();
@@ -41,7 +41,7 @@ public class Project {
 
     // FINAL SETTINGS: Require a restart to change.
     // Project Information
-    public static final String ENGINE_VERSION = "0.3.5 Dev 2";
+    public static final String ENGINE_VERSION = "0.3.5 Dev 3";
     public static final String NAME = "RSauce" + ENGINE_VERSION;
     public static final String PROJECT_VERSION = "0.0.0";
     public static final String ASSET_ROOT;

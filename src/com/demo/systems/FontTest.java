@@ -1,6 +1,6 @@
 package com.demo.systems;
 
-import com.Project;
+import com.Preferences;
 import com.sauce.asset.fonts.Font;
 import com.sauce.core.engine.DrawSystem;
 import com.sauce.core.engine.Engine;
@@ -9,8 +9,8 @@ import com.util.Color;
 public class FontTest extends DrawSystem {
 
     private Font spider;
-    private static int X = Project.getScreenWidth() / 2;
-    private static int Y = Project.getScreenHeight() / 4;
+    private static int X = Preferences.getScreenWidth() / 2;
+    private static int Y = Preferences.getScreenHeight() / 4;
 
     public FontTest(int priority) {
         super(priority);
@@ -18,7 +18,7 @@ public class FontTest extends DrawSystem {
 
     @Override
     public void addedToEngine(Engine engine) {
-        spider = new Font(Project.ASSET_ROOT + "spider.ttf", 196);
+        spider = new Font(Preferences.ASSET_ROOT + "spider.ttf", 196);
     }
 
     @Override

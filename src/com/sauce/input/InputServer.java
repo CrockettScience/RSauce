@@ -1,7 +1,7 @@
 package com.sauce.input;
 
 import com.sauce.core.Main;
-import com.Project;
+import com.Preferences;
 import com.sauce.core.scene.Camera;
 import com.sauce.core.scene.SceneManager;
 import com.util.Vector2DDouble;
@@ -48,7 +48,7 @@ public class InputServer {
         });
 
         glfwSetCursorPosCallback(Main.window, (window, x, y) -> {
-            dispatch(EVENT_TYPE_MOUSE_MOVE, -1, -1, -1, x, Project.getScreenHeight() - y);
+            dispatch(EVENT_TYPE_MOUSE_MOVE, -1, -1, -1, x, Preferences.getScreenHeight() - y);
         });
 
         glfwSetJoystickCallback((joyId, event) -> {
@@ -128,14 +128,14 @@ public class InputServer {
         double[] y = new double[1];
 
         glfwGetCursorPos(Main.window, x, y);
-        return new Vector2DDouble(x[0], Project.getScreenHeight() - y[0]);
+        return new Vector2DDouble(x[0], Preferences.getScreenHeight() - y[0]);
     }
 
     public static Vector2DDouble mouseScenePosition(){
         Vector2DDouble screenPos = mouseScreenPosition();
         Camera cam = SceneManager.getCamera();
 
-        return new Vector2DDouble(cam.getX() + (screenPos.getX() / Project.getScreenWidth()) * cam.getWidth(), cam.getY() + (screenPos.getY() / Project.getScreenHeight()) * cam.getHeight());
+        return new Vector2DDouble(cam.getX() + (screenPos.getX() / Preferences.getScreenWidth()) * cam.getWidth(), cam.getY() + (screenPos.getY() / Preferences.getScreenHeight()) * cam.getHeight());
 
     }
 

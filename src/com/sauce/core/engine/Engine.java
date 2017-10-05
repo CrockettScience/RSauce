@@ -1,8 +1,8 @@
 package com.sauce.core.engine;
 
+import com.Preferences;
 import com.sauce.asset.graphics.DrawBatch;
 import com.sauce.core.Main;
-import com.Project;
 import com.sauce.core.scene.BackgroundAttribute;
 import com.sauce.core.scene.Camera;
 import com.sauce.core.scene.Scene;
@@ -141,7 +141,7 @@ public final class Engine {
 
     public void update(double delta){
         timeSinceLast += delta;
-        if(timeSinceLast >= 1.0 / Project.getFrameLimit()) {
+        if(timeSinceLast >= 1.0 / Preferences.getFrameLimit()) {
             step(delta);
 
             SceneManager.getCamera().getCameraBuffer().bind();

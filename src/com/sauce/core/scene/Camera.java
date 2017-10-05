@@ -1,6 +1,6 @@
 package com.sauce.core.scene;
 
-import com.Project;
+import com.Preferences;
 import com.sauce.core.engine.BackBuffer;
 import com.sauce.core.engine.DrawComponent;
 import com.sauce.core.engine.Entity;
@@ -36,7 +36,7 @@ public class Camera {
         xBufferZone = xBuff;
         yBufferZone = yBuff;
 
-        cameraBuffer = new BackBuffer(Project.getScreenWidth(), Project.getScreenHeight());
+        cameraBuffer = new BackBuffer(Preferences.getScreenWidth(), Preferences.getScreenHeight());
     }
 
     void bindSubscriber(CameraChangeSubscriber sub){

@@ -1,12 +1,12 @@
 package com.demo.scenes;
 
+import com.Preferences;
 import com.demo.entities.Eggy;
 import com.demo.systems.CollisionTest;
 import com.demo.systems.FontTest;
 import com.sauce.asset.audio.AudioThread;
 import com.sauce.asset.audio.Music;
 import com.sauce.core.Main;
-import com.Project;
 import com.sauce.core.engine.Engine;
 import com.sauce.core.engine.Entity;
 import com.sauce.core.engine.ParallaxBackground;
@@ -18,7 +18,7 @@ import java.util.Iterator;
 
 import static com.sauce.input.InputServer.*;
 
-import static com.Project.ASSET_ROOT;
+import static com.Preferences.ASSET_ROOT;
 import static com.sauce.core.scene.SceneManager.*;
 
 /**
@@ -48,7 +48,7 @@ public class DemoScene extends Scene implements InputClient {
         bind(this);
 
         Engine.getEngine().add(new FontTest(0));
-        irritatingSong = new Music(Project.ASSET_ROOT + "Patriarchy.ogg", 21.391f);
+        irritatingSong = new Music(Preferences.ASSET_ROOT + "Patriarchy.ogg", 21.391f);
 
     }
 
@@ -112,7 +112,7 @@ public class DemoScene extends Scene implements InputClient {
     @Override
     public void mouseScrolled(double x, double y) {
         Camera v = SceneManager.getCamera();
-        v.resize((int)(v.getWidth() + ZOOM_SPEED * -y), (int)(v.getHeight() + (ZOOM_SPEED * Project.getScreenHeight() / Project.getScreenWidth()) * -y));
+        v.resize((int)(v.getWidth() + ZOOM_SPEED * -y), (int)(v.getHeight() + (ZOOM_SPEED * Preferences.getScreenHeight() / Preferences.getScreenWidth()) * -y));
     }
 
     @Override

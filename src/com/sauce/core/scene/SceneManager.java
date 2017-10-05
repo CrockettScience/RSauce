@@ -1,13 +1,9 @@
 package com.sauce.core.scene;
 
-import com.Project;
+import com.Preferences;
 import com.sauce.util.ogl.OGLCoordinateSystem;
 import com.util.RSauceLogger;
 import com.util.structures.nonsaveable.Set;
-
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
-import static org.lwjgl.opengl.GL11.glMatrixMode;
 
 /**
  *
@@ -16,7 +12,7 @@ import static org.lwjgl.opengl.GL11.glMatrixMode;
 public class SceneManager{
         
     private static Scene scene;
-    private static Camera camera = new Camera(0,0, Project.getScreenWidth(), Project.getScreenHeight(), 0, 0);
+    private static Camera camera = new Camera(0,0, Preferences.getScreenWidth(), Preferences.getScreenHeight(), 0, 0);
     private static Set<CameraChangeSubscriber> cameraChangeSubscribers = new Set<>();
 
     public static Scene getCurrentScene() {

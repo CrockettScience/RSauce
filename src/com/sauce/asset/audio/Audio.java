@@ -1,6 +1,6 @@
 package com.sauce.asset.audio;
 
-import com.Project;
+import com.Preferences;
 
 import java.io.IOException;
 import java.nio.IntBuffer;
@@ -56,7 +56,7 @@ public abstract class Audio {
 
         int samples = 0;
 
-        while (samples < Project.AUDIO_BUFFER_SIZE) {
+        while (samples < Preferences.AUDIO_BUFFER_SIZE) {
             info.getPcm().position(samples);
             int samplesPerChannel = stb_vorbis_get_samples_short_interleaved(info.getHandle(), info.getChannels(), info.getPcm());
             if (samplesPerChannel == 0) {

@@ -1,6 +1,6 @@
 package com.sauce.asset.graphics;
 
-import com.Project;
+import com.Preferences;
 import com.sauce.asset.scripts.Script;
 import com.util.structures.nonsaveable.Queue;
 import com.util.Vector2D;
@@ -53,8 +53,8 @@ public class DrawBatch {
             if(image.getIOImage() != null)
                 applyIOImageForDrawing(image.getIOImage(), image.absWidth(), image.absHeight(), image.components());
 
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Project.interpolation() ? GL_LINEAR : GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Project.interpolation() ? GL_LINEAR : GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Preferences.interpolation() ? GL_LINEAR : GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Preferences.interpolation() ? GL_LINEAR : GL_NEAREST);
 
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);

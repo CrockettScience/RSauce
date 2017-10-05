@@ -2,7 +2,7 @@ package com.demo.systems;
 
 import com.demo.entities.Eggy;
 import com.sauce.asset.graphics.Sprite;
-import com.Project;
+import com.Preferences;
 import com.sauce.core.engine.DrawComponent;
 import com.sauce.core.engine.Engine;
 import com.sauce.core.engine.Entity;
@@ -36,7 +36,7 @@ public class CollisionTest extends StepSystem implements InputClient {
                 buttonMatrix.set(1, 0, "on");
             }
 
-            Sprite buttonSprite = new Sprite(Project.ASSET_ROOT + "collisionTest.png", 2, 1, buttonMatrix, false, 0);
+            Sprite buttonSprite = new Sprite(Preferences.ASSET_ROOT + "collisionTest.png", 2, 1, buttonMatrix, false, 0);
 
             collisionButton = new Entity() {
                 private Sprite sprite = buttonSprite;
