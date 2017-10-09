@@ -1,11 +1,29 @@
 package com.sauce.asset.graphics;
 
-import com.util.Vector2D;
 import com.util.Vector2DDouble;
+import com.util.structures.nonsaveable.Map;
 
-public class TextureAtlas {
+public class TextureAtlas<K> {
     private static int PAGE_SIZE = 2048;
     private static double TEXEL_SIZE = 1 / PAGE_SIZE;
+
+    private Map<K, TextureRegion> textureMap = new Map<>();
+    private Node root = new Node();
+
+    public TextureRegion getTexture(K key){
+        return textureMap.get(key);
+    }
+
+    public boolean containsTexture(K key){
+        return textureMap.containsKey(key);
+    }
+
+    public void putTexture(K key, Graphic graphic){
+    }
+
+    private Node insert(Graphic graphic){
+        return null;
+    }
 
     public class TextureRegion {
         private Vector2DDouble p00;
@@ -54,4 +72,15 @@ public class TextureAtlas {
             return other;
         }
     }
+
+    private class Node {
+        private Node left;
+        private Node Right;
+        private TextureRegion reg;
+
+        public boolean isLeaf(){
+            return reg != null;
+        }
+    }
+
 }
