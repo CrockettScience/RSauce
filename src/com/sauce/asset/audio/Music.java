@@ -26,6 +26,7 @@ public class Music extends Audio {
 
     @Override
     protected boolean update() {
+        checkDisposed();
         int processed = alGetSourcei(getSource(), AL_BUFFERS_PROCESSED);
 
         for (int i = 0; i < processed; i++) {
@@ -49,22 +50,22 @@ public class Music extends Audio {
     }
 
     private float getProgress() {
+        checkDisposed();
         return 1.0f - getSamplesLeft() / (float) (getIOAudio().getAudioInfo().getLengthSamples());
     }
 
     private float getProgressTime(float progress) {
+        checkDisposed();
         return progress * getIOAudio().getAudioInfo().getLengthSeconds();
     }
 
     public float getElapsedTime() {
+        checkDisposed();
         return getProgressTime(getProgress());
     }
 
-    public void rewind(){
-        super.rewind();
-    }
-
     public void seek(float seekTime){
+        checkDisposed();
         int samples = getIOAudio().getAudioInfo().getLengthSamples();
         float seconds = getIOAudio().getAudioInfo().getLengthSeconds();
 

@@ -17,6 +17,7 @@ public class Effect extends Audio {
 
     @Override
     protected boolean update() {
+        checkDisposed();
         int processed = alGetSourcei(getSource(), AL_BUFFERS_PROCESSED);
 
         for (int i = 0; i < processed; i++) {

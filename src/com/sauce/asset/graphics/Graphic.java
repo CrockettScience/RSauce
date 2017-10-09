@@ -1,12 +1,15 @@
 package com.sauce.asset.graphics;
 
 import com.sauce.util.io.GraphicsUtil;
+import com.sauce.util.misc.AssetDisposedException;
+import com.sauce.util.misc.Disposable;
 import com.util.Vector2D;
 
 /**
  * Created by John Crockett.
  */
-public abstract class Graphic {
+public abstract class Graphic implements Disposable {
+    protected boolean disposed = false;
 
     // Properties
     protected int w;
@@ -99,5 +102,13 @@ public abstract class Graphic {
 
     public abstract void update(double delta);
 
-    public abstract void dispose();
+    public void dispose(){
+        disposed = true;
+    }
+
+    protected void checkDisposed(){
+        if(disposed)
+            throw new AssetDisposedException(this);
+
+    }
 }

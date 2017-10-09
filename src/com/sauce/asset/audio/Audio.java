@@ -1,6 +1,8 @@
 package com.sauce.asset.audio;
 
 import com.sauce.core.Preferences;
+import com.sauce.util.misc.AssetDisposedException;
+import com.sauce.util.misc.Disposable;
 
 import java.io.IOException;
 import java.nio.IntBuffer;
@@ -12,7 +14,8 @@ import static org.lwjgl.openal.AL10.*;
 import static org.lwjgl.openal.AL10.alSourcePlay;
 import static org.lwjgl.stb.STBVorbis.*;
 
-public abstract class Audio {
+public abstract class Audio implements Disposable{
+    private boolean disposed = false;
 
     private String fileName;
 
@@ -52,6 +55,9 @@ public abstract class Audio {
     }
 
     protected boolean stream(int buffer) {
+        if(disposed)
+            throw new AssetDisposedException(this);
+
         AudioInfo info = audio.getAudioInfo();
 
         int samples = 0;
@@ -78,16 +84,25 @@ public abstract class Audio {
     }
 
     protected void rewind() {
+        if(disposed)
+            throw new AssetDisposedException(this);
+
         stb_vorbis_seek_start(audio.getAudioInfo().getHandle());
         samplesLeft = audio.getAudioInfo().getLengthSamples();
     }
 
     protected void seek(int sample_number) {
+        if(disposed)
+            throw new AssetDisposedException(this);
+
         stb_vorbis_seek(audio.getAudioInfo().getHandle(), sample_number);
         samplesLeft = audio.getAudioInfo().getLengthSamples() - sample_number;
     }
 
     protected boolean play(IntBuffer buffers) {
+        if(disposed)
+            throw new AssetDisposedException(this);
+
         for (int i = 0; i < buffers.limit(); i++) {
             if (!stream(buffers.get(i))) {
                 return false;
@@ -106,8 +121,9 @@ public abstract class Audio {
         return source;
     }
 
-    void dispose(){
+    public void dispose(){
         alDeleteSources(source);
+        disposed = true;
     }
 
     boolean shouldBeRemoved() {
@@ -128,5 +144,11 @@ public abstract class Audio {
 
     protected int getSamplesLeft() {
         return samplesLeft;
+    }
+
+    protected void checkDisposed(){
+        if(disposed)
+            throw new AssetDisposedException(this);
+
     }
 }

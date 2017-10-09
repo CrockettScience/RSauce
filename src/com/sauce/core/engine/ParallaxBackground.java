@@ -28,12 +28,14 @@ public class ParallaxBackground extends TiledTexture implements CameraChangeSubs
 
     @Override
     public void update(double delta) {
+        super.update(delta);
         xPos += xScroll;
         yPos += yScroll;
     }
 
     @Override
     protected float[] regionCoordinates() {
+        checkDisposed();
         float x = (float)xPos / absWidth();
         float y = (float)yPos / absWidth();
         float w = (float)width() / absWidth();
@@ -44,9 +46,12 @@ public class ParallaxBackground extends TiledTexture implements CameraChangeSubs
     }
 
     int getXPos(){
+        checkDisposed();
         return xPos;
     }
+
     int getYPos(){
+        checkDisposed();
         return yPos;
     }
 
@@ -98,25 +103,30 @@ public class ParallaxBackground extends TiledTexture implements CameraChangeSubs
     }
 
     int texID(){
+        checkDisposed();
         return textureID();
     }
 
     int getParallaxComponents(){
+        checkDisposed();
         return components();
     }
 
     GraphicsUtil.IOGraphic getParallaxIOImage(){
+        checkDisposed();
         return getIOImage();
     }
 
     @Override
     public void cameraResized(Vector2D newSize) {
+        checkDisposed();
         w = newSize.getX();
         h = newSize.getY();
     }
 
     @Override
     public void cameraChanged(Camera newCamera) {
+        checkDisposed();
         w = newCamera.getWidth();
         h = newCamera.getHeight();
         xPos = newCamera.getX();
@@ -125,12 +135,14 @@ public class ParallaxBackground extends TiledTexture implements CameraChangeSubs
 
     @Override
     public void cameraMovedPosition(Vector2D deltaPosition) {
+        checkDisposed();
         xPos += deltaPosition.getX();
         yPos += deltaPosition.getY();
     }
 
     @Override
     public void dispose() {
+        checkDisposed();
         super.dispose();
         SceneManager.unsubscribeToCameraChanges(this);
     }

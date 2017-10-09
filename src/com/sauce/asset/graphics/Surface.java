@@ -31,6 +31,7 @@ public class Surface extends Graphic {
     }
 
     public void bind(){
+        checkDisposed();
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fboHandle);
         glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texID, 0);
 
@@ -51,37 +52,44 @@ public class Surface extends Graphic {
     }
 
     public void dispose(){
+        super.dispose();
         glDeleteFramebuffersEXT(fboHandle);
         glDeleteTextures(texID);
     }
 
     @Override
     protected float[] regionCoordinates() {
+        checkDisposed();
         float[] arr = {0f, 0f, 1f, 0f, 1f, -1f, 0f, -1f};
         return arr;
     }
 
     @Override
     protected int components() {
+        checkDisposed();
         return 4;
     }
 
     @Override
     protected int textureID() {
+        checkDisposed();
         return texID;
     }
 
     @Override
     public GraphicsUtil.IOGraphic getIOImage() {
+        checkDisposed();
         return null;
     }
 
     protected int getHandle(){
+        checkDisposed();
         return fboHandle;
     }
 
     @Override
     public void update(double delta) {
+        checkDisposed();
 
     }
 }

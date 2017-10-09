@@ -7,6 +7,8 @@ import static org.lwjgl.system.MemoryStack.stackPush;
 
 import com.sauce.asset.graphics.Surface;
 import com.sauce.util.io.ResourceUtil;
+import com.sauce.util.misc.AssetDisposedException;
+import com.sauce.util.misc.Disposable;
 import com.util.Color;
 import org.lwjgl.stb.STBTTAlignedQuad;
 import org.lwjgl.system.MemoryStack;
@@ -15,7 +17,9 @@ import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-public class Font {
+public class Font implements Disposable {
+    private boolean disposed = false;
+
     private IOFont font;
     private int fontHeight;
     private int texID;
@@ -38,6 +42,9 @@ public class Font {
     }
 
     public void renderText(String text, Color color, float xPos, float yPos){
+        if(disposed)
+            throw new AssetDisposedException(this);
+
 
         glBindTexture(GL_TEXTURE_2D, texID);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, font.getFontInfo().getBmpBufferSize(), font.getFontInfo().getBmpBufferSize(), 0, GL_ALPHA, GL_UNSIGNED_BYTE, font.getFontInfo().getBitmap());
@@ -106,6 +113,9 @@ public class Font {
     }
 
     public float getStringWidth(String text) {
+        if(disposed)
+            throw new AssetDisposedException(this);
+
         int width = 0;
 
         try (MemoryStack stack = stackPush()) {
@@ -131,6 +141,9 @@ public class Font {
     }
 
     public int getHeight(){
+        if(disposed)
+            throw new AssetDisposedException(this);
+
         return fontHeight;
     }
 
@@ -148,7 +161,7 @@ public class Font {
     }
 
     public void dispose(){
-
+        disposed = true;
         font.getFontInfo().getcData().free();
         glDeleteTextures(texID);
     }

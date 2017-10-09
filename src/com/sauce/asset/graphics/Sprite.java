@@ -62,6 +62,7 @@ public class Sprite extends Graphic {
 
     private double timeSinceLastUpdate;
     public void update(double delta){
+        source.checkDisposed();
         timeSinceLastUpdate += delta;
         if(timeSinceLastUpdate >= frameLimit) {
             if (animationStateIndex >= animationState.size()) {
@@ -86,6 +87,7 @@ public class Sprite extends Graphic {
     }
 
     public void setAnimationState(String state){
+        source.checkDisposed();
         if(!state.equals(animStateID)){
             animationState = idMap.get(state);
             animationStateIndex = 0;
@@ -96,11 +98,13 @@ public class Sprite extends Graphic {
     }
 
     public String currentAnimationStateIdentifier(){
+        source.checkDisposed();
         return animStateID;
     }
 
     @Override
     protected float[] regionCoordinates() {
+        source.checkDisposed();
         float w = 1.0f / cellsInRow;
         float h = 1.0f / cellsInColumn;
         float x = w * cellCoords.getX();
@@ -112,16 +116,19 @@ public class Sprite extends Graphic {
 
     @Override
     protected int components() {
+        source.checkDisposed();
         return source.components();
     }
 
     @Override
     protected int textureID() {
+        source.checkDisposed();
         return source.textureID();
     }
 
     @Override
     public GraphicsUtil.IOGraphic getIOImage() {
+        source.checkDisposed();
         return source.getIOImage();
     }
 }

@@ -36,32 +36,37 @@ public class Image extends Graphic {
 
     @Override
     protected float[] regionCoordinates() {
+        checkDisposed();
         float[] arr = {0f, 0f, 1f, 0f, 1f, 1f, 0f, 1f};
         return arr;
     }
 
     @Override
     protected int components() {
+        checkDisposed();
         return components;
     }
 
     @Override
     protected int textureID() {
+        checkDisposed();
         return texID;
     }
 
     @Override
     public IOGraphic getIOImage() {
+        checkDisposed();
         return image;
     }
 
     @Override
     public void update(double delta) {
-
+        checkDisposed();
     }
 
     @Override
     public void dispose() {
+        super.dispose();
         glDeleteTextures(texID);
     }
 }

@@ -24,6 +24,7 @@ public class TiledTexture extends Graphic {
 
     @Override
     protected float[] regionCoordinates() {
+        checkDisposed();
         float w = (float)textureWidth / (float)tileWidth;
         float h = (float)textureHeight / (float)tileHeight;
 
@@ -32,6 +33,7 @@ public class TiledTexture extends Graphic {
     }
 
     public void resize(int width, int height){
+        checkDisposed();
         textureWidth = width;
         textureHeight = height;
 
@@ -40,24 +42,30 @@ public class TiledTexture extends Graphic {
 
     @Override
     protected int components() {
+        checkDisposed();
         return image.components();
     }
 
     @Override
     protected int textureID() {
+        checkDisposed();
         return image.textureID();
     }
 
     @Override
     public GraphicsUtil.IOGraphic getIOImage() {
+        checkDisposed();
         return image.getIOImage();
     }
 
     @Override
-    public void update(double delta) {}
+    public void update(double delta) {
+        checkDisposed();
+    }
 
     @Override
-    public void dispose() {
+    public void dispose(){
+        super.dispose();
         image.dispose();
     }
 }
