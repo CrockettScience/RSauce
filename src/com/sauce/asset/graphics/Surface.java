@@ -28,20 +28,28 @@ public class Surface extends Graphic {
         glBindTexture(GL_TEXTURE_2D, texID);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_INT, (java.nio.ByteBuffer) null);
 
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fboHandle);
+        glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texID, 0);
+
+        OGLCoordinateSystem.pushCoordinateState();
+        OGLCoordinateSystem.setCoordinateState(0, 0, width, height);
+
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+
+        OGLCoordinateSystem.popCoordinateState();
     }
 
     public void bind(){
         checkDisposed();
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fboHandle);
-        glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texID, 0);
 
         glPushAttrib(GL_VIEWPORT_BIT);
         glViewport(0,0, width, height);
 
         OGLCoordinateSystem.pushCoordinateState();
         OGLCoordinateSystem.setCoordinateState(0, 0, width, height);
-
-        glClear(GL_COLOR_BUFFER_BIT);
     }
 
     public void unbind(){
