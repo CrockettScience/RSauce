@@ -8,10 +8,10 @@ import java.util.Iterator;
  * Created by John Crockett.
  */
 public class SortedArrayList<T> implements Iterable<T> {
-    private  static final int DEFAULT_CAPACITY = 10;
+    private static final int DEFAULT_CAPACITY = 10;
     private static final int NOT_FOUND = -1;
 
-    private T[] elements;
+    protected T[] elements;
     private int size;
     private Comparator<T> comp;
 

@@ -1,13 +1,18 @@
 package com.sauce.asset.graphics;
 
 import static com.sauce.core.Preferences.TEXTURE_PAGE_SIZE;
+
 import com.util.Vector2D;
 import com.util.structures.nonsaveable.Map;
+import com.util.structures.special.SortedArrayList;
+
+import java.util.Comparator;
 
 
 public class TextureAtlas<K> {
 
     private Map<K, TextureRegion> textureMap = new Map<>();
+    private PageList pages = new PageList();
 
     public TextureRegion getTexture(K key){
         return textureMap.get(key);
@@ -18,7 +23,26 @@ public class TextureAtlas<K> {
     }
 
     public void putTexture(K key, Graphic graphic){
+        int size = graphic.absWidth() * graphic.absHeight();
+        int i = pages.binSearch(size, 0, pages.size() - 1);
+        Page page = pages.get(i);
+        Node node = page.insert(graphic);
 
+        while(node == null){
+            i++;
+
+            if(i >= pages.size()){
+                Page newPage = new Page();
+                pages.add(newPage);
+                node = page.insert(graphic);
+            }
+
+            else{
+                node = pages.get(i).insert(graphic);
+            }
+        }
+
+        textureMap.put(key, node.region);
     }
 
     public class TextureRegion implements Comparable<TextureRegion>{
@@ -130,6 +154,27 @@ public class TextureAtlas<K> {
         @Override
         public int compareTo(Page o) {
             return largestSize - o.largestSize;
+        }
+    }
+
+    private class PageList extends SortedArrayList<Page>{
+
+        public PageList() {
+            super(Comparator.naturalOrder());
+        }
+
+        public int binSearch(int size, int start, int end){
+            int index = (start + end) / 2;
+
+            if(index == start)
+                return index;
+            if(elements[index].largestSize < size)
+                return binSearch(size, index, end);
+            if(elements[index].largestSize > size)
+                return binSearch(size, start, index);
+
+            return index;
+
         }
     }
 
