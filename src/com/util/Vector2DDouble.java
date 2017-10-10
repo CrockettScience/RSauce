@@ -1,6 +1,6 @@
 package com.util;
 
-public class Vector2DDouble {
+public class Vector2DDouble implements Comparable<Vector2DDouble> {
     private double x;
     private double y;
 
@@ -23,5 +23,19 @@ public class Vector2DDouble {
 
     public void setY(double y){
         this.y = y;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Vector2DDouble))
+            return false;
+
+        Vector2DDouble other = (Vector2DDouble) obj;
+         return x == other.x && y == other.y;
+    }
+
+    @Override
+    public int compareTo(Vector2DDouble o) {
+        return (int) (x == o.x ? Math.signum(y - o.y) : Math.signum(x - o.x));
     }
 }

@@ -3,7 +3,7 @@ package com.util;
 /**
  * Created by John Crockett.
  */
-public class Vector3D {
+public class Vector3D implements Comparable<Vector3D> {
     private int x;
     private int y;
     private int z;
@@ -36,5 +36,19 @@ public class Vector3D {
 
     public void setZ(int z){
         this.z = z;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof Vector3D))
+            return false;
+
+        Vector3D other = (Vector3D) obj;
+        return x == other.x && y == other.y && z == other.z;
+    }
+
+    @Override
+    public int compareTo(Vector3D o) {
+        return x == o.x ? y == o.y ? z - o.z : y - o.y : x - o.x;
     }
 }
