@@ -30,6 +30,17 @@ public class BackgroundAttribute implements Attribute {
         return new ParallaxIterator(false);
     }
 
+    @Override
+    public void dispose() {
+        for(ParallaxBackground bg : backgrounds)
+            if(bg != null)
+                bg.dispose();
+
+        for(ParallaxBackground fg : foregrounds)
+            if(fg != null)
+                fg.dispose();
+    }
+
     private class ParallaxIterator implements Iterator<ParallaxBackground>{
 
         private int current = -1;

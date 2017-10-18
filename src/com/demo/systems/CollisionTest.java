@@ -36,7 +36,7 @@ public class CollisionTest extends StepSystem implements InputClient {
                 buttonMatrix.set(1, 0, "on");
             }
 
-            Sprite buttonSprite = new Sprite(Preferences.ASSET_ROOT + "collisionTest.png", 2, 1, buttonMatrix, false, 0);
+            Sprite buttonSprite = new Sprite(Preferences.ASSET_ROOT + "button.png", 2, 1, buttonMatrix, false, 0);
 
             collisionButton = new Entity() {
                 private Sprite sprite = buttonSprite;
@@ -58,12 +58,6 @@ public class CollisionTest extends StepSystem implements InputClient {
             collisionButton.addComponent(box);
         }
 
-        DrawComponent pos = eggy.getComponent(DrawComponent.class);
-        int width = (int)(pos.getImage().width() * pos.getImage().getXScale());
-        int height = (int)(pos.getImage().height() * pos.getImage().getYScale());
-
-        eggy.addComponent(new BoundBox(pos.getX() - width / 2, pos.getY() - height / 2, width, height));
-
         Engine.getEngine().add(collisionButton);
         Engine.getEngine().add(new CollisionUtil.DrawBBoxWires());
 
@@ -82,12 +76,6 @@ public class CollisionTest extends StepSystem implements InputClient {
 
         if(isKeyPressed(KEY_MINUS))
             eggy.getComponent(BoundBox.class).rotate(eggy.getComponent(BoundBox.class).getRadianAngle() - 0.1);
-
-        DrawComponent pos = eggy.getComponent(DrawComponent.class);
-        int width = (int)(pos.getImage().width() * pos.getImage().getXScale());
-        int height = (int)(pos.getImage().height() * pos.getImage().getYScale());
-
-        eggy.getComponent(BoundBox.class).moveTo(pos.getX() - width / 2, pos.getY() - height / 2);
 
     }
 

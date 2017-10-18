@@ -176,8 +176,23 @@ public class BoundBox implements Component {
         }
     }
 
-    public boolean detectPointInside(Vector2D point){
-        return detectCollision(new BoundBox(point.getX(), point.getY(), 0, 0, angle));
+    public boolean detectPointInside(Vector2D point) {
+        if (angle == 0) {
+            // Use simple algorithm for non-rotated boxes
+            return (point.getX() < x + width &&
+                    point.getY() < y + height &&
+                    point.getX() > x &&
+                    point.getY() > y);
+        }
+        else {
+            // Last Resort: Rotate point and check for Collision
+            Vector2D rotatedPoint = getRotatedPoint(point, center, -angle);
+
+            return (rotatedPoint.getX() < x + width &&
+                    rotatedPoint.getY() < y + height &&
+                    rotatedPoint.getX() > x &&
+                    rotatedPoint.getY() > y);
+        }
     }
 
     public int getX() {

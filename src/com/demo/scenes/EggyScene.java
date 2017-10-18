@@ -3,9 +3,6 @@ package com.demo.scenes;
 import com.sauce.core.Preferences;
 import com.demo.entities.Eggy;
 import com.demo.systems.CollisionTest;
-import com.demo.systems.FontTest;
-import com.sauce.asset.audio.AudioThread;
-import com.sauce.asset.audio.Music;
 import com.sauce.core.Main;
 import com.sauce.core.engine.Engine;
 import com.sauce.core.engine.Entity;
@@ -13,6 +10,7 @@ import com.sauce.core.engine.ParallaxBackground;
 import com.sauce.core.scene.*;
 import com.sauce.input.InputClient;
 import com.sauce.input.InputEvent;
+import com.sauce.input.InputServer;
 
 import java.util.Iterator;
 
@@ -20,20 +18,22 @@ import static com.sauce.input.InputServer.*;
 
 import static com.sauce.core.Preferences.ASSET_ROOT;
 import static com.sauce.core.scene.SceneManager.*;
+import static com.demo.util.DemoUtil.*;
 
 /**
  * Created by John Crockett.
  */
-public class DemoScene extends Scene implements InputClient {
+public class EggyScene extends Scene implements InputClient {
 
     private static final int VIEW_SPEED = 50;
     private static final int ZOOM_SPEED = 100;
-    private Music irritatingSong;
 
     @Override
     protected void loadResources() {
+        SceneManager.setCamera(new Camera(0, 0, WIDTH, HEIGHT, 0, 0));
+
         // Setup Eggy
-        Entity eggy1 = new Eggy(16, 16, SceneManager.getCamera().getWidth() / 2, SceneManager.getCamera().getHeight() / 2, 0);
+        Entity eggy1 = new Eggy(1, 1, SceneManager.getCamera().getWidth() / 2, SceneManager.getCamera().getHeight() / 2, 0);
 
         putEntity("eggy", eggy1);
 
@@ -41,40 +41,29 @@ public class DemoScene extends Scene implements InputClient {
         BackgroundAttribute attr = new BackgroundAttribute();
         addAttribute(attr);
 
-        ParallaxBackground triangles = new ParallaxBackground(ASSET_ROOT + "bg.png", 0, 0);
-        attr.setBackground(triangles, 0);
+        ParallaxBackground grass = new ParallaxBackground(ASSET_ROOT + "grass.png", 0, 0);
+        attr.setBackground(grass, 0);
 
         // Bind to recieve InputEvents
         bind(this);
 
-        Engine.getEngine().add(new FontTest(0));
-        irritatingSong = new Music(Preferences.ASSET_ROOT + "Patriarchy.ogg", 21.391f);
 
     }
 
     @Override
     protected void destroyResources() {
-        getEntity("eggy").dispose();
-        removeEntities();
-        Iterator<ParallaxBackground> i = getAttribute(BackgroundAttribute.class).backgroundIterator();
-
-        while(i.hasNext()){
-            i.next().dispose();
-        }
-
-        Engine.getEngine().removeDrawSystem(FontTest.class);
+        InputServer.unbind(this);
     }
 
     @Override
     protected void sceneMain() {
         activateEntity("eggy");
-        AudioThread.enqueue(irritatingSong);
     }
 
     @Override
     public void receivedKeyEvent(InputEvent event) {
         if(event.key() == KEY_ESCAPE && event.action() == ACTION_RELEASED){
-            Main.quitAtEndOfCycle();
+            SceneManager.setScene(new Demo());
         }
 
         if(event.key() == KEY_UP || event.key() == KEY_DOWN || event.key() == KEY_LEFT || event.key() == KEY_RIGHT ) {

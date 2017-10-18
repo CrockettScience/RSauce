@@ -20,7 +20,7 @@ public abstract class Graphic implements Disposable {
     protected float xScale = 1.0f;
     protected float yScale = 1.0f;
 
-    Vector2D center;
+    protected Vector2D center;
     protected Vector2D origin = new Vector2D(0, 0);
 
     public Graphic(int width, int height, int absWidth, int absHeight){
@@ -41,6 +41,7 @@ public abstract class Graphic implements Disposable {
 
         absW = absWidth;
         absH = absHeight;
+
         center = new Vector2D(w / 2, h / 2);
     }
 
@@ -90,6 +91,10 @@ public abstract class Graphic implements Disposable {
 
     public void setOrigin(Vector2D newOrigin){
         origin = newOrigin;
+    }
+
+    public void setOrigin(int x, int y){
+        origin = new Vector2D(x, y);
     }
 
     protected abstract float[] regionCoordinates();

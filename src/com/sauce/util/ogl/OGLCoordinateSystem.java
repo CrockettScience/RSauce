@@ -9,11 +9,10 @@ import static org.lwjgl.opengl.GL11.glMatrixMode;
 
 public class OGLCoordinateSystem {
 
-    private static CoordinateState current;
     private static Stack<CoordinateState> coordinateStateStack = new Stack<>();
 
     public static void pushCoordinateState(){
-        coordinateStateStack.push(current);
+        coordinateStateStack.push(coordinateStateStack.top());
     }
 
     public static void popCoordinateState(){
@@ -22,23 +21,23 @@ public class OGLCoordinateSystem {
             return;
         }
 
-        current = coordinateStateStack.popAndTop();
+        coordinateStateStack.pop();
 
         applyState();
     }
 
     public static void setCoordinateState(int x, int y, int width, int height){
-        current = new CoordinateState(x, y, width, height);
         if(!coordinateStateStack.isEmpty()){
             coordinateStateStack.pop();
         }
 
-        coordinateStateStack.push(current);
+        coordinateStateStack.push(new CoordinateState(x, y, width, height));
 
         applyState();
     }
 
     private static void  applyState(){
+        CoordinateState current = coordinateStateStack.top();
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         glOrtho(current.x, current.x + current.width, current.y, current.y + current.height, -1.0, 1.0);

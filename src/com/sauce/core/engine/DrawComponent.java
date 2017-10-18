@@ -18,6 +18,17 @@ public class DrawComponent implements Component {
         position = new Vector3D(x, y, z);
     }
 
+    public DrawComponent(Graphic asset, int x, int y, int z, Script<?, ?> drawScript){
+        image = asset;
+        position = new Vector3D(x, y, z);
+        script = drawScript;
+    }
+
+    public DrawComponent(Script<?, ?> drawScript, int z){
+        script = drawScript;
+        position = new Vector3D(0, 0, z);
+    }
+
     boolean setEntity(Entity ent){
         if(entity == null) {
             entity = ent;

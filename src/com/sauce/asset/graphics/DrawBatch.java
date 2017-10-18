@@ -48,28 +48,43 @@ public class DrawBatch {
             coord = coords.dequeue();
             script = scripts.dequeue();
 
-            glBindTexture(GL_TEXTURE_2D, image.textureID());
+            if(image != null) {
 
-            if(image.getIOImage() != null)
-                applyIOImageForDrawing(image.getIOImage(), image.absWidth(), image.absHeight(), image.components());
+                glBindTexture(GL_TEXTURE_2D, image.textureID());
 
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                if (image.getIOImage() != null)
+                    applyIOImageForDrawing(image.getIOImage(), image.absWidth(), image.absHeight(), image.components());
 
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-            glEnable(GL_TEXTURE_2D);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-            glPushMatrix();
-            glTranslatef(coord.getX() + image.center.getX(), coord.getY() + image.center.getY(), 0);
-            glRotatef(image.getAngle(), 0, 0, 1);
-            glScalef(image.getXScale(), -image.getYScale(), 1f);
-            glTranslatef(-coord.getX() - image.center.getX(), -coord.getY() - image.center.getY(), 0);
+                glEnable(GL_TEXTURE_2D);
 
-            renderImage(image, coord);
+                glPushMatrix();
 
-            glPopMatrix();
+                if(image instanceof Surface) {
+                    glTranslatef(coord.getX() + image.getOrigin().getX(), coord.getY() + image.getOrigin().getY(), 0);
+                    glRotatef(image.getAngle(), 0, 0, 1);
+                    glScalef(image.getXScale(), -image.getYScale(), 1f);
+                    glTranslatef(-coord.getX() - image.getOrigin().getX() * 2, -coord.getY() - image.height(), 0);
+                }
+
+                else {
+                    glTranslatef(coord.getX() + image.center.getX(), coord.getY() + image.center.getY(), 0);
+                    glScalef(1, -1, 1f);
+                    glTranslatef(image.getOrigin().getX() - image.center.getX(), image.getOrigin().getY() - image.center.getY(), 0);
+                    glRotatef(image.getAngle(), 0, 0, 1);
+                    glScalef(image.getXScale(), image.getYScale(), 1f);
+                    glTranslatef(-coord.getX() - image.getOrigin().getX() * 2, -coord.getY(), 0);
+                }
+
+                renderImage(image, coord);
+
+                glPopMatrix();
+            }
 
             if(script != null)
                 script.execute(null);

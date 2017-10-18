@@ -8,17 +8,22 @@ import com.sauce.asset.graphics.Sprite;
 import com.sauce.core.engine.DrawComponent;
 import com.sauce.core.engine.Engine;
 import com.sauce.core.engine.StepSystem;
+import com.util.collision.BoundBox;
 import com.util.structures.nonsaveable.Map;
 
 import static com.sauce.input.InputServer.*;
 
 public class EggyControl extends StepSystem {
 
-    private Map<Eggy, DrawComponent> components = new Map<>();
+    private static int EGGY_BASE_SPEED = 1;
 
-    public EggyControl(int priority, Eggy eggy, DrawComponent eggyDrawComponent){
+    private Map<Eggy, DrawComponent> components = new Map<>();
+    private Map<Eggy, BoundBox> boxes = new Map<>();
+
+    public EggyControl(int priority, Eggy eggy, DrawComponent eggyDrawComponent, BoundBox box){
         super(priority);
         components.put(eggy, eggyDrawComponent);
+        boxes.put(eggy, box);
     }
 
     @Override
@@ -26,39 +31,45 @@ public class EggyControl extends StepSystem {
 
     }
 
-    private int totalDelta = 0;
+    private double totalDelta = 0;
     @Override
     public void update(double delta) {
-        for(DrawComponent eggy : components.valueSet()) {
+        for(Eggy eggy : components.keySet()) {
+
+            DrawComponent eggyDraw = components.get(eggy);
             if (isKeyPressed(KEY_W) || isKeyPressed(KEY_A) || isKeyPressed(KEY_S) || isKeyPressed(KEY_D)) {
                 if (isKeyPressed(KEY_W)) {
-                    eggy.setY(eggy.getY() + 20 * (isKeyPressed(KEY_LEFT_SHIFT) ? 2 : 1));
-                    ((Sprite) eggy.getImage()).setAnimationState("up");
+                    eggyDraw.setY(eggyDraw.getY() + EGGY_BASE_SPEED * (isKeyPressed(KEY_LEFT_SHIFT) ? 2 : 1));
+                    ((Sprite) eggyDraw.getImage()).setAnimationState("up");
                 }
 
                 if (isKeyPressed(KEY_S)) {
-                    eggy.setY(eggy.getY() - 20 * (isKeyPressed(KEY_LEFT_SHIFT) ? 2 : 1));
-                    ((Sprite) eggy.getImage()).setAnimationState("down");
+                    eggyDraw.setY(eggyDraw.getY() - EGGY_BASE_SPEED * (isKeyPressed(KEY_LEFT_SHIFT) ? 2 : 1));
+                    ((Sprite) eggyDraw.getImage()).setAnimationState("down");
                 }
 
                 if (isKeyPressed(KEY_A)) {
-                    eggy.setX(eggy.getX() - 20 * (isKeyPressed(KEY_LEFT_SHIFT) ? 2 : 1));
-                    ((Sprite) eggy.getImage()).setAnimationState("left");
+                    eggyDraw.setX(eggyDraw.getX() - EGGY_BASE_SPEED * (isKeyPressed(KEY_LEFT_SHIFT) ? 2 : 1));
+                    ((Sprite) eggyDraw.getImage()).setAnimationState("left");
                 }
 
                 if (isKeyPressed(KEY_D)) {
-                    eggy.setX(eggy.getX() + 20 * (isKeyPressed(KEY_LEFT_SHIFT) ? 2 : 1));
-                    ((Sprite) eggy.getImage()).setAnimationState("right");
+                    eggyDraw.setX(eggyDraw.getX() + EGGY_BASE_SPEED * (isKeyPressed(KEY_LEFT_SHIFT) ? 2 : 1));
+                    ((Sprite) eggyDraw.getImage()).setAnimationState("right");
                 }
+
                 // 8fps
-                if(totalDelta >= 1 / 8){
+                if (totalDelta >= 1.0 / 8) {
                     AudioThread.enqueue(new Effect(Preferences.ASSET_ROOT + "blip.ogg"));
                     totalDelta = 0;
                 }
 
+
+                boxes.get(eggy).moveTo(eggyDraw.getX(), eggyDraw.getY());
+
                 totalDelta += delta;
             } else {
-                ((Sprite) eggy.getImage()).setAnimationState("idle");
+                ((Sprite) eggyDraw.getImage()).setAnimationState("idle");
                 totalDelta = 0;
             }
         }
@@ -71,8 +82,9 @@ public class EggyControl extends StepSystem {
         return components.isEmpty();
     }
 
-    public void addEggy(Eggy eggy, DrawComponent eggyDrawComponent){
+    public void addEggy(Eggy eggy, DrawComponent eggyDrawComponent, BoundBox box){
         components.put(eggy, eggyDrawComponent);
+        boxes.put(eggy, box);
     }
 
     @Override

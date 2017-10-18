@@ -1,6 +1,7 @@
 package com.sauce.core;
 
-import com.demo.scenes.DemoScene;
+import com.demo.scenes.Demo;
+import com.demo.scenes.EggyScene;
 import com.sauce.asset.audio.AudioThread;
 import com.sauce.core.engine.Engine;
 import com.sauce.core.scene.SceneManager;
@@ -104,8 +105,7 @@ public class Main{
     }
 
     private static Engine initEngine(){
-        SceneManager.setCamera(new Camera(0, 0, Preferences.getScreenWidth(), Preferences.getScreenHeight(), 0, 0));
-        SceneManager.setScene(new DemoScene());
+        SceneManager.setScene(new Demo());
 
         return Engine.getEngine();
     }

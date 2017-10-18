@@ -85,6 +85,7 @@ public class Font implements Disposable {
                 }
 
                 stbtt_GetBakedQuad(font.getFontInfo().getcData(), font.getFontInfo().getBmpBufferSize(), font.getFontInfo().getBmpBufferSize(), cp - 32, x, y, q, true);
+
                 if (i < to) {
                     getCP(text, to, i, pCodePoint);
                     x.put(0, x.get(0) + stbtt_GetCodepointKernAdvance(font.getFontInfo().getRawInfo(), cp, pCodePoint.get(0)) * scale);

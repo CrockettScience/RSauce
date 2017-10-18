@@ -1,5 +1,7 @@
 package com.sauce.core.scene;
 
+import com.sauce.asset.audio.Audio;
+import com.sauce.asset.audio.AudioThread;
 import com.sauce.core.Preferences;
 import com.sauce.util.ogl.OGLCoordinateSystem;
 import com.util.RSauceLogger;
@@ -24,8 +26,14 @@ public class SceneManager{
     }
 
     public static void setScene(Scene aScene) {
-        if(scene != null)
-            scene.destroyResources();
+        if(scene != null) {
+            scene.dispose();
+        }
+
+        AudioThread.clear();
+        AudioThread.clearAudioCache();
+
+        setCamera(new Camera(0, 0, Preferences.getScreenWidth(), Preferences.getScreenHeight(), 0, 0));
         
         scene = aScene;
         scene.loadResources();

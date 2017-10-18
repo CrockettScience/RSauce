@@ -376,7 +376,8 @@ public final class Engine {
         public void update(double delta) {
             for(Entity ent : entities){
                 DrawComponent draw = ent.getComponent(DrawComponent.class);
-                draw.getImage().update(delta);
+                if(draw.getImage() != null)
+                    draw.getImage().update(delta);
                 batch.add(draw.getImage(), draw.getX(), draw.getY(), draw.getScript());
             }
 

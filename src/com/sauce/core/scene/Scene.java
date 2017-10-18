@@ -100,11 +100,28 @@ public abstract class Scene{
     
     public void removeEntities(){
         for(Entity ent : entities.valueSet()) {
+            ENGINE.removeEntity(ent);
+        }
+
+        entities.clear();
+        isInEngine.clear();
+    }
+
+    void dispose(){
+        for(Entity ent : entities.valueSet()) {
             ent.dispose();
             ENGINE.removeEntity(ent);
         }
 
         entities.clear();
         isInEngine.clear();
+
+        destroyResources();
+
+        for (Attribute attr : attributes.valueSet()){
+            attr.dispose();
+        }
+
+        attributes.clear();
     }
 }

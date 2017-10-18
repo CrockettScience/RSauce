@@ -4,6 +4,7 @@ import com.sauce.core.Main;
 import com.sauce.core.Preferences;
 import com.sauce.core.scene.Camera;
 import com.sauce.core.scene.SceneManager;
+import com.util.Vector2D;
 import com.util.Vector2DDouble;
 import com.util.structures.nonsaveable.ArrayList;
 import com.util.structures.special.RecyclePool;
@@ -131,11 +132,11 @@ public class InputServer {
         return new Vector2DDouble(x[0], Preferences.getScreenHeight() - y[0]);
     }
 
-    public static Vector2DDouble mouseScenePosition(){
+    public static Vector2D mouseScenePosition(){
         Vector2DDouble screenPos = mouseScreenPosition();
         Camera cam = SceneManager.getCamera();
 
-        return new Vector2DDouble(cam.getX() + (screenPos.getX() / Preferences.getScreenWidth()) * cam.getWidth(), cam.getY() + (screenPos.getY() / Preferences.getScreenHeight()) * cam.getHeight());
+        return new Vector2D((int)(cam.getX() + (screenPos.getX() / Preferences.getScreenWidth()) * cam.getWidth()), (int)(cam.getY() + (screenPos.getY() / Preferences.getScreenHeight()) * cam.getHeight()));
 
     }
 

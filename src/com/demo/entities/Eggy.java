@@ -5,6 +5,7 @@ import com.sauce.asset.graphics.Sprite;
 import com.sauce.core.engine.DrawComponent;
 import com.sauce.core.engine.Engine;
 import com.sauce.core.engine.Entity;
+import com.util.collision.BoundBox;
 import com.util.structures.nonsaveable.ArrayGrid;
 
 import static com.sauce.core.Preferences.ASSET_ROOT;
@@ -30,15 +31,22 @@ public class Eggy extends Entity{
         eggySprite.setYScale(yScale);
 
         eggyComponent = new DrawComponent(eggySprite, x, y, z);
+
+        int width = (int)(eggySprite.width() * xScale);
+        int height = (int)(eggySprite.height() * yScale);
+        BoundBox box = new BoundBox(x, y, width, height);
+
+        addComponent(box);
         addComponent(eggyComponent);
 
         if(controller == null){
-            controller = new EggyControl(0,this,  eggyComponent);
+            controller = new EggyControl(0,this,  eggyComponent, box);
             Engine.getEngine().add(controller);
         }
         else{
-            controller.addEggy(this, eggyComponent);
+            controller.addEggy(this, eggyComponent, box);
         }
+
 
     }
 
@@ -61,7 +69,6 @@ public class Eggy extends Entity{
 
         eggy.set(0, 2, up);
     }
-
 
     @Override
     public void dispose(){

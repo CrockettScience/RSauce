@@ -1,6 +1,7 @@
 package com.util.collision;
 
 import com.sauce.core.engine.*;
+import com.sauce.input.InputServer;
 import com.util.Color;
 import com.util.Vector2D;
 import com.util.Vector2DDouble;
@@ -52,8 +53,13 @@ public class CollisionUtil {
                 BoundBox box = ent.getComponent(BoundBox.class);
                 BoundBox.Box inner = box.getInnerBox();
                 BoundBox.Box outer = box.getOuterBox();
-                quad(12, inner.getUL(), inner.getUR(), inner.getLL(), inner.getLR(), Color.C_RED, 1);
-                quad(12, outer.getUL(), outer.getUR(), outer.getLL(), outer.getLR(), Color.C_BLACK, 1);
+                quad(6, inner.getUL(), inner.getUR(), inner.getLL(), inner.getLR(), Color.C_RED, 1);
+                quad(6, outer.getUL(), outer.getUR(), outer.getLL(), outer.getLR(), Color.C_BLACK, 1);
+                Vector2D point = InputServer.mouseScenePosition();
+                quad(12,    new Vector2D(point.getX() - 1, point.getY() + 1),
+                                    new Vector2D(point.getX() + 1, point.getY() + 1),
+                                    new Vector2D(point.getX() - 1, point.getY() - 1),
+                                    new Vector2D(point.getX() + 1, point.getY() - 1), Color.C_PURPLE, 1);
             }
         }
 
