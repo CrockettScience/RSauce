@@ -133,11 +133,15 @@ public class InputServer {
     }
 
     public static Vector2D mouseScenePosition(){
-        Vector2DDouble screenPos = mouseScreenPosition();
+        Vector2DDouble pos = mouseScreenPosition();
         Camera cam = SceneManager.getCamera();
 
-        return new Vector2D((int)(cam.getX() + (screenPos.getX() / Preferences.getScreenWidth()) * cam.getWidth()), (int)(cam.getY() + (screenPos.getY() / Preferences.getScreenHeight()) * cam.getHeight()));
+        int sWidth = (Preferences.isFullscreen() ? Preferences.getFullscreenWidth() : Preferences.getScreenWidth());
+        int sHeight = (Preferences.isFullscreen() ? Preferences.getFullscreenHeight() : Preferences.getScreenHeight());
+        int cWidth = cam.getWidth();
+        int cHeight = cam.getHeight();
 
+        return new Vector2D((int)(((double)cWidth / sWidth) * pos.getX()), (int)(((double)cHeight / sHeight) * pos.getY()));
     }
 
     public static final int MOUSE_LEFT = GLFW_MOUSE_BUTTON_LEFT;

@@ -7,6 +7,7 @@ import com.sauce.core.engine.Engine;
 import com.sauce.core.scene.SceneManager;
 import com.sauce.core.scene.Camera;
 import com.sauce.util.ogl.OGLCoordinateSystem;
+import com.util.RSauceLogger;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -34,12 +35,14 @@ public class Main{
     private static boolean running = true;
 
     public static void main(String[] args) {
-        System.out.println("LWJGL " + Version.getVersion() + "!");
-        System.out.println("RSauce " + ENGINE_VERSION + "!");
+        RSauceLogger.println("LWJGL " + Version.getVersion() + "!");
+        RSauceLogger.println("RSauce " + ENGINE_VERSION + "!");
 
         initGLFW();
         initOpenGL();
         initOpenAL();
+
+        RSauceLogger.printDebugln("ACTIVE");
 
         try {
             loop(initEngine());

@@ -21,12 +21,12 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 public class Preferences {
 
     // Project CONSTANTS
-    public static final String ENGINE_VERSION = "0.3.6 Dev 10";
+    public static final String ENGINE_VERSION = "0.3.6 Dev 11";
     public static final String NAME = "RSauce " + ENGINE_VERSION;
     public static final String PROJECT_VERSION = "0.0.0";
 
     // Dev Settings
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toString().indexOf("-agentlib:jdwp") > 0;
     private static final Path DEV_INI_PATH = Paths.get(System.getProperty("user.home"), "RSauce Dev");
     private static final Path PROJ_INI_PATH = Paths.get(System.getProperty("user.home"), NAME + " " + PROJECT_VERSION);
 
