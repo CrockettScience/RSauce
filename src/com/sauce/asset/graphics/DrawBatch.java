@@ -2,6 +2,7 @@ package com.sauce.asset.graphics;
 
 import com.sauce.core.Preferences;
 import com.sauce.asset.scripts.Script;
+import com.sauce.core.engine.ParallaxBackground;
 import com.util.structures.nonsaveable.Queue;
 import com.util.Vector2D;
 import static com.sauce.util.io.GraphicsUtil.*;

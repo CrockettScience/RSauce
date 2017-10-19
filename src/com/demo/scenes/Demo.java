@@ -2,6 +2,8 @@ package com.demo.scenes;
 
 import com.demo.entities.Button;
 import com.demo.entities.Text;
+import com.sauce.asset.audio.AudioThread;
+import com.sauce.asset.audio.Music;
 import com.sauce.asset.graphics.Image;
 import com.sauce.asset.scripts.Argument;
 import com.sauce.asset.scripts.Return;
@@ -35,8 +37,13 @@ public class Demo extends Scene implements InputClient{
         BackgroundAttribute bg  = new BackgroundAttribute();
         addAttribute(bg);
 
-        ParallaxBackground sand = new ParallaxBackground(Preferences.ASSET_ROOT + "sand.png", 0, 0);
-        bg.setBackground(sand, 0);
+        ParallaxBackground sky = new ParallaxBackground(Preferences.ASSET_ROOT + "sky.png", 0, 0);
+        ParallaxBackground clouds = new ParallaxBackground(Preferences.ASSET_ROOT + "cloudParallax.png", 1, 0);
+        ParallaxBackground flare = new ParallaxBackground(Preferences.ASSET_ROOT + "flare.png", 0, 0);
+
+        bg.setBackground(sky, 0);
+        bg.setBackground(clouds, 1);
+        bg.setBackground(flare, 2);
 
         Entity title = new Entity();
         {
@@ -70,6 +77,8 @@ public class Demo extends Scene implements InputClient{
         Engine.getEngine().add(mbs);
 
         InputServer.bind(this);
+
+        AudioThread.enqueue(new Music(Preferences.ASSET_ROOT + "waves.ogg", 0));
 
     }
 

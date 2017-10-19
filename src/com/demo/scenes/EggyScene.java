@@ -1,9 +1,10 @@
 package com.demo.scenes;
 
+import com.sauce.asset.audio.AudioThread;
+import com.sauce.asset.audio.Music;
 import com.sauce.core.Preferences;
 import com.demo.entities.Eggy;
 import com.demo.systems.CollisionTest;
-import com.sauce.core.Main;
 import com.sauce.core.engine.Engine;
 import com.sauce.core.engine.Entity;
 import com.sauce.core.engine.ParallaxBackground;
@@ -11,8 +12,6 @@ import com.sauce.core.scene.*;
 import com.sauce.input.InputClient;
 import com.sauce.input.InputEvent;
 import com.sauce.input.InputServer;
-
-import java.util.Iterator;
 
 import static com.sauce.input.InputServer.*;
 
@@ -47,12 +46,13 @@ public class EggyScene extends Scene implements InputClient {
         // Bind to recieve InputEvents
         bind(this);
 
-
+        AudioThread.enqueue(new Music(Preferences.ASSET_ROOT + "Patriarchy.ogg", 21.391f));
     }
 
     @Override
     protected void destroyResources() {
         InputServer.unbind(this);
+        Engine.getEngine().removeStepSystem(CollisionTest.class);
     }
 
     @Override

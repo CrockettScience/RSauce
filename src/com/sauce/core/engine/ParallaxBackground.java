@@ -41,7 +41,7 @@ public class ParallaxBackground extends TiledTexture implements CameraChangeSubs
         float w = (float)width() / absWidth();
         float h = (float)height() / absHeight();
 
-        float[] arr = {x, y, x + w, y, x + w, y + h, x, y + h};
+        float[] arr = {x, y, x + w, y, x + w, y - h, x, y - h};
         return arr;
     }
 

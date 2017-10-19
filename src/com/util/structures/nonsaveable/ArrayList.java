@@ -7,7 +7,7 @@ import java.util.Iterator;
  */
 
 public class ArrayList<T> implements Iterable<T> {
-    private T[] elements;
+    protected T[] elements;
     private int size;
 
     public ArrayList() {
@@ -88,10 +88,10 @@ public class ArrayList<T> implements Iterable<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return new ArrayListIterator<>();
+        return new ArrayListIterator();
     }
 
-    private class ArrayListIterator<T> implements Iterator<T>{
+    protected class ArrayListIterator implements Iterator<T>{
 
         int current = 0;
 
@@ -102,7 +102,7 @@ public class ArrayList<T> implements Iterable<T> {
 
         @Override
         public T next() {
-            return (T) ArrayList.this.elements[current++];
+            return ArrayList.this.elements[current++];
 
         }
     }

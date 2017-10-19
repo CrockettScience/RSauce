@@ -6,8 +6,8 @@ import com.sauce.core.scene.Camera;
 import com.sauce.core.scene.SceneManager;
 import com.util.Vector2D;
 import com.util.Vector2DDouble;
-import com.util.structures.nonsaveable.ArrayList;
 import com.util.structures.special.RecyclePool;
+import com.util.structures.threadsafe.SafeArrayList;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -57,7 +57,7 @@ public class InputServer {
         });
     }
 
-    private static ArrayList<InputClient> subscribers = new ArrayList<>();
+    private static SafeArrayList<InputClient> subscribers = new SafeArrayList<>();
 
     private static InputEvent event = null;
 

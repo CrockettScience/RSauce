@@ -27,22 +27,14 @@ public class Set<T> implements Iterable<T> {
         return currentSize == 0;
     }
 
-    public boolean contains(Object e) {
-
-        T element;
-        try {
-            element = (T) e;
-        } catch (ClassCastException ex) {
-            return false;
-        }
-
-        int currentPos = findPos(element);
+    public boolean contains(T e) {
+        int currentPos = findPos(e);
 
         if (entryTable[currentPos] != null) {
             SetEntry i = entryTable[currentPos];
 
-            while (i.next != null) {
-                if (i.element.equals(element) && i.isActive)
+            while (i != null) {
+                if (i.element.equals(e) && i.isActive)
                     return true;
 
                 i = i.next;
@@ -66,7 +58,7 @@ public class Set<T> implements Iterable<T> {
     }
 
     public Set<T> union(Set<? extends T> otherSet) {
-        Set<T> union = new Set<T>();
+        Set<T> union = new Set<>();
 
         for (SetEntry<T> entry : entryTable) {
             union.add(entry.element);
@@ -79,11 +71,11 @@ public class Set<T> implements Iterable<T> {
         return union;
     }
 
-    public Set<T> intersection(Set<? extends T> otherSet) {
-        Set<T> intersection = new Set<T>();
+    public <OT extends T> Set<T> intersection(Set<OT> otherSet) {
+        Set<T> intersection = new Set<>();
 
-        for (SetEntry<T> entry : entryTable) {
-            if (otherSet.contains(entry.element)) {
+        for (Set<OT>.SetEntry<OT> entry : otherSet.entryTable) {
+            if (contains(entry.element)) {
                 intersection.add(entry.element);
             }
         }
@@ -91,11 +83,11 @@ public class Set<T> implements Iterable<T> {
         return intersection;
     }
 
-    public Set<T> not(Set<? extends T> otherSet) {
-        Set<T> not = new Set<T>();
+    public <OT extends T> Set<T> not(Set<OT> otherSet) {
+        Set<T> not = new Set<>();
 
-        for (SetEntry<T> entry : entryTable) {
-            if (!otherSet.contains(entry.element)) {
+        for (Set<OT>.SetEntry<OT> entry : otherSet.entryTable) {
+            if (!contains(entry.element)) {
                 not.add(entry.element);
             }
         }
@@ -103,11 +95,11 @@ public class Set<T> implements Iterable<T> {
         return not;
     }
 
-    public Set<T> xor(Set<? extends T> otherSet) {
-        Set<T> xor = new Set<T>();
+    public <OT extends T> Set<T> xor(Set<OT> otherSet) {
+        Set<T> xor = new Set<>();
 
-        for (SetEntry<T> entry : entryTable) {
-            if (!otherSet.contains(entry.element)) {
+        for (Set<OT>.SetEntry<OT> entry : otherSet.entryTable) {
+            if (!contains(entry.element)) {
                 xor.add(entry.element);
             }
         }
@@ -255,7 +247,7 @@ public class Set<T> implements Iterable<T> {
 
     protected class SetEntry<T> {
         public T element;
-        private boolean isActive;
+        public boolean isActive;
         public SetEntry next = null;
 
         protected SetEntry(T e) {
@@ -264,7 +256,7 @@ public class Set<T> implements Iterable<T> {
         }
     }
 
-    private class SetIterator implements Iterator<T> {
+    protected class SetIterator implements Iterator<T> {
         private int current = 0;
         private int currentChainIndex = 0;
 

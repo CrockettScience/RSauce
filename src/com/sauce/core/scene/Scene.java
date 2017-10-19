@@ -14,8 +14,7 @@ public abstract class Scene{
     private static final Engine ENGINE = Engine.getEngine();
 
     private final Map<Class<? extends Attribute>, Attribute> attributes = new Map<>();
-    private Map<String, Entity> entities = new Map<>();
-    private Map<String, Boolean> isInEngine = new Map<>();
+    private Map<String, EntityEntry> entities = new Map<>();
 
     protected abstract void loadResources();
     protected abstract void destroyResources();
@@ -38,15 +37,14 @@ public abstract class Scene{
     }
     
     public void putEntity(String key, Entity ent){
-        entities.put(key, ent);
-        isInEngine.put(key, false);
+        entities.put(key, new EntityEntry(ent));
     }
     
     public boolean activateEntity(String key){
-        if(entities.containsKey(key)){
-            if(!isInEngine.get(key)){
-                ENGINE.add(entities.get(key));
-                isInEngine.put(key, true);
+        EntityEntry entry = entities.get(key);
+        if(entry != null){
+            if(!entry.isActive) {
+                entry.activate();
             }
             return true;
         }
@@ -55,10 +53,10 @@ public abstract class Scene{
     }
     
     public boolean disableEntity(String key){
-        if(entities.containsKey(key)){
-            if(isInEngine.get(key)){
-                ENGINE.removeEntity(entities.get(key));
-                isInEngine.put(key, false);
+        EntityEntry entry = entities.get(key);
+        if(entry != null){
+            if(entry.isActive){
+                entry.deactivate();
             }
             return true;
         }
@@ -67,11 +65,10 @@ public abstract class Scene{
     }
 
     public boolean removeEntity(String key){
-        if(entities.containsKey(key)){
-            ENGINE.removeEntity(entities.get(key));
-            entities.get(key).dispose();
+        EntityEntry entry = entities.get(key);
+        if(entry != null){
+            entry.dispose();
             entities.remove(key);
-            isInEngine.remove(key);
             return true;
         }
         RSauceLogger.printWarningln("Cannot remove entity; entity '" + key + "' could not be found");
@@ -79,49 +76,73 @@ public abstract class Scene{
     }
     
     public Entity getEntity(String key){
-        Entity ent = entities.get(key);
+        EntityEntry entry = entities.get(key);
         
-        if(ent == null) {
+        if(entry == null) {
             RSauceLogger.printWarningln("Cannot get entity; entity '" + key + "' could not be found");
-            ent = new Entity();
+            return null;
         }
-        
-        return ent;
+
+        return entry.entity;
     }
     
     public void disableEntities(){
-        for(String key: entities.keySet()){
-            if(isInEngine.get(key)){
-                ENGINE.removeEntity(entities.get(key));
-                isInEngine.put(key, false);
+        for(EntityEntry entry: entities.valueSet()){
+            if(entry.isActive){
+                entry.deactivate();
             }
         }
     }
     
     public void removeEntities(){
-        for(Entity ent : entities.valueSet()) {
-            ENGINE.removeEntity(ent);
+        for(EntityEntry entry: entities.valueSet()){
+            entry.deactivate();
         }
 
         entities.clear();
-        isInEngine.clear();
     }
 
     void dispose(){
-        for(Entity ent : entities.valueSet()) {
-            ent.dispose();
-            ENGINE.removeEntity(ent);
+        for(EntityEntry entry: entities.valueSet()){
+            entry.dispose();
         }
 
         entities.clear();
-        isInEngine.clear();
-
-        destroyResources();
 
         for (Attribute attr : attributes.valueSet()){
             attr.dispose();
         }
 
         attributes.clear();
+
+        destroyResources();
+    }
+
+    private class EntityEntry{
+        private Entity entity;
+        private boolean isActive;
+
+        private EntityEntry(Entity ent){
+            entity = ent;
+            isActive = false;
+        }
+
+        private void deactivate(){
+            isActive = false;
+            Engine.getEngine().removeEntity(entity);
+        }
+
+        private void activate(){
+            isActive = true;
+            Engine.getEngine().add(entity);
+        }
+
+        private void dispose(){
+            entity.dispose();
+            if(isActive){
+                Engine.getEngine().removeEntity(entity);
+                isActive = false;
+            }
+        }
     }
 }

@@ -21,7 +21,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 public class Preferences {
 
     // Project CONSTANTS
-    public static final String ENGINE_VERSION = "0.3.6 Dev 9";
+    public static final String ENGINE_VERSION = "0.3.6 Dev 10";
     public static final String NAME = "RSauce " + ENGINE_VERSION;
     public static final String PROJECT_VERSION = "0.0.0";
 

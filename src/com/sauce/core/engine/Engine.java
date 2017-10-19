@@ -98,6 +98,10 @@ public final class Engine {
 
     public <T extends StepSystem> T removeStepSystem(Class<T> sys){
         StepSystem ret = steps.get(sys);
+        if(ret == null){
+            RSauceLogger.printWarningln("System " + sys.getSimpleName() + " was not found in engine");
+            return null;
+        }
         steps.remove(sys);
         ret.removedFromEngine(this);
         return (T) ret;
@@ -105,12 +109,20 @@ public final class Engine {
 
     public <T extends DrawSystem> T removeDrawSystem(Class<T> sys){
         DrawSystem ret = draws.get(sys);
+        if(ret == null){
+            RSauceLogger.printWarningln("System " + sys.getSimpleName() + " was not found in engine");
+            return null;
+        }
         draws.remove(sys);
         ret.removedFromEngine(this);
         return (T) ret;
     }
 
     public void removeEntity(Entity ent){
+        if(!entities.contains(ent)){
+            RSauceLogger.printWarningln("Entity was not found in engine");
+            return;
+        }
         entities.remove(ent);
         ent.removedFromEngine();
         for(EntitySubscriber sub : subs){
@@ -252,6 +264,10 @@ public final class Engine {
 
                     float[] texelCoord = fore.regionCoordinates();
                     Camera cam = SceneManager.getCamera();
+
+                    glTranslatef(fore.width() / 2, fore.height() / 2, 0);
+                    glScalef(1, -1, 1f);
+                    glTranslatef(-fore.width() / 2, -fore.height() / 2, 0);
 
                     glBegin(GL_QUADS);
                     {
