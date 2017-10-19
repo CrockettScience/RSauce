@@ -86,11 +86,11 @@ public class Text extends Entity {
     }
 
     public void setY(int y){
-        draw.setX(y);
+        draw.setY(y);
         pY[0] = y;
     }
 
     public void setZ(int z){
-        draw.setX(z);
+        draw.setZ(z);
     }
 }

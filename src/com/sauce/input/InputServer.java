@@ -49,7 +49,7 @@ public class InputServer {
         });
 
         glfwSetCursorPosCallback(Main.getWindowHandle(), (window, x, y) -> {
-            dispatch(EVENT_TYPE_MOUSE_MOVE, -1, -1, -1, x, Preferences.getScreenHeight() - y);
+            dispatch(EVENT_TYPE_MOUSE_MOVE, -1, -1, -1, x, Preferences.getWindowScreenHeight() - y);
         });
 
         glfwSetJoystickCallback((joyId, event) -> {
@@ -129,19 +129,19 @@ public class InputServer {
         double[] y = new double[1];
 
         glfwGetCursorPos(Main.getWindowHandle(), x, y);
-        return new Vector2DDouble(x[0], Preferences.getScreenHeight() - y[0]);
+        return new Vector2DDouble(x[0], Preferences.getWindowScreenHeight() - y[0]);
     }
 
     public static Vector2D mouseScenePosition(){
         Vector2DDouble pos = mouseScreenPosition();
         Camera cam = SceneManager.getCamera();
 
-        int sWidth = (Preferences.isFullscreen() ? Preferences.getFullscreenWidth() : Preferences.getScreenWidth());
-        int sHeight = (Preferences.isFullscreen() ? Preferences.getFullscreenHeight() : Preferences.getScreenHeight());
+        int sWidth = Preferences.getCurrentScreenWidth();
+        int sHeight = Preferences.getCurrentScreenHeight();
         int cWidth = cam.getWidth();
         int cHeight = cam.getHeight();
 
-        return new Vector2D((int)(((double)cWidth / sWidth) * pos.getX()), (int)(((double)cHeight / sHeight) * pos.getY()));
+        return new Vector2D((int)Math.ceil(((double)cWidth / sWidth) * pos.getX()) + cam.getX(), (int)(((double)cHeight / sHeight) * pos.getY()) + cam.getY());
     }
 
     public static final int MOUSE_LEFT = GLFW_MOUSE_BUTTON_LEFT;

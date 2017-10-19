@@ -13,11 +13,12 @@ import com.sauce.input.InputClient;
 import com.sauce.input.InputEvent;
 import com.sauce.input.InputServer;
 
+import static com.demo.util.DemoUtil.HEIGHT;
+import static com.demo.util.DemoUtil.WIDTH;
 import static com.sauce.input.InputServer.*;
 
 import static com.sauce.core.Preferences.ASSET_ROOT;
 import static com.sauce.core.scene.SceneManager.*;
-import static com.demo.util.DemoUtil.*;
 
 /**
  * Created by John Crockett.
@@ -25,11 +26,11 @@ import static com.demo.util.DemoUtil.*;
 public class EggyScene extends Scene implements InputClient {
 
     private static final int VIEW_SPEED = 50;
-    private static final int ZOOM_SPEED = 100;
+    private static final int ZOOM_SPEED = 10;
 
     @Override
     protected void loadResources() {
-        SceneManager.setCamera(new Camera(0, 0, WIDTH, HEIGHT, 0, 0));
+        setCamera(new Camera(0, 0, WIDTH, HEIGHT, 0, 0), true);
 
         // Setup Eggy
         Entity eggy1 = new Eggy(1, 1, SceneManager.getCamera().getWidth() / 2, SceneManager.getCamera().getHeight() / 2, 0);
@@ -108,7 +109,7 @@ public class EggyScene extends Scene implements InputClient {
     @Override
     public void mouseScrolled(double x, double y) {
         Camera v = SceneManager.getCamera();
-        v.resize((int)(v.getWidth() + ZOOM_SPEED * -y), (int)(v.getHeight() + (ZOOM_SPEED * Preferences.getScreenHeight() / Preferences.getScreenWidth()) * -y));
+        v.resize((int)(v.getWidth() + ZOOM_SPEED * -y), (int)(v.getHeight() + (ZOOM_SPEED * Preferences.getWindowScreenHeight() / Preferences.getWindowScreenWidth()) * -y));
     }
 
     @Override

@@ -29,7 +29,7 @@ public class ParallaxBackground extends TiledTexture implements CameraChangeSubs
     @Override
     public void update(double delta) {
         super.update(delta);
-        xPos += xScroll;
+        xPos -= xScroll;
         yPos += yScroll;
     }
 
@@ -86,20 +86,12 @@ public class ParallaxBackground extends TiledTexture implements CameraChangeSubs
         yScroll = yScrollFactor;
     }
 
-    public int getxPos() {
-        return xPos;
-    }
-
     public void setxPos(int xPosition) {
         xPos = xPosition;
     }
 
-    public int getyPos() {
-        return yPos;
-    }
-
     public void setyPos(int yPosition) {
-        yPos = yPosition;
+        yPos = -yPosition;
     }
 
     int texID(){
@@ -130,14 +122,14 @@ public class ParallaxBackground extends TiledTexture implements CameraChangeSubs
         w = newCamera.getWidth();
         h = newCamera.getHeight();
         xPos = newCamera.getX();
-        yPos = newCamera.getY();
+        yPos = -newCamera.getY();
     }
 
     @Override
     public void cameraMovedPosition(Vector2D deltaPosition) {
         checkDisposed();
         xPos += deltaPosition.getX();
-        yPos += deltaPosition.getY();
+        yPos -= deltaPosition.getY();
     }
 
     @Override

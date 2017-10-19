@@ -19,6 +19,7 @@ public class Camera {
     private int y;
     private int width;
     private int height;
+    private boolean isActive;
 
     private Entity entityFollowing;
     private int xBufferZone;
@@ -36,7 +37,29 @@ public class Camera {
         xBufferZone = xBuff;
         yBufferZone = yBuff;
 
-        cameraBuffer = new BackBuffer(Preferences.getScreenWidth(), Preferences.getScreenHeight());
+        cameraBuffer = new BackBuffer(Preferences.getCurrentScreenWidth(), Preferences.getCurrentScreenHeight());
+        isActive = false;
+    }
+
+    public Camera(int aX, int aY, int aWidth, int aHeight) {
+        x = aX;
+        y = aY;
+        width = aWidth;
+        height = aHeight;
+        xBufferZone = 0;
+        yBufferZone = 0;
+
+        cameraBuffer = new BackBuffer(Preferences.getCurrentScreenWidth(), Preferences.getCurrentScreenHeight());
+        isActive = false;
+    }
+
+    void activate(){
+        isActive = true;
+        reAdjustCoordinateSystem();
+    }
+
+    void deactivate(){
+        isActive = false;
     }
 
     void bindSubscriber(CameraChangeSubscriber sub){
@@ -72,7 +95,8 @@ public class Camera {
     }
 
     private void reAdjustCoordinateSystem(){
-        OGLCoordinateSystem.setCoordinateState(x, y, width, height);
+        if(isActive)
+            OGLCoordinateSystem.setCoordinateState(x, y, width, height);
     }
 
     public int getX() {

@@ -71,6 +71,9 @@ public abstract class Graphic implements Disposable {
 
     public void setXScale(float factor){
         xScale = factor;
+
+        // Refactor the origin
+        origin = new Vector2D((int)(xScale * origin.getX()), origin.getY());
     }
 
     public float getXScale(){
@@ -79,6 +82,9 @@ public abstract class Graphic implements Disposable {
 
     public void setYScale(float factor){
         yScale = factor;
+
+        // Refactor the origin
+        origin = new Vector2D(origin.getX(), (int)(yScale * origin.getY()));
     }
 
     public float getYScale(){

@@ -57,9 +57,9 @@ public class CollisionUtil {
                 quad(6, outer.getUL(), outer.getUR(), outer.getLL(), outer.getLR(), Color.C_BLACK, 1);
                 Vector2D point = InputServer.mouseScenePosition();
                 quad(12,    new Vector2D(point.getX() - 1, point.getY() + 1),
-                                    new Vector2D(point.getX() + 1, point.getY() + 1),
-                                    new Vector2D(point.getX() - 1, point.getY() - 1),
-                                    new Vector2D(point.getX() + 1, point.getY() - 1), Color.C_PURPLE, 1);
+                                    new Vector2D(point.getX(), point.getY() + 1),
+                                    new Vector2D(point.getX() - 1, point.getY()),
+                                    new Vector2D(point.getX(), point.getY()), Color.C_PURPLE, 1);
             }
         }
 

@@ -21,7 +21,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 public class Preferences {
 
     // Project CONSTANTS
-    public static final String ENGINE_VERSION = "0.3.6 Dev 11";
+    public static final String ENGINE_VERSION = "0.3.6 Dev 12";
     public static final String NAME = "RSauce " + ENGINE_VERSION;
     public static final String PROJECT_VERSION = "0.0.0";
 
@@ -73,8 +73,8 @@ public class Preferences {
             }
         }
 
-        screenWidth = proj.readInt("GRAPHICS", "WindowWidth", -1);
-        screenHeight = proj.readInt("GRAPHICS", "WindowHeight", -1);
+        windowScreenWidth = proj.readInt("GRAPHICS", "WindowWidth", -1);
+        windowScreenHeight = proj.readInt("GRAPHICS", "WindowHeight", -1);
 
         fullscreenWidth = proj.readInt("GRAPHICS", "FullScreenWidth", -1);
         fullscreenHeight = proj.readInt("GRAPHICS", "FullScreenHeight", -1);
@@ -101,15 +101,15 @@ public class Preferences {
     private static int fullscreenWidth;
     private static int fullscreenHeight;
     private static int fullscreenRefreshRate;
-    private static int screenWidth;
-    private static int screenHeight;
+    private static int windowScreenWidth;
+    private static int windowScreenHeight;
 
     // Other
     private static int frameLimit = 60;
 
     public static void setWindowedSize(int width, int height){
-        screenWidth = width;
-        screenHeight = height;
+        windowScreenWidth = width;
+        windowScreenHeight = height;
 
         Ini proj = new Ini(PROJ_INI_PATH, NAME);
 
@@ -165,12 +165,21 @@ public class Preferences {
         return fullscreenRefreshRate;
     }
 
-    public static int getScreenWidth() {
-        return screenWidth;
+    public static int getWindowScreenWidth() {
+        return windowScreenWidth;
     }
 
-    public static int getScreenHeight() {
-        return screenHeight;
+    public static int getWindowScreenHeight() {
+        return windowScreenHeight;
+    }
+
+    public static int getCurrentScreenWidth() {
+        return (Preferences.isFullscreen() ? Preferences.getFullscreenWidth() : Preferences.getWindowScreenWidth());
+    }
+
+    public static int getCurrentScreenHeight() {
+        return (Preferences.isFullscreen() ? Preferences.getFullscreenHeight() : Preferences.getWindowScreenHeight());
+
     }
 
     public static int getFrameLimit() {
@@ -182,8 +191,8 @@ public class Preferences {
                 Main.getWindowHandle(),
                 fullscreen ? glfwGetPrimaryMonitor() : NULL,
                 0,0,
-                fullscreen ? fullscreenWidth : screenWidth,
-                fullscreen ? fullscreenHeight : screenHeight,
+                fullscreen ? fullscreenWidth : windowScreenWidth,
+                fullscreen ? fullscreenHeight : windowScreenHeight,
                 fullscreenRefreshRate);
     }
 

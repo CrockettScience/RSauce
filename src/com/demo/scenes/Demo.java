@@ -23,8 +23,9 @@ import com.util.collision.BoundBox;
 import com.util.collision.CollisionUtil;
 import com.util.structures.nonsaveable.ArrayList;
 
+import static com.demo.util.DemoUtil.HEIGHT;
+import static com.demo.util.DemoUtil.WIDTH;
 import static com.sauce.core.scene.SceneManager.*;
-import static com.demo.util.DemoUtil.*;
 import static com.sauce.input.InputServer.ACTION_RELEASED;
 import static com.sauce.input.InputServer.KEY_ESCAPE;
 
@@ -32,13 +33,13 @@ public class Demo extends Scene implements InputClient{
 
     @Override
     protected void loadResources() {
-        setCamera(new Camera(0, 0, WIDTH, HEIGHT, 0, 0));
+        setCamera(new Camera(0, 0, WIDTH, HEIGHT), true);
 
         BackgroundAttribute bg  = new BackgroundAttribute();
         addAttribute(bg);
 
         ParallaxBackground sky = new ParallaxBackground(Preferences.ASSET_ROOT + "sky.png", 0, 0);
-        ParallaxBackground clouds = new ParallaxBackground(Preferences.ASSET_ROOT + "cloudParallax.png", 1, 0);
+        ParallaxBackground clouds = new ParallaxBackground(Preferences.ASSET_ROOT + "cloudParallax.png", -1, 0);
         ParallaxBackground flare = new ParallaxBackground(Preferences.ASSET_ROOT + "flare.png", 0, 0);
 
         bg.setBackground(sky, 0);
@@ -58,7 +59,8 @@ public class Demo extends Scene implements InputClient{
         putEntity("RSauce", title);
         putEntity("Version String", new Text(Preferences.ASSET_ROOT + "coderCrux.ttf", Color.C_BLACK, Preferences.ENGINE_VERSION, 8, 128, 128, 0, 6));
 
-        Button button = new Button<>(Preferences.ASSET_ROOT + "button.png", 128, 56, 0, new Script<Argument, Return>(){
+        Text text = new Text(Preferences.ASSET_ROOT + "coderCrux.ttf", Color.C_BLACK, "Start", 8, 108, 50, -1, 6);
+        Button button = new Button<>(Preferences.ASSET_ROOT + "button.png", text, 128, 56, 0, new Script<Argument, Return>(){
 
             @Override
             protected Return scriptMain(Argument args) {
@@ -69,7 +71,7 @@ public class Demo extends Scene implements InputClient{
         });
 
         putEntity("Button", button);
-        putEntity("Start String", new Text(Preferences.ASSET_ROOT + "coderCrux.ttf", Color.C_BLACK, "Start", 12, 108, 50, -1, 4));
+        putEntity("Start String", text);
 
         MouseButtonSystem mbs = new MouseButtonSystem(0);
         mbs.addButton(button);
@@ -79,6 +81,9 @@ public class Demo extends Scene implements InputClient{
         InputServer.bind(this);
 
         AudioThread.enqueue(new Music(Preferences.ASSET_ROOT + "waves.ogg", 0));
+
+        if(Preferences.DEBUG)
+            Engine.getEngine().add(new CollisionUtil.DrawBBoxWires());
 
     }
 

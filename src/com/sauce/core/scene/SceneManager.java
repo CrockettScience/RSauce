@@ -1,6 +1,5 @@
 package com.sauce.core.scene;
 
-import com.sauce.asset.audio.Audio;
 import com.sauce.asset.audio.AudioThread;
 import com.sauce.core.Preferences;
 import com.sauce.util.ogl.OGLCoordinateSystem;
@@ -14,7 +13,7 @@ import com.util.structures.nonsaveable.Set;
 public class SceneManager{
         
     private static Scene scene;
-    private static Camera camera = new Camera(0,0, Preferences.getScreenWidth(), Preferences.getScreenHeight(), 0, 0);
+    private static Camera camera = new Camera(0,0, Preferences.getWindowScreenWidth(), Preferences.getWindowScreenHeight(), 0, 0);
     private static Set<CameraChangeSubscriber> cameraChangeSubscribers = new Set<>();
 
     public static Scene getCurrentScene() {
@@ -33,20 +32,23 @@ public class SceneManager{
         AudioThread.clear();
         AudioThread.clearAudioCache();
 
-        setCamera(new Camera(0, 0, Preferences.getScreenWidth(), Preferences.getScreenHeight(), 0, 0));
+        setCamera(new Camera(0, 0, Preferences.getWindowScreenWidth(), Preferences.getWindowScreenHeight(), 0, 0), true);
         
         scene = aScene;
         scene.loadResources();
         scene.sceneMain();
     }
     
-    public static void setCamera(Camera aCamera) {
+    public static void setCamera(Camera aCamera, boolean disposeCurrent) {
         if(aCamera == null) {
             RSauceLogger.printWarningln("You cannot set camera to a null value.");
             return;
         }
 
-        camera.dispose();
+        if(disposeCurrent)
+            camera.dispose();
+
+        camera.deactivate();
         camera = aCamera;
 
         for (CameraChangeSubscriber sub : cameraChangeSubscribers) {
@@ -54,7 +56,7 @@ public class SceneManager{
             camera.bindSubscriber(sub);
         }
 
-        OGLCoordinateSystem.setCoordinateState(0, 0, camera.getWidth(), camera.getHeight());
+        camera.activate();
     }
 
     public static void subscribeToCameraChanges(CameraChangeSubscriber sub){

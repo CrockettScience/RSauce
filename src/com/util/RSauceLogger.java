@@ -9,7 +9,7 @@ public class RSauceLogger {
 
     private static final String ANSI_YELLOW = "\u001B[33m";
     private static final String ANSI_RED = "\u001B[31m";
-    private static final String ANSI_GREEN = "\u001B[32m";
+    private static final String ANSI_BLUE = "\u001B[34m";
 
     public static void print(Object o){
         System.out.print(o);
@@ -37,11 +37,11 @@ public class RSauceLogger {
 
     public static void printDebug(Object o){
         if(Preferences.DEBUG)
-            System.out.print(ANSI_GREEN + "DEBUG: " + o);
+            System.out.print(ANSI_BLUE + "DEBUG: " + o);
     }
 
     public static void printDebugln(Object o){
         if(Preferences.DEBUG)
-            System.out.println(ANSI_GREEN + "DEBUG: " + o);
+            System.out.println(ANSI_BLUE + "DEBUG: " + o);
     }
 }

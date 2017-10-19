@@ -1,11 +1,9 @@
 package com.sauce.core;
 
 import com.demo.scenes.Demo;
-import com.demo.scenes.EggyScene;
 import com.sauce.asset.audio.AudioThread;
 import com.sauce.core.engine.Engine;
 import com.sauce.core.scene.SceneManager;
-import com.sauce.core.scene.Camera;
 import com.sauce.util.ogl.OGLCoordinateSystem;
 import com.util.RSauceLogger;
 import org.lwjgl.*;
@@ -66,7 +64,7 @@ public class Main{
 
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-        window = glfwCreateWindow(Preferences.getScreenWidth(), Preferences.getScreenHeight(), Preferences.NAME, Preferences.isFullscreen() ? GLFW.glfwGetPrimaryMonitor() : NULL, NULL);
+        window = glfwCreateWindow(Preferences.getWindowScreenWidth(), Preferences.getWindowScreenHeight(), Preferences.NAME, Preferences.isFullscreen() ? GLFW.glfwGetPrimaryMonitor() : NULL, NULL);
 
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
@@ -79,8 +77,8 @@ public class Main{
 
             glfwSetWindowPos(
                     window,
-                    (Preferences.getScreenWidth() - pWidth.get(0)) / 2,
-                    (Preferences.getScreenHeight() - pHeight.get(0)) / 2
+                    (Preferences.getWindowScreenWidth() - pWidth.get(0)) / 2,
+                    (Preferences.getWindowScreenHeight() - pHeight.get(0)) / 2
             );
         }
 
@@ -94,12 +92,12 @@ public class Main{
 
         glClearColor(0.0f, 0.0f, 0.5f, 0.0f);
 
-        glViewport(0, 0, Preferences.getScreenWidth(), Preferences.getScreenHeight());
+        glViewport(0, 0, Preferences.getWindowScreenWidth(), Preferences.getWindowScreenHeight());
         glDisable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        OGLCoordinateSystem.setCoordinateState(0, 0, Preferences.getScreenWidth(), Preferences.getScreenHeight());
+        OGLCoordinateSystem.setCoordinateState(0, 0, Preferences.getWindowScreenWidth(), Preferences.getWindowScreenHeight());
     }
 
     private static void initOpenAL(){
