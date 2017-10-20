@@ -14,15 +14,10 @@ import static org.lwjgl.opengl.GL11.*;
 public class Surface extends Graphic {
 
     private int fboHandle;
-    private int width;
-    private int height;
     private int texID = glGenTextures();
 
-    public Surface(int w, int h){
-        super(w, h, w, h);
-
-        width = w;
-        height = h;
+    public Surface(int width, int height){
+        super(width, height, width, height);
 
         fboHandle = glGenFramebuffersEXT();
 
@@ -48,10 +43,10 @@ public class Surface extends Graphic {
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fboHandle);
 
         glPushAttrib(GL_VIEWPORT_BIT);
-        glViewport(0,0, width, height);
+        glViewport(0,0, width(), height());
 
         OGLCoordinateSystem.pushCoordinateState();
-        OGLCoordinateSystem.setCoordinateState(0, 0, width, height);
+        OGLCoordinateSystem.setCoordinateState(0, 0, width(), height());
     }
 
     public void unbind(){
@@ -70,7 +65,7 @@ public class Surface extends Graphic {
     @Override
     protected float[] regionCoordinates() {
         checkDisposed();
-        float[] arr = {0f, 0f, 1f, 0f, 1f, -1f, 0f, -1f};
+        float[] arr = {0f, 0f, 1f, 0f, 1f, 1f, 0f, 1f};
         return arr;
     }
 
@@ -99,7 +94,6 @@ public class Surface extends Graphic {
 
     @Override
     public void update(double delta) {
-        checkDisposed();
 
     }
 }

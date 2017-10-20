@@ -131,7 +131,7 @@ public class TextureAtlas<K> {
             glBindTexture(GL_TEXTURE_2D, page.textureID());
 
             if(graphic.getIOImage() != null)
-                applyIOImageForDrawing(graphic.getIOImage(), graphic.absWidth(), graphic.absHeight(), graphic.components());
+                applyIOImageForDrawing(graphic.getIOImage(), graphic.actualWidth(), graphic.actualHeight(), graphic.components());
 
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -178,18 +178,18 @@ public class TextureAtlas<K> {
         }
 
         private int compareWidth(Graphic graphic){
-            if(graphic.absWidth() == p11.getX() - p00.getX())
+            if(graphic.actualWidth() == p11.getX() - p00.getX())
                 return 0;
-            if(graphic.absWidth() > p11.getX() - p00.getX())
+            if(graphic.actualWidth() > p11.getX() - p00.getX())
                 return -1;
 
             return 1;
         }
 
         private int compareHeight(Graphic graphic){
-            if(graphic.absHeight() == p11.getY() - p00.getY())
+            if(graphic.actualHeight() == p11.getY() - p00.getY())
                 return 0;
-            if(graphic.absHeight() > p11.getY() - p00.getY())
+            if(graphic.actualHeight() > p11.getY() - p00.getY())
                 return -1;
 
             return 1;
@@ -246,7 +246,7 @@ public class TextureAtlas<K> {
                     return null;
 
                 if(region.compareWidth(graphic) > 0){
-                    TextureRegion otherRegion = region.divide(true, graphic.absWidth());
+                    TextureRegion otherRegion = region.divide(true, graphic.actualWidth());
                     node.region = null;
                     node.left.region = region;
                     node.right.region = otherRegion;
@@ -255,7 +255,7 @@ public class TextureAtlas<K> {
                 }
 
                 if(region.compareHeight(graphic) > 0){
-                    TextureRegion otherRegion = region.divide(false, graphic.absWidth());
+                    TextureRegion otherRegion = region.divide(false, graphic.actualWidth());
                     node.region = null;
                     node.left.region = region;
                     node.right.region = otherRegion;

@@ -12,10 +12,10 @@ public abstract class Graphic implements Disposable {
     protected boolean disposed = false;
 
     // Properties
-    protected int w;
-    protected int h;
-    private int absW;
-    private int absH;
+    protected int width;
+    protected int height;
+    private int absWidth;
+    private int absHeight;
     protected float angle = 0.0f;
     protected float xScale = 1.0f;
     protected float yScale = 1.0f;
@@ -23,42 +23,42 @@ public abstract class Graphic implements Disposable {
     protected Vector2D center;
     protected Vector2D origin = new Vector2D(0, 0);
 
-    public Graphic(int width, int height, int absWidth, int absHeight){
-        w = width;
-        h = height;
+    public Graphic(int basicWidth, int basicHeight, int actualWidth, int actualHeight){
+        width = basicWidth;
+        height = basicHeight;
 
-        absW = absWidth;
-        absH = absHeight;
+        absWidth = actualWidth;
+        absHeight = actualHeight;
 
-        center = new Vector2D(w / 2, h / 2);
+        center = new Vector2D(basicWidth / 2, basicHeight / 2);
     }
 
     public Graphic(){}
 
-    protected final void resize(int width, int height, int absWidth, int absHeight){
-        w = width;
-        h = height;
+    protected final void resize(int basicWidth, int basicHeight, int actualWidth, int actualHeight){
+        width = basicWidth;
+        height = basicHeight;
 
-        absW = absWidth;
-        absH = absHeight;
+        absWidth = actualWidth;
+        absHeight = actualHeight;
 
-        center = new Vector2D(w / 2, h / 2);
+        center = new Vector2D(basicWidth / 2, basicHeight / 2);
     }
 
     public int width(){
-        return w;
+        return width;
     }
 
     public int height(){
-        return h;
+        return height;
     }
 
-    public int absWidth() {
-        return absW;
+    public int actualWidth() {
+        return absWidth;
     }
 
-    public int absHeight() {
-        return absH;
+    public int actualHeight() {
+        return absHeight;
     }
 
     public void setAngle(float degrees){

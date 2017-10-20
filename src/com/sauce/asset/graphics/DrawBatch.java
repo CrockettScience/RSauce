@@ -52,7 +52,7 @@ public class DrawBatch {
                 glBindTexture(GL_TEXTURE_2D, image.textureID());
 
                 if (image.getIOImage() != null)
-                    applyIOImageForDrawing(image.getIOImage(), image.absWidth(), image.absHeight(), image.components());
+                    applyIOImageForDrawing(image.getIOImage(), image.actualWidth(), image.actualHeight(), image.components());
 
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -64,11 +64,11 @@ public class DrawBatch {
 
                 glPushMatrix();
 
-                if(image instanceof Surface) {
+                if(image instanceof Surface || image instanceof TiledTexture) {
                     glTranslatef(coord.getX() + image.getOrigin().getX(), coord.getY() + image.getOrigin().getY(), 0);
                     glRotatef(image.getAngle(), 0, 0, 1);
-                    glScalef(image.getXScale(), -image.getYScale(), 1f);
-                    glTranslatef(-coord.getX() - image.getOrigin().getX() * 2, -coord.getY() - image.height(), 0);
+                    glScalef(image.getXScale(), image.getYScale(), 1f);
+                    glTranslatef(-coord.getX() - image.getOrigin().getX() * 2, -coord.getY(), 0);
                 }
 
                 else {

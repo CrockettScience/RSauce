@@ -176,6 +176,8 @@ public final class Engine {
     }
 
     private void preDraw(double delta){
+        glClear(GL_COLOR_BUFFER_BIT);
+
         Scene scene = SceneManager.getCurrentScene();
 
         if(scene.containsAttribute(BackgroundAttribute.class)) {
@@ -188,42 +190,18 @@ public final class Engine {
                 if (back != null) {
                     back.update(delta);
 
-                    glBindTexture(GL_TEXTURE_2D, back.texID());
-
-                    applyIOImageForDrawing(back.getParallaxIOImage(), back.absWidth(), back.absHeight(), back.getParallaxComponents());
-
-                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-                    glEnable(GL_TEXTURE_2D);
-
-                    glPushMatrix();
-
-                    float[] texelCoord = back.regionCoordinates();
                     Camera cam = SceneManager.getCamera();
 
-                    glBegin(GL_QUADS);
-                    {
-                        glTexCoord2f(texelCoord[0], texelCoord[1]);
-                        glVertex2f(cam.getX(), cam.getY());
+                    int modX = back.getXPos() % back.actualWidth();
+                    int modY = back.getYPos() % back.actualHeight();
 
-                        glTexCoord2f(texelCoord[2], texelCoord[3]);
-                        glVertex2f(cam.getX() + cam.getWidth(), cam.getY());
-
-                        glTexCoord2f(texelCoord[4], texelCoord[5]);
-                        glVertex2f(cam.getX() + cam.getWidth(), cam.getY() + cam.getHeight());
-
-                        glTexCoord2f(texelCoord[6], texelCoord[7]);
-                        glVertex2f(cam.getX(), cam.getY() + cam.getHeight());
-                    }
-                    glEnd();
-
-                    glPopMatrix();
+                    render.batch.add(back,
+                            cam.getX() + (modX < 0 ? modX : modX - back.actualWidth()),
+                            cam.getY() + (modY < 0 ? modY : modY - back.actualHeight()));
                 }
             }
+
+            render.batch.renderBatch();
         }
     }
 
@@ -248,46 +226,18 @@ public final class Engine {
                 if (fore != null) {
                     fore.update(delta);
 
-                    glBindTexture(GL_TEXTURE_2D, fore.texID());
-
-                    applyIOImageForDrawing(fore.getParallaxIOImage(), fore.absWidth(), fore.absHeight(), fore.getParallaxComponents());
-
-                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-                    glEnable(GL_TEXTURE_2D);
-
-                    glPushMatrix();
-
-                    float[] texelCoord = fore.regionCoordinates();
                     Camera cam = SceneManager.getCamera();
 
-                    glTranslatef(fore.width() / 2, fore.height() / 2, 0);
-                    glScalef(1, -1, 1f);
-                    glTranslatef(-fore.width() / 2, -fore.height() / 2, 0);
+                    int modX = fore.getXPos() % fore.actualWidth();
+                    int modY = fore.getYPos() % fore.actualHeight();
 
-                    glBegin(GL_QUADS);
-                    {
-                        glTexCoord2f(texelCoord[0], texelCoord[1]);
-                        glVertex2f(cam.getX(), cam.getY());
-
-                        glTexCoord2f(texelCoord[2], texelCoord[3]);
-                        glVertex2f(cam.getX() + cam.getWidth(), cam.getY());
-
-                        glTexCoord2f(texelCoord[4], texelCoord[5]);
-                        glVertex2f(cam.getX() + cam.getWidth(), cam.getY() + cam.getHeight());
-
-                        glTexCoord2f(texelCoord[6], texelCoord[7]);
-                        glVertex2f(cam.getX(), cam.getY() + cam.getHeight());
-                    }
-                    glEnd();
-
-                    glPopMatrix();
+                    render.batch.add(fore,
+                            cam.getX() + (modX < 0 ? modX : modX - fore.actualWidth()),
+                            cam.getY() + (modY < 0 ? modY : modY - fore.actualHeight()));
                 }
             }
+
+            render.batch.renderBatch();
         }
     }
 

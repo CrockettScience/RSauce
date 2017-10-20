@@ -7,37 +7,27 @@ import com.sauce.util.io.GraphicsUtil;
  */
 public class TiledTexture extends Graphic {
     private Image image;
-    private final int tileWidth;
-    private final int tileHeight;
-    private int textureWidth;
-    private int textureHeight;
 
     public TiledTexture(String fileSource, int width, int height){
         image = new Image(fileSource);
-        tileWidth = image.width();
-        tileHeight = image.height();
-        textureWidth = width;
-        textureHeight = height;
 
-        resize(width, height, tileWidth, tileHeight);
+        resize(width, height, image.width, image.height);
     }
 
     @Override
     protected float[] regionCoordinates() {
         checkDisposed();
-        float w = (float)textureWidth / (float)tileWidth;
-        float h = (float)textureHeight / (float)tileHeight;
+        float w = (float)width() / (float)actualWidth();
+        float h = (float)height() / (float)actualHeight();
 
-        float[] arr = { 0, 0, w, 0, w, h, 0, h};
+        float[] arr = { 0, 0, w, 0, w, -h, 0, -h};
         return arr;
     }
 
     public void resize(int width, int height){
         checkDisposed();
-        textureWidth = width;
-        textureHeight = height;
 
-        resize(width, height, tileWidth, tileHeight);
+        resize(width, height, image.width, image.height);
     }
 
     @Override

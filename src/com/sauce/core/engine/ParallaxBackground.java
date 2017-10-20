@@ -3,6 +3,7 @@ package com.sauce.core.engine;
 import com.sauce.asset.graphics.TiledTexture;
 import com.sauce.core.scene.Camera;
 import com.sauce.core.scene.CameraChangeSubscriber;
+import com.sauce.core.scene.Scene;
 import com.sauce.core.scene.SceneManager;
 import com.sauce.util.io.GraphicsUtil;
 import com.util.RSauceLogger;
@@ -16,12 +17,11 @@ public class ParallaxBackground extends TiledTexture implements CameraChangeSubs
     private int yPos;
 
     public ParallaxBackground(String fileSource, int xScrollFactor, int yScrollFactor) {
-        super(fileSource, SceneManager.getCamera().getWidth(), SceneManager.getCamera().getHeight());
+        super(fileSource, 0, 0);
+        resize(SceneManager.getCamera().getWidth() + actualWidth(), SceneManager.getCamera().getHeight() + actualHeight());
 
         xScroll = xScrollFactor;
         yScroll = yScrollFactor;
-
-        setOrigin(new Vector2D(w / 2, h / 2));
 
         SceneManager.subscribeToCameraChanges(this);
     }
@@ -29,20 +29,8 @@ public class ParallaxBackground extends TiledTexture implements CameraChangeSubs
     @Override
     public void update(double delta) {
         super.update(delta);
-        xPos -= xScroll;
+        xPos += xScroll;
         yPos += yScroll;
-    }
-
-    @Override
-    protected float[] regionCoordinates() {
-        checkDisposed();
-        float x = (float)xPos / absWidth();
-        float y = (float)yPos / absWidth();
-        float w = (float)width() / absWidth();
-        float h = (float)height() / absHeight();
-
-        float[] arr = {x, y, x + w, y, x + w, y - h, x, y - h};
-        return arr;
     }
 
     int getXPos(){
@@ -91,7 +79,7 @@ public class ParallaxBackground extends TiledTexture implements CameraChangeSubs
     }
 
     public void setyPos(int yPosition) {
-        yPos = -yPosition;
+        yPos = yPosition;
     }
 
     int texID(){
@@ -112,24 +100,22 @@ public class ParallaxBackground extends TiledTexture implements CameraChangeSubs
     @Override
     public void cameraResized(Vector2D newSize) {
         checkDisposed();
-        w = newSize.getX();
-        h = newSize.getY();
+        resize(newSize.getX() + actualWidth(), newSize.getY() + actualHeight());
     }
 
     @Override
     public void cameraChanged(Camera newCamera) {
         checkDisposed();
-        w = newCamera.getWidth();
-        h = newCamera.getHeight();
-        xPos = newCamera.getX();
+        resize(newCamera.getWidth() + actualWidth(), newCamera.getHeight() + actualHeight());
+        xPos = -newCamera.getX();
         yPos = -newCamera.getY();
     }
 
     @Override
-    public void cameraMovedPosition(Vector2D deltaPosition) {
+    public void cameraMovedPosition(Vector2D delta) {
         checkDisposed();
-        xPos += deltaPosition.getX();
-        yPos -= deltaPosition.getY();
+        xPos -= delta.getX();
+        yPos -= delta.getY();
     }
 
     @Override
