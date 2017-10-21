@@ -118,14 +118,14 @@ public class Main{
     }
 
     private static void loop(Engine engine) {
-        double current = (double) System.currentTimeMillis() / 1000.0;
+        double current = glfwGetTime();
         double last;
 
         while ( !glfwWindowShouldClose(window) && running) {
             glClear(GL_COLOR_BUFFER_BIT); // clear the framebuffer
 
             last = current;
-            current = (double) System.currentTimeMillis() / 1000.0;
+            current = glfwGetTime();
             engine.update(current - last);
 
             glfwPollEvents();

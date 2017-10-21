@@ -152,11 +152,11 @@ public final class Engine {
     public void update(double delta){
         timeSinceLast += delta;
         if(timeSinceLast >= 1.0 / Preferences.getFullscreenRefreshRate()) {
-            step(delta);
+            step(timeSinceLast);
 
-            preDraw(delta);
-            draw(delta);
-            postDraw(delta);
+            preDraw(timeSinceLast);
+            draw(timeSinceLast);
+            postDraw(timeSinceLast);
 
             glfwSwapBuffers(Main.getWindowHandle());
             timeSinceLast = 0;
