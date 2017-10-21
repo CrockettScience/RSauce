@@ -3,7 +3,7 @@ package com.sauce.core;
 import com.demo.scenes.Demo;
 import com.sauce.asset.audio.AudioThread;
 import com.sauce.core.engine.Engine;
-import com.sauce.core.scene.SceneManager;
+import com.sauce.core.engine.SceneManager;
 import com.sauce.util.ogl.OGLCoordinateSystem;
 import com.util.RSauceLogger;
 import org.lwjgl.*;
@@ -64,12 +64,12 @@ public class Main{
 
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-        window = glfwCreateWindow(Preferences.getWindowScreenWidth(), Preferences.getWindowScreenHeight(), Preferences.NAME, Preferences.isFullscreen() ? GLFW.glfwGetPrimaryMonitor() : NULL, NULL);
+        window = glfwCreateWindow(Preferences.getCurrentScreenWidth(), Preferences.getCurrentScreenHeight(), Preferences.NAME, Preferences.isFullscreen() ? GLFW.glfwGetPrimaryMonitor() : NULL, NULL);
 
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
 
-        try ( MemoryStack stack = stackPush() ) {
+        try (MemoryStack stack = stackPush() ) {
             IntBuffer pWidth = stack.mallocInt(1); // int*
             IntBuffer pHeight = stack.mallocInt(1); // int*
 
@@ -92,12 +92,12 @@ public class Main{
 
         glClearColor(0.0f, 0.0f, 0.5f, 0.0f);
 
-        glViewport(0, 0, Preferences.getWindowScreenWidth(), Preferences.getWindowScreenHeight());
+        glViewport(0, 0, Preferences.getCurrentScreenWidth(), Preferences.getCurrentScreenHeight());
         glDisable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        OGLCoordinateSystem.setCoordinateState(0, 0, Preferences.getWindowScreenWidth(), Preferences.getWindowScreenHeight());
+        OGLCoordinateSystem.setCoordinateState(0, 0, Preferences.getCurrentScreenWidth(), Preferences.getCurrentScreenHeight());
     }
 
     private static void initOpenAL(){
@@ -107,6 +107,12 @@ public class Main{
 
     private static Engine initEngine(){
         SceneManager.setScene(new Demo());
+
+        Preferences.setFullscreen(Preferences.isFullscreen());
+
+        Preferences.setWindowedSize(Preferences.getWindowScreenWidth(), Preferences.getWindowScreenHeight());
+
+        Preferences.setFullscreenMode(SupportedVideoModes.getClosestVidMode(Preferences.getFullscreenWidth(), Preferences.getFullscreenHeight(), Preferences.getFullscreenRefreshRate()));
 
         return Engine.getEngine();
     }

@@ -1,5 +1,8 @@
 package com.sauce.core.scene;
 
+import com.sauce.core.engine.Scene;
+import com.sauce.core.engine.SceneManager;
+
 /**
  *
  * @author Jonathan Crockett

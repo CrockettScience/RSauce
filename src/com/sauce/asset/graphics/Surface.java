@@ -2,7 +2,9 @@ package com.sauce.asset.graphics;
 
 import com.sauce.util.io.GraphicsUtil;
 import com.sauce.util.ogl.OGLCoordinateSystem;
+import com.util.RSauceLogger;
 import com.util.Vector2D;
+import com.util.structures.nonsaveable.Stack;
 
 import static org.lwjgl.opengl.EXTFramebufferObject.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -40,7 +42,8 @@ public class Surface extends Graphic {
 
     public void bind(){
         checkDisposed();
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fboHandle);
+        OGLSurfaceSystem.pushSurface();
+        OGLSurfaceSystem.setSurface(this);
 
         glPushAttrib(GL_VIEWPORT_BIT);
         glViewport(0,0, width(), height());
@@ -50,7 +53,7 @@ public class Surface extends Graphic {
     }
 
     public void unbind(){
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+        OGLSurfaceSystem.popSurface();
         glPopAttrib();
 
         OGLCoordinateSystem.popCoordinateState();
@@ -96,4 +99,43 @@ public class Surface extends Graphic {
     public void update(double delta) {
 
     }
+
+    public static class OGLSurfaceSystem {
+
+        private static Stack<Integer> surfaceStack = new Stack<>();
+
+        static{
+            surfaceStack.push(0);
+        }
+
+        public static void pushSurface(){
+            surfaceStack.push(surfaceStack.top());
+        }
+
+        public static void popSurface(){
+            if(surfaceStack.isEmpty()){
+                RSauceLogger.printErrorln("Surface Stack is empty!");
+                return;
+            }
+
+            surfaceStack.pop();
+
+            applyState();
+        }
+
+        public static void setSurface(Surface surface){
+            if(!surfaceStack.isEmpty()){
+                surfaceStack.pop();
+            }
+
+            surfaceStack.push(surface.fboHandle);
+
+            applyState();
+        }
+
+        private static void  applyState(){
+            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, surfaceStack.top());
+        }
+    }
+
 }

@@ -72,11 +72,11 @@ public class Entity{
         return componentMap;
     }
 
-    void addedToEngine(){
+    protected void addedToEngine(){
         isInEngine = true;
     }
 
-    void removedFromEngine(){
+    protected void removedFromEngine(){
         isInEngine = false;
     }
 

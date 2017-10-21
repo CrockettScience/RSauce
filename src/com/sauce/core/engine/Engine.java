@@ -4,9 +4,7 @@ import com.sauce.core.Preferences;
 import com.sauce.asset.graphics.DrawBatch;
 import com.sauce.core.Main;
 import com.sauce.core.scene.BackgroundAttribute;
-import com.sauce.core.scene.Camera;
-import com.sauce.core.scene.Scene;
-import com.sauce.core.scene.SceneManager;
+import com.sauce.util.ogl.OGLCoordinateSystem;
 import com.util.RSauceLogger;
 import com.util.structures.nonsaveable.ArrayList;
 import com.util.structures.nonsaveable.Set;
@@ -16,7 +14,6 @@ import com.util.structures.special.SortedArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 
-import static com.sauce.util.io.GraphicsUtil.applyIOImageForDrawing;
 import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
 import static org.lwjgl.opengl.GL11.*;
 
@@ -123,6 +120,7 @@ public final class Engine {
             RSauceLogger.printWarningln("Entity was not found in engine");
             return;
         }
+
         entities.remove(ent);
         ent.removedFromEngine();
         for(EntitySubscriber sub : subs){
@@ -153,18 +151,14 @@ public final class Engine {
 
     public void update(double delta){
         timeSinceLast += delta;
-        if(timeSinceLast >= 1.0 / Preferences.getFrameLimit()) {
+        if(timeSinceLast >= 1.0 / Preferences.getFullscreenRefreshRate()) {
             step(delta);
-
-            SceneManager.getCamera().getCameraBuffer().bind();
 
             preDraw(delta);
             draw(delta);
             postDraw(delta);
 
-            SceneManager.getCamera().getCameraBuffer().unbind();
-
-            swapBuffer();
+            glfwSwapBuffers(Main.getWindowHandle());
             timeSinceLast = 0;
         }
     }
@@ -243,36 +237,7 @@ public final class Engine {
 
     private void swapBuffer(){
 
-        glBindTexture(GL_TEXTURE_2D, SceneManager.getCamera().getCameraBuffer().texID());
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-        glEnable(GL_TEXTURE_2D);
-
-        glPushMatrix();
-
-        Camera cam = SceneManager.getCamera();
-
-        glBegin(GL_QUADS);
-        {
-            glTexCoord2f(0, 0);
-            glVertex2f(cam.getX(), cam.getY());
-
-            glTexCoord2f(1, 0);
-            glVertex2f(cam.getX() + cam.getWidth(), cam.getY());
-
-            glTexCoord2f(1, 1);
-            glVertex2f(cam.getX() + cam.getWidth(), cam.getY() + cam.getHeight());
-
-            glTexCoord2f(0, 1);
-            glVertex2f(cam.getX(), cam.getY() + cam.getHeight());
-        }
-        glEnd();
-
-        glPopMatrix();
-
-        glfwSwapBuffers(Main.getWindowHandle());
     }
 
     private EntitySet onlyEntitiesWithComponent(Class<? extends Component> c){

@@ -3,7 +3,7 @@ package com.sauce.core.engine;
 /**
  * Created by John Crockett.
  */
-abstract class System implements Comparable<System> {
+abstract class System implements Comparable<System>{
     int prio;
 
     public System(int priority){

@@ -1,8 +1,6 @@
-package com.sauce.core.scene;
+package com.sauce.core.engine;
 
 
-import com.sauce.core.engine.Engine;
-import com.sauce.core.engine.Entity;
 import com.util.RSauceLogger;
 import com.util.structures.nonsaveable.Map;
 

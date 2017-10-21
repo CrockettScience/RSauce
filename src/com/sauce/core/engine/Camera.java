@@ -1,13 +1,16 @@
-package com.sauce.core.scene;
+package com.sauce.core.engine;
 
+import com.sauce.asset.graphics.Surface;
 import com.sauce.core.Preferences;
-import com.sauce.core.engine.BackBuffer;
-import com.sauce.core.engine.DrawComponent;
-import com.sauce.core.engine.Entity;
+import com.sauce.core.scene.CameraChangeSubscriber;
 import com.sauce.util.ogl.OGLCoordinateSystem;
 import com.util.RSauceLogger;
 import com.util.Vector2D;
 import com.util.structures.nonsaveable.Set;
+
+import static org.lwjgl.opengl.EXTFramebufferObject.GL_FRAMEBUFFER_EXT;
+import static org.lwjgl.opengl.EXTFramebufferObject.glBindFramebufferEXT;
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  *
@@ -25,8 +28,6 @@ public class Camera {
     private int xBufferZone;
     private int yBufferZone;
 
-    private BackBuffer cameraBuffer;
-
     private Set<CameraChangeSubscriber> cameraChangeSubscribers = new Set<>();
 
     public Camera(int aX, int aY, int aWidth, int aHeight, int xBuff, int yBuff) {
@@ -37,7 +38,6 @@ public class Camera {
         xBufferZone = xBuff;
         yBufferZone = yBuff;
 
-        cameraBuffer = new BackBuffer(Preferences.getCurrentScreenWidth(), Preferences.getCurrentScreenHeight());
         isActive = false;
     }
 
@@ -49,7 +49,6 @@ public class Camera {
         xBufferZone = 0;
         yBufferZone = 0;
 
-        cameraBuffer = new BackBuffer(Preferences.getCurrentScreenWidth(), Preferences.getCurrentScreenHeight());
         isActive = false;
     }
 
@@ -140,14 +139,8 @@ public class Camera {
         return yBufferZone;
     }
 
-    public BackBuffer getCameraBuffer(){
-        return cameraBuffer;
-    }
 
     void dispose(){
         cameraChangeSubscribers.clear();
-        cameraBuffer.dispose();
     }
-
-
 }

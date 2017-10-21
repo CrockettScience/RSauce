@@ -1,10 +1,7 @@
 package com.sauce.core.engine;
 
 import com.sauce.asset.graphics.TiledTexture;
-import com.sauce.core.scene.Camera;
 import com.sauce.core.scene.CameraChangeSubscriber;
-import com.sauce.core.scene.Scene;
-import com.sauce.core.scene.SceneManager;
 import com.sauce.util.io.GraphicsUtil;
 import com.util.RSauceLogger;
 import com.util.Vector2D;

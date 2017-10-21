@@ -1,8 +1,8 @@
-package com.sauce.core.scene;
+package com.sauce.core.engine;
 
 import com.sauce.asset.audio.AudioThread;
 import com.sauce.core.Preferences;
-import com.sauce.util.ogl.OGLCoordinateSystem;
+import com.sauce.core.scene.CameraChangeSubscriber;
 import com.util.RSauceLogger;
 import com.util.structures.nonsaveable.Set;
 
@@ -13,7 +13,7 @@ import com.util.structures.nonsaveable.Set;
 public class SceneManager{
         
     private static Scene scene;
-    private static Camera camera = new Camera(0,0, Preferences.getWindowScreenWidth(), Preferences.getWindowScreenHeight(), 0, 0);
+    private static Camera camera = new Camera(0,0, Preferences.getCurrentScreenWidth(), Preferences.getCurrentScreenHeight(), 0, 0);
     private static Set<CameraChangeSubscriber> cameraChangeSubscribers = new Set<>();
 
     public static Scene getCurrentScene() {
@@ -32,7 +32,7 @@ public class SceneManager{
         AudioThread.clear();
         AudioThread.clearAudioCache();
 
-        setCamera(new Camera(0, 0, Preferences.getWindowScreenWidth(), Preferences.getWindowScreenHeight(), 0, 0), true);
+        setCamera(new Camera(0, 0, Preferences.getCurrentScreenWidth(), Preferences.getCurrentScreenHeight(), 0, 0), true);
         
         scene = aScene;
         scene.loadResources();

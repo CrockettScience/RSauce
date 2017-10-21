@@ -2,6 +2,7 @@
 package com.sauce.core.scene;
 
 
+import com.sauce.core.engine.Attribute;
 import com.sauce.core.engine.ParallaxBackground;
 
 import java.util.Iterator;

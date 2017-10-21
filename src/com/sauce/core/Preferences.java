@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 import java.util.function.Consumer;
 
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 /**
@@ -21,7 +22,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 public class Preferences {
 
     // Project CONSTANTS
-    public static final String ENGINE_VERSION = "0.3.6 Dev 13";
+    public static final String ENGINE_VERSION = "0.3.6 Dev 14";
     public static final String NAME = "RSauce " + ENGINE_VERSION;
     public static final String PROJECT_VERSION = "0.0.0";
 
@@ -63,8 +64,6 @@ public class Preferences {
                 proj.write("GRAPHICS", "FullScreenHeight", String.valueOf(vidmode.height()));
                 proj.write("GRAPHICS", "RefreshRate", String.valueOf(vidmode.refreshRate()));
 
-                proj.write("GRAPHICS", "FrameLimit", String.valueOf(vidmode.refreshRate()));
-
                 proj.write("GRAPHICS", "TexturePageSize", "2048");
 
                 proj.write("AUDIO", "BufferSize", "4096");
@@ -88,6 +87,10 @@ public class Preferences {
 
         SupportedVideoModes.addModes(glfwGetVideoModes(glfwGetPrimaryMonitor()));
 
+        for(SupportedVideoModes.FullScreenMode mode : SupportedVideoModes.getModes()){
+            RSauceLogger.printDebugln(mode.width + " x " + mode.height + " at " + mode.rate);
+        }
+
     }
 
     // FINAL SETTINGS: Require a restart to change.
@@ -105,8 +108,6 @@ public class Preferences {
     private static int windowScreenHeight;
 
     // Other
-    private static int frameLimit = 60;
-
     public static void setWindowedSize(int width, int height){
         windowScreenWidth = width;
         windowScreenHeight = height;
@@ -118,23 +119,29 @@ public class Preferences {
 
         proj.save();
 
-        updateWindow();
+        glViewport(0, 0, Preferences.getCurrentScreenWidth(), Preferences.getCurrentScreenHeight());
+
+        if(!fullscreen)
+            glfwSetWindowSize(Main.getWindowHandle(), width, height);
     }
 
-    public static void setFullscreenMode(GLFWVidMode vidmode){
-        fullscreenWidth = vidmode.width();
-        fullscreenHeight = vidmode.height();
-        fullscreenRefreshRate = vidmode.refreshRate();
+    public static void setFullscreenMode(SupportedVideoModes.FullScreenMode vidmode){
+        fullscreenWidth = vidmode.width;
+        fullscreenHeight = vidmode.height;
+        fullscreenRefreshRate = vidmode.rate;
 
         Ini proj = new Ini(PROJ_INI_PATH, NAME);
 
-        proj.write("GRAPHICS", "FullScreenWidth", String.valueOf(vidmode.width()));
-        proj.write("GRAPHICS", "FullScreenHeight", String.valueOf(vidmode.height()));
-        proj.write("GRAPHICS", "RefreshRate", String.valueOf(vidmode.refreshRate()));
+        proj.write("GRAPHICS", "FullScreenWidth", String.valueOf(vidmode.width));
+        proj.write("GRAPHICS", "FullScreenHeight", String.valueOf(vidmode.height));
+        proj.write("GRAPHICS", "RefreshRate", String.valueOf(vidmode.rate));
 
         proj.save();
 
-        updateWindow();
+        glViewport(0, 0, Preferences.getCurrentScreenWidth(), Preferences.getCurrentScreenHeight());
+
+        if(fullscreen)
+            glfwSetWindowSize(Main.getWindowHandle(), vidmode.width, vidmode.height);
     }
 
     public static void setFullscreen(boolean bool){
@@ -146,7 +153,7 @@ public class Preferences {
 
         proj.save();
 
-        updateWindow();
+        changeMode();
     }
 
     public static boolean isFullscreen() {
@@ -182,11 +189,7 @@ public class Preferences {
 
     }
 
-    public static int getFrameLimit() {
-        return frameLimit;
-    }
-
-    private static void updateWindow(){
+    static void changeMode(){
         glfwSetWindowMonitor(
                 Main.getWindowHandle(),
                 fullscreen ? glfwGetPrimaryMonitor() : NULL,
@@ -194,6 +197,8 @@ public class Preferences {
                 fullscreen ? fullscreenWidth : windowScreenWidth,
                 fullscreen ? fullscreenHeight : windowScreenHeight,
                 fullscreenRefreshRate);
+
+        glViewport(0, 0, Preferences.getCurrentScreenWidth(), Preferences.getCurrentScreenHeight());
     }
 
     public static class SupportedVideoModes{
@@ -259,6 +264,26 @@ public class Preferences {
 
         public static SortedArrayList<FullScreenMode> getModes() {
             return modes;
+        }
+
+        public static FullScreenMode getClosestVidMode(int width, int height, int rate){
+                int low = 0;
+                int mid;
+                int high = modes.size() - 1;
+                while (low < high) {
+                    mid = (low + high) / 2;
+                    if (compare(modes.get(mid), width, height, rate) < 0)
+                        low = mid + 1;
+                    else if (compare(modes.get(mid), width, height, rate) > 0)
+                        high = mid - 1;
+                    else
+                        return modes.get(mid);
+                }
+                return modes.get(low);
+        }
+
+        private static int compare(FullScreenMode mode, int width, int height, int rate){
+            return mode.width - width == 0 ? mode.height - height == 0 ? mode.rate - rate : mode.height - height : mode.width - width;
         }
 
         public static class FullScreenMode{

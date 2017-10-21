@@ -2,8 +2,8 @@ package com.sauce.input;
 
 import com.sauce.core.Main;
 import com.sauce.core.Preferences;
-import com.sauce.core.scene.Camera;
-import com.sauce.core.scene.SceneManager;
+import com.sauce.core.engine.Camera;
+import com.sauce.core.engine.SceneManager;
 import com.util.Vector2D;
 import com.util.Vector2DDouble;
 import com.util.structures.special.RecyclePool;

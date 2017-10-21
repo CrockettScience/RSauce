@@ -4,8 +4,11 @@ import com.sauce.asset.graphics.Sprite;
 import com.sauce.asset.scripts.Argument;
 import com.sauce.asset.scripts.Return;
 import com.sauce.asset.scripts.Script;
+import com.sauce.core.Preferences;
 import com.sauce.core.engine.DrawComponent;
+import com.sauce.core.engine.Engine;
 import com.sauce.core.engine.Entity;
+import com.util.Color;
 import com.util.collision.BoundBox;
 import com.util.structures.nonsaveable.ArrayGrid;
 
@@ -13,8 +16,9 @@ public class Button<A extends Argument, R extends Return> extends Entity {
 
     private Script<A, R> execute;
     private A invokationArgument;
+    private Text tag;
 
-    public Button(String imagePath, Text text, int x, int y, int z, Script<A, R> invokation){
+    public Button(String imagePath, String label, int x, int y, int z, Script<A, R> invokation){
         ArrayGrid<String> matrix = new ArrayGrid<>(2, 1);
         {
             matrix.set(0, 0, "off");
@@ -28,10 +32,14 @@ public class Button<A extends Argument, R extends Return> extends Entity {
         addComponent(new DrawComponent(buttonSprite, x ,y, z));
         addComponent(box);
 
-        execute = invokation;
+        Text text = new Text(Preferences.ASSET_ROOT + "coderCrux.ttf", Color.C_BLACK, label, buttonSprite.height() / 2, 0, 0, 0, 6);
 
         text.setX(x - text.getWidth() / 2);
         text.setY(y - text.getHeight() / 2);
+        text.setZ(z - 1);
+
+        execute = invokation;
+        tag = text;
 
     }
 
@@ -53,6 +61,22 @@ public class Button<A extends Argument, R extends Return> extends Entity {
 
     }
 
+    @Override
+    protected void addedToEngine() {
+        super.addedToEngine();
+
+        if(tag != null)
+            Engine.getEngine().add(tag);
+    }
+
+    @Override
+    protected void removedFromEngine() {
+        super.removedFromEngine();
+
+        if(tag != null)
+            Engine.getEngine().removeEntity(tag);
+    }
+
     public R invoke(){
         return execute.execute(invokationArgument);
     }
@@ -64,6 +88,8 @@ public class Button<A extends Argument, R extends Return> extends Entity {
     @Override
     public void dispose() {
         getComponent(DrawComponent.class).getImage().dispose();
+        if(tag != null)
+            tag.dispose();
     }
 
     public void turnOn(){

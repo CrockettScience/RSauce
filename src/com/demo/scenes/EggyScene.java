@@ -5,9 +5,7 @@ import com.sauce.asset.audio.Music;
 import com.sauce.core.Preferences;
 import com.demo.entities.Eggy;
 import com.demo.systems.CollisionTest;
-import com.sauce.core.engine.Engine;
-import com.sauce.core.engine.Entity;
-import com.sauce.core.engine.ParallaxBackground;
+import com.sauce.core.engine.*;
 import com.sauce.core.scene.*;
 import com.sauce.input.InputClient;
 import com.sauce.input.InputEvent;
@@ -18,7 +16,7 @@ import static com.demo.util.DemoUtil.WIDTH;
 import static com.sauce.input.InputServer.*;
 
 import static com.sauce.core.Preferences.ASSET_ROOT;
-import static com.sauce.core.scene.SceneManager.*;
+import static com.sauce.core.engine.SceneManager.*;
 
 /**
  * Created by John Crockett.
@@ -109,7 +107,7 @@ public class EggyScene extends Scene implements InputClient {
     @Override
     public void mouseScrolled(double x, double y) {
         Camera v = SceneManager.getCamera();
-        v.resize((int)(v.getWidth() + ZOOM_SPEED * -y), (int)(v.getHeight() + (ZOOM_SPEED * Preferences.getWindowScreenHeight() / Preferences.getWindowScreenWidth()) * -y));
+        v.resize((int)(v.getWidth() + ZOOM_SPEED * -y), (int)(v.getHeight() + (ZOOM_SPEED * Preferences.getCurrentScreenHeight() / Preferences.getCurrentScreenWidth()) * -y));
     }
 
     @Override

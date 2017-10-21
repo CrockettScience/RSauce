@@ -12,9 +12,9 @@ import com.sauce.core.Main;
 import com.sauce.core.Preferences;
 import com.sauce.core.engine.*;
 import com.sauce.core.scene.BackgroundAttribute;
-import com.sauce.core.scene.Camera;
-import com.sauce.core.scene.Scene;
-import com.sauce.core.scene.SceneManager;
+import com.sauce.core.engine.Camera;
+import com.sauce.core.engine.Scene;
+import com.sauce.core.engine.SceneManager;
 import com.sauce.input.InputClient;
 import com.sauce.input.InputEvent;
 import com.sauce.input.InputServer;
@@ -25,11 +25,13 @@ import com.util.structures.nonsaveable.ArrayList;
 
 import static com.demo.util.DemoUtil.HEIGHT;
 import static com.demo.util.DemoUtil.WIDTH;
-import static com.sauce.core.scene.SceneManager.*;
+import static com.sauce.core.engine.SceneManager.*;
 import static com.sauce.input.InputServer.ACTION_RELEASED;
 import static com.sauce.input.InputServer.KEY_ESCAPE;
+import static com.sauce.input.InputServer.MOUSE_LEFT;
 
 public class Demo extends Scene implements InputClient{
+    private ArrayList<Button> buttons = new ArrayList<>();
 
     @Override
     protected void loadResources() {
@@ -56,11 +58,7 @@ public class Demo extends Scene implements InputClient{
             title.addComponent(draw);
         }
 
-        putEntity("RSauce", title);
-        putEntity("Version String", new Text(Preferences.ASSET_ROOT + "coderCrux.ttf", Color.C_BLACK, Preferences.ENGINE_VERSION, 8, 128, 128, 0, 6));
-
-        Text text = new Text(Preferences.ASSET_ROOT + "coderCrux.ttf", Color.C_BLACK, "Start", 8, 108, 50, -1, 6);
-        Button button = new Button<>(Preferences.ASSET_ROOT + "button.png", text, 128, 56, 0, new Script<Argument, Return>(){
+        Button eggy = new Button<>(Preferences.ASSET_ROOT + "button.png", "Eggy Test", 128, 92, 0, new Script<Argument, Return>(){
 
             @Override
             protected Return scriptMain(Argument args) {
@@ -70,16 +68,39 @@ public class Demo extends Scene implements InputClient{
 
         });
 
-        putEntity("Button", button);
-        putEntity("Start String", text);
+        Button atlas = new Button<>(Preferences.ASSET_ROOT + "button.png", "Atlas Demo", 128, 56, 0, new Script<Argument, Return>(){
 
-        MouseButtonSystem mbs = new MouseButtonSystem(0);
-        mbs.addButton(button);
+            @Override
+            protected Return scriptMain(Argument args) {
+                Preferences.setWindowedSize(800, 600);
+                return null;
+            }
 
-        Engine.getEngine().add(mbs);
+        });
+
+        Button exit = new Button<>(Preferences.ASSET_ROOT + "button.png", "Exit", 128, 20, 0, new Script<Argument, Return>(){
+
+            @Override
+            protected Return scriptMain(Argument args) {
+                Main.quitAtEndOfCycle();
+                return null;
+            }
+
+        });
+
+
+
+        putEntity("RSauce", title);
+        putEntity("Version String", new Text(Preferences.ASSET_ROOT + "coderCrux.ttf", Color.C_BLACK, Preferences.ENGINE_VERSION, 8, 128, 128, 0, 6));
+        putEntity("Eggy", eggy);
+        putEntity("Atlas", atlas);
+        putEntity("Exit", exit);
+
+        buttons.add(eggy);
+        buttons.add(atlas);
+        buttons.add(exit);
 
         InputServer.bind(this);
-
         AudioThread.enqueue(new Music(Preferences.ASSET_ROOT + "waves.ogg", 0));
 
         if(Preferences.DEBUG)
@@ -89,7 +110,6 @@ public class Demo extends Scene implements InputClient{
 
     @Override
     protected void destroyResources() {
-        Engine.getEngine().removeStepSystem(MouseButtonSystem.class);
         InputServer.unbind(this);
     }
 
@@ -97,8 +117,9 @@ public class Demo extends Scene implements InputClient{
     protected void sceneMain() {
         activateEntity("RSauce");
         activateEntity("Version String");
-        activateEntity("Start String");
-        activateEntity("Button");
+        activateEntity("Eggy");
+        activateEntity("Atlas");
+        activateEntity("Exit");
     }
 
     @Override
@@ -114,17 +135,33 @@ public class Demo extends Scene implements InputClient{
     }
 
     @Override
-    public void receivedMouseButtonEvent(InputEvent event) {
-
-    }
-
-    @Override
     public void mouseScrolled(double x, double y) {
 
     }
 
+    Button highlight;
+
     @Override
     public void cursorPosChanged(double x, double y) {
+        boolean highlighted = false;
+        for(Button button : buttons){
+            if(button.getComponent(BoundBox.class).detectPointInside(InputServer.mouseScenePosition())){
+                button.turnOn();
+                highlight = button;
+                highlighted = true;
+            }
+            else
+                button.turnOff();
+        }
+
+        if(!highlighted)
+            highlight = null;
+    }
+
+    @Override
+    public void receivedMouseButtonEvent(InputEvent event) {
+        if(highlight != null && event.key() == MOUSE_LEFT && event.action() == ACTION_RELEASED)
+            highlight.invoke();
 
     }
 
@@ -136,42 +173,5 @@ public class Demo extends Scene implements InputClient{
     @Override
     public void joystickDisconnected(int joyID) {
 
-    }
-
-    private class MouseButtonSystem extends StepSystem{
-
-        private ArrayList<Button> buttons = new ArrayList<>();
-
-        public MouseButtonSystem(int priority) {
-            super(priority);
-        }
-
-        @Override
-        public void addedToEngine(Engine engine) {
-
-        }
-
-        @Override
-        public void update(double delta) {
-            for(Button button : buttons){
-                if(button.getComponent(BoundBox.class).detectPointInside(InputServer.mouseScenePosition())){
-                    button.turnOn();
-                    if(InputServer.isButtonPressed(InputServer.MOUSE_LEFT)){
-                        button.invoke();
-                    }
-                }
-                else
-                    button.turnOff();
-            }
-        }
-
-        @Override
-        public void removedFromEngine(Engine engine) {
-
-        }
-
-        private void addButton(Button button){
-            buttons.add(button);
-        }
     }
 }
