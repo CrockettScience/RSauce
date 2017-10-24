@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/RSauce.iml" filepath="$PROJECT_DIR$/.idea/RSauce.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RSauce.iml" filepath="$PROJECT_DIR$/RSauce.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/RSauce_main.iml" filepath="$PROJECT_DIR$/.idea/modules/RSauce_main.iml" group="RSauce" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/RSauce_test.iml" filepath="$PROJECT_DIR$/.idea/modules/RSauce_test.iml" group="RSauce" />
     </modules>
   </component>
 </project>
