@@ -5,17 +5,17 @@ import util.structures.nonsaveable.Queue;
 /**
  * Created by John Crockett.
  */
-public abstract class RecyclePool<T extends RecyclePool.Poolable> {
+public abstract class Pool<T extends Pool.Poolable> {
 
     private Queue<T> pool;
     private int max;
 
-    public RecyclePool(int maxSize){
+    public Pool(int maxSize){
         pool = new Queue<>();
         max = maxSize;
     }
 
-    public RecyclePool(){
+    public Pool(){
         pool = new Queue<>();
         max = 100;
     }

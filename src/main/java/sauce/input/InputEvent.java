@@ -1,11 +1,11 @@
 package sauce.input;
 
-import util.structures.special.RecyclePool;
+import util.structures.special.Pool;
 
 /**
  * Created by John Crockett.
  */
-public class InputEvent implements RecyclePool.Poolable {
+public class InputEvent implements Pool.Poolable {
 
     private int key = -1;
     private int action = -1;

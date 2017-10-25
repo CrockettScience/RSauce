@@ -9,7 +9,7 @@ import java.util.Iterator;
  */
 
 public class Set<T> implements Iterable<T> {
-    private static final int DEFAULT_TABLE_SIZE = 10;
+    private static final int DEFAULT_TABLE_SIZE = 101;
 
     protected SetEntry<T>[] entryTable;
     private int occupied;

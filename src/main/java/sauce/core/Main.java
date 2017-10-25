@@ -42,6 +42,12 @@ public class Main{
 
         RSauceLogger.printDebugln("ACTIVE");
 
+        int[] w = new int[1];
+        int[] h = new int[1];
+        glfwGetWindowSize(window, w, h);
+
+        RSauceLogger.printDebugln(w[0] + "x" + h[0]);
+
         try {
             loop(initEngine());
         }
@@ -64,7 +70,7 @@ public class Main{
 
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-        window = glfwCreateWindow(getCurrentScreenWidth(), getCurrentScreenHeight(), NAME, isFullscreen() ? GLFW.glfwGetPrimaryMonitor() : NULL, NULL);
+        window = glfwCreateWindow(getCurrentScreenWidth(), getCurrentScreenHeight(), NAME, isFullscreen() ? glfwGetPrimaryMonitor() : NULL, NULL);
 
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");

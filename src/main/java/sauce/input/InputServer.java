@@ -7,7 +7,7 @@ import sauce.core.engine.Camera;
 import sauce.core.engine.SceneManager;
 import util.Vector2D;
 import util.Vector2DDouble;
-import util.structures.special.RecyclePool;
+import util.structures.special.Pool;
 import util.structures.threadsafe.SafeArrayList;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -24,7 +24,7 @@ public class InputServer {
     private static final int EVENT_TYPE_MOUSE_MOVE = 4;
     private static final int EVENT_TYPE_JOYSTICK_CONNECT = 5;
 
-    private static RecyclePool<InputEvent> inputEventPool = new RecyclePool<InputEvent>() {
+    private static Pool<InputEvent> inputEventPool = new Pool<InputEvent>() {
         @Override
         protected InputEvent newElement() {
             return new InputEvent();
@@ -130,7 +130,11 @@ public class InputServer {
         double[] y = new double[1];
 
         glfwGetCursorPos(Main.getWindowHandle(), x, y);
-        return new Vector2DDouble(x[0], Preferences.getWindowScreenHeight() - y[0]);
+
+        int[] h = new int[1];
+        glfwGetWindowSize(Main.getWindowHandle(), null, h);
+
+        return new Vector2DDouble(x[0], h[0] - y[0]);
     }
 
     public static Vector2D mouseScenePosition(){

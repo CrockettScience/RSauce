@@ -72,7 +72,7 @@ public class Demo extends Scene implements InputClient{
 
             @Override
             protected Return scriptMain(Argument args) {
-                Preferences.setWindowedSize(800, 600);
+                SceneManager.setScene(new AtlasDemo());
                 return null;
             }
 

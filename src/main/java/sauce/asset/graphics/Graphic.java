@@ -114,6 +114,7 @@ public abstract class Graphic implements Disposable {
     public abstract void update(double delta);
 
     public void dispose(){
+        checkDisposed();
         disposed = true;
     }
 

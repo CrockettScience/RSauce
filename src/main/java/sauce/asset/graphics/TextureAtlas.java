@@ -1,20 +1,23 @@
 package sauce.asset.graphics;
 
 import static sauce.core.Preferences.TEXTURE_PAGE_SIZE;
-import static sauce.util.io.GraphicsUtil.applyIOImageForDrawing;
-import static org.lwjgl.opengl.GL11.*;
 
+import util.Color;
+import util.RSauceLogger;
 import util.Vector2D;
 import util.structures.nonsaveable.LinkedList;
 import util.structures.nonsaveable.Map;
 
 import java.util.Iterator;
 
-
 public class TextureAtlas<K> {
 
     private Map<K, TextureRegion> textureMap = new Map<>();
     private LinkedList<Page> pages = new LinkedList<>();
+
+    public TextureAtlas(){
+        pages.add(new Page());
+    }
 
     public TextureRegion getTexture(K key){
         return textureMap.get(key);
@@ -29,6 +32,10 @@ public class TextureAtlas<K> {
     }
 
     public void putTexture(K key, Graphic graphic){
+        if(containsTexture(key)){
+            RSauceLogger.printErrorln("Texture was not added; key " + key + " already exists in atlas.");
+        }
+
         Iterator<Page> i = pages.iterator();
         TextureRegion region = null;
 
@@ -45,7 +52,11 @@ public class TextureAtlas<K> {
         textureMap.put(key, region);
     }
 
-    public class TextureRegion implements Comparable<TextureRegion>{
+    public Surface getPageSurface(int i){
+        return pages.get(i).pageSurface;
+    }
+
+    public static class TextureRegion implements Comparable<TextureRegion>{
         private Vector2D p00;
         private Vector2D p01;
         private Vector2D p10;
@@ -90,7 +101,7 @@ public class TextureAtlas<K> {
                 other.p11 = p11;
 
                 p01 = new Vector2D(p00.getX(), p00.getY() + size);
-                p11 = new Vector2D(p10.getX(), p11.getY() + size);
+                p11 = new Vector2D(p10.getX(), p10.getY() + size);
             }
 
             setSize();
@@ -124,45 +135,13 @@ public class TextureAtlas<K> {
         }
 
         private void drawGraphicToRegion(Graphic graphic){
-            if(compareGraphic(graphic) == -1){
-                throw new RuntimeException("TextureRegion too small to draw graphic onto.");
-            }
-
-            glBindTexture(GL_TEXTURE_2D, page.textureID());
-
-            if(graphic.getIOImage() != null)
-                applyIOImageForDrawing(graphic.getIOImage(), graphic.actualWidth(), graphic.actualHeight(), graphic.components());
-
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-            glEnable(GL_TEXTURE_2D);
 
             page.bind();
-
-            glPushMatrix();
-
-            glBegin(GL_QUADS);
             {
-                glTexCoord2f(0, 0);
-                glVertex2f(p00.getX(), p00.getY());
-
-                glTexCoord2f(1, 0);
-                glVertex2f(p10.getX(), p10.getY());
-
-                glTexCoord2f(1, 1);
-                glVertex2f(p11.getX(), p11.getY());
-
-                glTexCoord2f(0, 1);
-                glVertex2f(p01.getX(), p01.getY());
+                DrawBatch batch = new DrawBatch();
+                batch.add(graphic, p00.getX(), p00.getY());
+                batch.renderBatch();
             }
-            glEnd();
-
-            glPopMatrix();
-
             page.unbind();
 
             occupied = true;
@@ -178,21 +157,12 @@ public class TextureAtlas<K> {
         }
 
         private int compareWidth(Graphic graphic){
-            if(graphic.actualWidth() == p11.getX() - p00.getX())
-                return 0;
-            if(graphic.actualWidth() > p11.getX() - p00.getX())
-                return -1;
 
-            return 1;
+            return (p11.getX() - p00.getX()) - graphic.actualWidth();
         }
 
         private int compareHeight(Graphic graphic){
-            if(graphic.actualHeight() == p11.getY() - p00.getY())
-                return 0;
-            if(graphic.actualHeight() > p11.getY() - p00.getY())
-                return -1;
-
-            return 1;
+            return (p11.getY() - p00.getY()) - graphic.actualHeight();
         }
 
         @Override
@@ -205,22 +175,29 @@ public class TextureAtlas<K> {
         }
     }
 
-    private class Node {
+    private static class Node {
         private Node left;
         private Node right;
         private TextureRegion region;
+
+        private Node(){}
+
+        private Node(TextureRegion reg){
+            region = reg;
+        }
 
         public boolean isLeaf(){
             return region != null;
         }
     }
 
-    private class Page {
+    private static class Page {
         private Node root = new Node();
         private Surface pageSurface;
 
         public Page(){
             pageSurface = new Surface(TEXTURE_PAGE_SIZE, TEXTURE_PAGE_SIZE);
+            pageSurface.clear(Color.C_RED, 0);
             root.region = new TextureRegion(0, 0, TEXTURE_PAGE_SIZE, TEXTURE_PAGE_SIZE, pageSurface);
 
         }
@@ -245,20 +222,21 @@ public class TextureAtlas<K> {
                 if(region.compareGraphic(graphic) < 0)
                     return null;
 
-                if(region.compareWidth(graphic) > 0){
-                    TextureRegion otherRegion = region.divide(true, graphic.actualWidth());
-                    node.region = null;
-                    node.left.region = region;
-                    node.right.region = otherRegion;
+                if(region.compareGraphic(graphic) > 0) {
 
-                    return insert(node.left, graphic);
-                }
+                    if (region.compareWidth(graphic) > region.compareHeight(graphic)) {
+                        TextureRegion otherRegion = region.divide(true, graphic.actualWidth());
+                        node.region = null;
+                        node.left = new Node(region);
+                        node.right = new Node(otherRegion);
 
-                if(region.compareHeight(graphic) > 0){
-                    TextureRegion otherRegion = region.divide(false, graphic.actualWidth());
+                        return insert(node.left, graphic);
+                    }
+
+                    TextureRegion otherRegion = region.divide(false, graphic.actualHeight());
                     node.region = null;
-                    node.left.region = region;
-                    node.right.region = otherRegion;
+                    node.left = new Node(region);
+                    node.right = new Node(otherRegion);
                     return insert(node.left, graphic);
                 }
 

@@ -12,7 +12,6 @@ import java.nio.file.Paths;
 import java.util.function.Consumer;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 /**
@@ -22,7 +21,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 public class Preferences {
 
     // Project CONSTANTS
-    public static final String ENGINE_VERSION = "0.3.6 Dev 16";
+    public static final String ENGINE_VERSION = "0.3.6 Dev 17";
     public static final String NAME = "RSauce " + ENGINE_VERSION;
     public static final String PROJECT_VERSION = "0.0.0";
 
@@ -44,22 +43,23 @@ public class Preferences {
             dev.save();
         }
 
+
+
         ASSET_ROOT = dev.read("PATHS", "Repository", Paths.get(System.getProperty("user.home"), "RSauce").toString()) + "\\assets\\";
 
         Ini proj = new Ini(PROJ_INI_PATH, NAME);
         {
             GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+            SupportedVideoModes.addModes(glfwGetVideoModes(glfwGetPrimaryMonitor()));
 
-            if (proj.isEmpty() ||
-                    !(proj.readInt("GRAPHICS", "WindowWidth", -1) == vidmode.width() &&
-                            proj.readInt("GRAPHICS", "WindowHeight", -1) == vidmode.height()) &&
-                            proj.readInt("GRAPHICS", "RefreshRate", -1) == vidmode.refreshRate()) {
+            if (proj.isEmpty()) {
 
                 proj.write("GRAPHICS", "WindowWidth", String.valueOf(vidmode.width()));
                 proj.write("GRAPHICS", "WindowHeight", String.valueOf(vidmode.height()));
 
                 proj.write("GRAPHICS", "FullScreen", "false");
 
+                
                 proj.write("GRAPHICS", "FullScreenWidth", String.valueOf(vidmode.width()));
                 proj.write("GRAPHICS", "FullScreenHeight", String.valueOf(vidmode.height()));
                 proj.write("GRAPHICS", "RefreshRate", String.valueOf(vidmode.refreshRate()));
@@ -85,7 +85,6 @@ public class Preferences {
 
         TEXTURE_PAGE_SIZE = proj.readInt("GRAPHICS", "TexturePageSize", 2048);
 
-        SupportedVideoModes.addModes(glfwGetVideoModes(glfwGetPrimaryMonitor()));
 
         for(SupportedVideoModes.FullScreenMode mode : SupportedVideoModes.getModes()){
             RSauceLogger.printDebugln(mode.width + " x " + mode.height + " at " + mode.rate);

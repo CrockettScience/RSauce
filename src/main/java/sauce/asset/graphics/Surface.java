@@ -2,41 +2,33 @@ package sauce.asset.graphics;
 
 import sauce.util.io.GraphicsUtil;
 import sauce.util.ogl.OGLCoordinateSystem;
+import util.Color;
 import util.RSauceLogger;
-import util.Vector2D;
 import util.structures.nonsaveable.Stack;
 
 import static org.lwjgl.opengl.EXTFramebufferObject.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL30.*;
 
 /**
  * Created by John Crockett.
  * A wrapper object that represents a GL_FRAMEBUFFER.
  */
 public class Surface extends Graphic {
-
-    private int fboHandle;
+    private int fboHandle = glGenFramebuffers();
     private int texID = glGenTextures();
 
     public Surface(int width, int height){
         super(width, height, width, height);
 
-        fboHandle = glGenFramebuffersEXT();
-
         glBindTexture(GL_TEXTURE_2D, texID);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_INT, (java.nio.ByteBuffer) null);
 
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fboHandle);
-        glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texID, 0);
-
-        OGLCoordinateSystem.pushCoordinateState();
-        OGLCoordinateSystem.setCoordinateState(0, 0, width, height);
-
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
-
-        OGLCoordinateSystem.popCoordinateState();
+        bind();
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texID, 0);
+        unbind();
 
     }
 
@@ -54,22 +46,28 @@ public class Surface extends Graphic {
 
     public void unbind(){
         OGLSurfaceSystem.popSurface();
+        OGLCoordinateSystem.popCoordinateState();
         glPopAttrib();
 
-        OGLCoordinateSystem.popCoordinateState();
+    }
+
+    public void clear(Color color, float alpha){
+        bind();
+        float[] c = {color.getRed(), color.getGreen(), color.getBlue(), alpha};
+        glClearBufferfv(GL_COLOR, 0, c);
+        unbind();
     }
 
     public void dispose(){
         super.dispose();
-        glDeleteFramebuffersEXT(fboHandle);
+        glDeleteFramebuffers(fboHandle);
         glDeleteTextures(texID);
     }
 
     @Override
     protected float[] regionCoordinates() {
         checkDisposed();
-        float[] arr = {0f, 0f, 1f, 0f, 1f, 1f, 0f, 1f};
-        return arr;
+        return new float[]{0f, 0f, 1f, 0f, 1f, 1f, 0f, 1f};
     }
 
     @Override
@@ -133,8 +131,8 @@ public class Surface extends Graphic {
             applyState();
         }
 
-        private static void  applyState(){
-            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, surfaceStack.top());
+        private static void applyState(){
+            glBindFramebuffer(GL_FRAMEBUFFER_EXT, surfaceStack.top());
         }
     }
 

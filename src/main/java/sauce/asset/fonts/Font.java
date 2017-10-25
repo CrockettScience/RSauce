@@ -109,8 +109,6 @@ public class Font implements Disposable {
 
         glColor3f(1, 1, 1);
 
-        glDeleteTextures(texID);
-
     }
 
     public float getStringWidth(String text) {
@@ -161,7 +159,14 @@ public class Font implements Disposable {
         return 1;
     }
 
+    protected void checkDisposed(){
+        if(disposed)
+            throw new AssetDisposedException(this);
+
+    }
+
     public void dispose(){
+        checkDisposed();
         disposed = true;
         font.getFontInfo().getcData().free();
         glDeleteTextures(texID);

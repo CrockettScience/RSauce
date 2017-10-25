@@ -128,6 +128,7 @@ public class Map<K, V> {
 
         allocateArray(nextPrime(4 * currentSize));
         currentSize = 0;
+        occupied = 0;
 
         for (MapEntry entry : oldArray) {
             if (entry != null) {

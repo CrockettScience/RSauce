@@ -70,6 +70,7 @@ public class Text extends Entity {
     @Override
     public void dispose() {
         font.dispose();
+        draw.getImage().dispose();
     }
 
     public int getWidth() {
