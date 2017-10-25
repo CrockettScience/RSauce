@@ -52,6 +52,10 @@ public class TextureAtlas<K> {
         textureMap.put(key, region);
     }
 
+    public int getPageCount(){
+        return pages.size();
+    }
+
     public Surface getPageSurface(int i){
         return pages.get(i).pageSurface;
     }

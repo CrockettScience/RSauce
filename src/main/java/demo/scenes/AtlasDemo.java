@@ -15,13 +15,14 @@ import static sauce.input.InputServer.*;
 public class AtlasDemo extends Scene implements InputClient{
 
     private TextureAtlas<Double> atlas = new TextureAtlas<>();
+    private DrawSystem atlasDraw;
+    private int i = 0;
 
     @Override
     protected void loadResources() {
         SceneManager.setCamera(new Camera(0, 0, Preferences.TEXTURE_PAGE_SIZE, Preferences.TEXTURE_PAGE_SIZE), true);
 
-
-        Engine.getEngine().add(new DrawSystem(0){
+        atlasDraw = new DrawSystem(0){
 
             @Override
             public void addedToEngine(Engine engine) {
@@ -31,7 +32,7 @@ public class AtlasDemo extends Scene implements InputClient{
             @Override
             public void update(double delta) {
                 DrawBatch batch = new DrawBatch();
-                batch.add(atlas.getPageSurface(0), 0, 0);
+                batch.add(atlas.getPageSurface(i), 0, 0);
                 batch.renderBatch();
             }
 
@@ -39,7 +40,9 @@ public class AtlasDemo extends Scene implements InputClient{
             public void removedFromEngine(Engine engine) {
 
             }
-        });
+        };
+
+        Engine.getEngine().add(atlasDraw);
 
         InputServer.bind(this);
 
@@ -48,6 +51,7 @@ public class AtlasDemo extends Scene implements InputClient{
     @Override
     protected void destroyResources() {
         InputServer.unbind(this);
+        Engine.getEngine().removeDrawSystem(atlasDraw.getClass());
     }
 
     @Override
@@ -59,6 +63,14 @@ public class AtlasDemo extends Scene implements InputClient{
     public void receivedKeyEvent(InputEvent event) {
         if(event.action() == ACTION_RELEASED && event.key() == KEY_ESCAPE)
             SceneManager.setScene(new Demo());
+        else if (event.action() == ACTION_PRESSED){
+
+            if(event.key() == KEY_LEFT)
+                i = Math.max(0, i - 1);
+
+            else if(event.key() == KEY_RIGHT)
+                i = Math.min(atlas.getPageCount() - 1, i + 1);
+        }
 
 
     }
