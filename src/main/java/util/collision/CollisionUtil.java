@@ -27,7 +27,7 @@ public class CollisionUtil {
         }
 
         static Vector2D getRotatedPoint(Vector2D point, Vector2D about, double theta){
-            return new Vector2D((int)(about.getX() + ((point.getX() - about.getX()) * cos(theta)) + ((point.getY() - about.getY()) * sin(theta))),
+            return Vector2D.create((int)(about.getX() + ((point.getX() - about.getX()) * cos(theta)) + ((point.getY() - about.getY()) * sin(theta))),
                                 (int)(about.getY() - ((point.getX() - about.getX()) * sin(theta)) + ((point.getY() - about.getY()) * cos(theta))));
         }
 
@@ -39,11 +39,11 @@ public class CollisionUtil {
 
         public DrawBBoxWires() {
             super(2147483647);
-            Engine.getEngine().bindEntitySubscriber(this);
         }
 
         @Override
         public void addedToEngine(Engine engine) {
+            Engine.getEngine().bindEntitySubscriber(this);
 
         }
 
@@ -56,10 +56,10 @@ public class CollisionUtil {
                 quad(6, inner.getUL(), inner.getUR(), inner.getLL(), inner.getLR(), Color.C_RED, 1);
                 quad(6, outer.getUL(), outer.getUR(), outer.getLL(), outer.getLR(), Color.C_BLACK, 1);
                 Vector2D point = InputServer.mouseScenePosition();
-                quad(12,    new Vector2D(point.getX() - 1, point.getY() + 1),
-                                    new Vector2D(point.getX(), point.getY() + 1),
-                                    new Vector2D(point.getX() - 1, point.getY()),
-                                    new Vector2D(point.getX(), point.getY()), Color.C_PURPLE, 1);
+                quad(12, Vector2D.create(point.getX() - 1, point.getY() + 1),
+                        Vector2D.create(point.getX(), point.getY() + 1),
+                        Vector2D.create(point.getX() - 1, point.getY()),
+                        Vector2D.create(point.getX(), point.getY()), Color.C_PURPLE, 1);
             }
         }
 

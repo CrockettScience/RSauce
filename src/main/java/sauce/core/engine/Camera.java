@@ -67,7 +67,7 @@ public class Camera {
         height = newHeight;
 
         for(CameraChangeSubscriber sub : cameraChangeSubscribers){
-            sub.cameraResized(new Vector2D(width, height));
+            sub.cameraResized(Vector2D.create(width, height));
         }
 
         reAdjustCoordinateSystem();
@@ -80,7 +80,7 @@ public class Camera {
         y = newY;
 
         for(CameraChangeSubscriber sub: cameraChangeSubscribers){
-            sub.cameraMovedPosition(new Vector2D(newX - oldX, newY - oldY));
+            sub.cameraMovedPosition(Vector2D.create(newX - oldX, newY - oldY));
         }
 
         reAdjustCoordinateSystem();

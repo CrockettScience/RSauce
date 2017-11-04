@@ -12,16 +12,12 @@ public class HashGrid<T> {
     }
 
     public void set(int x, int y, T data) {
-        if (x < 0 || y < 0)
-            throw new ArrayIndexOutOfBoundsException();
 
         Coordinates point = makeCoordinates(x, y);
         gridMap.put(point, data);
     }
 
     public T get(int x, int y) {
-        if (x < 0 || y < 0)
-            throw new ArrayIndexOutOfBoundsException();
 
         return gridMap.get(makeCoordinates(x, y));
     }

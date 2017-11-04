@@ -19,10 +19,10 @@ public class DrawUtil {
     }
 
     public static void rect(float thickness, Vector2D xy, Vector2D wh, Color c, float opacity){
-        line(thickness, xy,                                                               new Vector2D(xy.getX(),             xy.getY() + wh.getY()), c, opacity);
-        line(thickness, xy,                                                               new Vector2D(xy.getX() + wh.getX(), xy.getY())            , c, opacity);
-        line(thickness, new Vector2D(xy.getX() + wh.getX(), xy.getY() + wh.getY()), new Vector2D(xy.getX(),             xy.getY() + wh.getY()), c, opacity);
-        line(thickness, new Vector2D(xy.getX() + wh.getX(), xy.getY() + wh.getY()), new Vector2D(xy.getX() + wh.getX(), xy.getY())            , c, opacity);
+        line(thickness, xy, Vector2D.create(xy.getX(),             xy.getY() + wh.getY()), c, opacity);
+        line(thickness, xy, Vector2D.create(xy.getX() + wh.getX(), xy.getY()), c, opacity);
+        line(thickness, Vector2D.create(xy.getX() + wh.getX(), xy.getY() + wh.getY()), Vector2D.create(xy.getX(),             xy.getY() + wh.getY()), c, opacity);
+        line(thickness, Vector2D.create(xy.getX() + wh.getX(), xy.getY() + wh.getY()), Vector2D.create(xy.getX() + wh.getX(), xy.getY()), c, opacity);
     }
 
     public static void quad(float thickness, Vector2D ul, Vector2D ur, Vector2D ll, Vector2D lr, Color c, float opacity){

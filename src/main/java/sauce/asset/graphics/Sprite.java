@@ -27,7 +27,7 @@ public class Sprite extends Graphic {
     private int components;
 
     //Sprite State Variables;
-    private Vector2D cellCoords = new Vector2D(0,0);
+    private Vector2D cellCoords = Vector2D.create(0,0);
     private ArrayList<Vector2D> animationState = new ArrayList<>();
     private int animationStateIndex = 0;
     private String animStateID;
@@ -41,17 +41,17 @@ public class Sprite extends Graphic {
         animStateID = idMatrix.get(0, 0);
         idMap = new Map<>();
         idMap.put(animStateID, animationState);
-        animationState.add(new Vector2D(0, 0));
+        animationState.add(Vector2D.create(0, 0));
 
         int i = 1, j = 0;
         while(j < idMatrix.height()){
             while(i < idMatrix.width()){
                 if(idMap.containsKey(idMatrix.get(i, j)))
-                    idMap.get(idMatrix.get(i, j)).add(new Vector2D(i, j));
+                    idMap.get(idMatrix.get(i, j)).add(Vector2D.create(i, j));
 
                 else if(idMatrix.get(i, j) != null) {
                     idMap.put(idMatrix.get(i, j), new ArrayList<>());
-                    idMap.get(idMatrix.get(i, j)).add(new Vector2D(i, j));
+                    idMap.get(idMatrix.get(i, j)).add(Vector2D.create(i, j));
                 }
                 i++;
             }

@@ -13,7 +13,7 @@ public abstract class Graphic implements Disposable {
     // Properties
     protected int width;
     protected int height;
-    private Vector2D origin = new Vector2D(0, 0);
+    private Vector2D origin = Vector2D.create(0, 0);
     private float angle = 0.0f;
     private float xScale = 1.0f;
     private float yScale = 1.0f;
@@ -49,7 +49,7 @@ public abstract class Graphic implements Disposable {
     }
 
     private Vector2D findCenter(){
-        return region == null ? new Vector2D(width / 2, height / 2) : new Vector2D(region.p00.getX() + width / 2, region.p00.getY() + height / 2);
+        return region == null ? Vector2D.create(width / 2, height / 2) : Vector2D.create(region.p00.getX() + width / 2, region.p00.getY() + height / 2);
     }
 
     public int width(){
@@ -72,7 +72,7 @@ public abstract class Graphic implements Disposable {
         xScale = factor;
 
         // Refactor the origin
-        origin = new Vector2D((int)(xScale * origin.getX()), origin.getY());
+        origin = Vector2D.create((int)(xScale * origin.getX()), origin.getY());
     }
 
     public float getXScale(){
@@ -83,7 +83,7 @@ public abstract class Graphic implements Disposable {
         yScale = factor;
 
         // Refactor the origin
-        origin = new Vector2D(origin.getX(), (int)(yScale * origin.getY()));
+        origin = Vector2D.create(origin.getX(), (int)(yScale * origin.getY()));
     }
 
     public float getYScale(){
@@ -99,7 +99,7 @@ public abstract class Graphic implements Disposable {
     }
 
     public void setOrigin(int x, int y){
-        origin = new Vector2D(x, y);
+        origin = Vector2D.create(x, y);
     }
 
     protected abstract float[] regionCoordinates();

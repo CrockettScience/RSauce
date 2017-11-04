@@ -116,16 +116,6 @@ public class Demo extends Scene implements InputClient{
         }
     }
 
-    @Override
-    public void receivedTextEvent(char character) {
-
-    }
-
-    @Override
-    public void mouseScrolled(double x, double y) {
-
-    }
-
     Button highlight;
 
     @Override
@@ -149,16 +139,6 @@ public class Demo extends Scene implements InputClient{
     public void receivedMouseButtonEvent(InputEvent event) {
         if(highlight != null && event.key() == MOUSE_LEFT && event.action() == ACTION_RELEASED)
             highlight.invoke();
-
-    }
-
-    @Override
-    public void joystickConnected(int joyID) {
-
-    }
-
-    @Override
-    public void joystickDisconnected(int joyID) {
 
     }
 }

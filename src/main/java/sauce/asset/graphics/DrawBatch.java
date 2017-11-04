@@ -26,13 +26,13 @@ public class DrawBatch {
 
     public void add(Graphic image, int x, int y){
         images.enqueue(image);
-        coords.enqueue(new Vector2D(x, y));
+        coords.enqueue(Vector2D.create(x, y));
         scripts.enqueue(null);
     }
 
     public void add(Graphic image, int x, int y, Script<?, ?> script){
         images.enqueue(image);
-        coords.enqueue(new Vector2D(x, y));
+        coords.enqueue(Vector2D.create(x, y));
         scripts.enqueue(script);
     }
 

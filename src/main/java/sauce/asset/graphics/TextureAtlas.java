@@ -83,10 +83,10 @@ public class TextureAtlas{
         private boolean occupied = false;
 
         private TextureRegion(int x, int y, int width, int height, Surface id){
-            p00 = new Vector2D(x, y);
-            p01 = new Vector2D(x, y + height);
-            p10 = new Vector2D(x + width, y);
-            p11 = new Vector2D(x + width, y + height);
+            p00 = Vector2D.create(x, y);
+            p01 = Vector2D.create(x, y + height);
+            p10 = Vector2D.create(x + width, y);
+            p11 = Vector2D.create(x + width, y + height);
             page = id;
             setSize();
         }
@@ -102,22 +102,22 @@ public class TextureAtlas{
         private TextureRegion divide(boolean horizontally, int size){
             TextureRegion other = new TextureRegion(page);
             if(horizontally){
-                other.p00 = new Vector2D(p00.getX() + size + 1, p00.getY());
-                other.p01 = new Vector2D(p01.getX() + size + 1, p01.getY());
+                other.p00 = Vector2D.create(p00.getX() + size + 1, p00.getY());
+                other.p01 = Vector2D.create(p01.getX() + size + 1, p01.getY());
                 other.p10 = p10;
                 other.p11 = p11;
 
-                p10 = new Vector2D(p00.getX() + size, p00.getY());
-                p11 = new Vector2D(p01.getX() + size, p01.getY());
+                p10 = Vector2D.create(p00.getX() + size, p00.getY());
+                p11 = Vector2D.create(p01.getX() + size, p01.getY());
             }
             else{
-                other.p00 = new Vector2D(p01.getX(), p00.getY() + size + 1);
-                other.p10 = new Vector2D(p10.getX(), p10.getY() + size + 1);
+                other.p00 = Vector2D.create(p01.getX(), p00.getY() + size + 1);
+                other.p10 = Vector2D.create(p10.getX(), p10.getY() + size + 1);
                 other.p01 = p01;
                 other.p11 = p11;
 
-                p01 = new Vector2D(p00.getX(), p00.getY() + size);
-                p11 = new Vector2D(p10.getX(), p10.getY() + size);
+                p01 = Vector2D.create(p00.getX(), p00.getY() + size);
+                p11 = Vector2D.create(p10.getX(), p10.getY() + size);
             }
 
             setSize();

@@ -3,6 +3,7 @@ package sauce.asset.audio;
 import sauce.core.Preferences;
 import sauce.util.misc.AssetDisposedException;
 import sauce.util.misc.Disposable;
+import util.RSauceLogger;
 
 import java.io.IOException;
 import java.nio.IntBuffer;

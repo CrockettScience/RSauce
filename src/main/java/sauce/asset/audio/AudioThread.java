@@ -77,7 +77,9 @@ public class AudioThread extends Thread {
                 }
 
                 if (clearAudio) {
-                    loadedAudio.clear();
+                    for (OpenALPlayEntry entry : loadedAudio)
+                        removalQueue.enqueue(entry);
+
                     clearAudio = false;
                 }
 
@@ -170,8 +172,8 @@ public class AudioThread extends Thread {
         }
 
         private void dispose(){
-            alDeleteBuffers(buffer);
             audio.dispose();
+            alDeleteBuffers(buffer);
             buffer = null;
             audio = null;
         }

@@ -94,34 +94,8 @@ public class EggyScene extends Scene implements InputClient {
     }
 
     @Override
-    public void receivedTextEvent(char character) {
-
-    }
-
-    @Override
-    public void receivedMouseButtonEvent(InputEvent event) {
-
-    }
-
-    @Override
     public void mouseScrolled(double x, double y) {
         Camera v = SceneManager.getCamera();
         v.resize((int)(v.getWidth() + ZOOM_SPEED * -y), (int)(v.getHeight() + (ZOOM_SPEED * Preferences.getCurrentScreenHeight() / Preferences.getCurrentScreenWidth()) * -y));
-    }
-
-    @Override
-    public void cursorPosChanged(double x, double y) {
-
-    }
-
-    @Override
-    public void joystickConnected(int joyID) {
-        System.out.println("Joystick " + joyID + " was connected!");
-    }
-
-    @Override
-    public void joystickDisconnected(int joyID) {
-        System.out.println("Joystick " + joyID + " was disconnected!");
-
     }
 }

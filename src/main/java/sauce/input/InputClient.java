@@ -5,12 +5,33 @@ package sauce.input;
  */
 public interface InputClient {
 
-    void receivedKeyEvent(InputEvent event);
-    void receivedTextEvent(char character);
-    void receivedMouseButtonEvent(InputEvent event);
-    void mouseScrolled(double x, double y);
-    void cursorPosChanged(double x, double y);
-    void joystickConnected(int joyID);
-    void joystickDisconnected(int joyID);
+    default void receivedKeyEvent(InputEvent event){
+
+    }
+
+    default void receivedTextEvent(char character){
+
+    }
+
+    default void receivedMouseButtonEvent(InputEvent event){
+
+    }
+
+    default void mouseScrolled(double x, double y){
+
+    }
+
+    default void cursorPosChanged(double x, double y){
+
+    }
+
+    default void joystickConnected(int joyID){
+
+    }
+
+    default void joystickDisconnected(int joyID){
+
+    }
+
 
 }

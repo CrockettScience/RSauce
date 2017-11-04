@@ -146,7 +146,7 @@ public class InputServer {
         int cWidth = cam.getWidth();
         int cHeight = cam.getHeight();
 
-        return new Vector2D((int)Math.ceil(((double)cWidth / sWidth) * pos.getX()) + cam.getX(), (int)(((double)cHeight / sHeight) * pos.getY()) + cam.getY());
+        return Vector2D.create((int)Math.ceil(((double)cWidth / sWidth) * pos.getX()) + cam.getX(), (int)(((double)cHeight / sHeight) * pos.getY()) + cam.getY());
     }
 
     public static final int MOUSE_LEFT = GLFW_MOUSE_BUTTON_LEFT;

@@ -53,17 +53,17 @@ public class BoundBox implements Component {
 
     private final void setup(){
         radius = (hypot(width, height)) / 2;
-        center = new Vector2D(x + width / 2, y + height / 2);
+        center = Vector2D.create(x + width / 2, y + height / 2);
 
-        upperLInner = new Vector2D(x, y + height);
-        upperRInner = new Vector2D(x + width, y + height);
-        lowerLInner = new Vector2D(x, y);
-        lowerRInner = new Vector2D(x + width, y);
+        upperLInner = Vector2D.create(x, y + height);
+        upperRInner = Vector2D.create(x + width, y + height);
+        lowerLInner = Vector2D.create(x, y);
+        lowerRInner = Vector2D.create(x + width, y);
 
-        upperLOuter = new Vector2D(center.getX() - (int) radius, center.getY() + (int) radius);
-        upperROuter = new Vector2D(center.getX() + (int) radius, center.getY() + (int) radius);
-        lowerLOuter = new Vector2D(center.getX() - (int) radius, center.getY() - (int) radius);
-        lowerROuter = new Vector2D(center.getX() + (int) radius, center.getY() - (int) radius);
+        upperLOuter = Vector2D.create(center.getX() - (int) radius, center.getY() + (int) radius);
+        upperROuter = Vector2D.create(center.getX() + (int) radius, center.getY() + (int) radius);
+        lowerLOuter = Vector2D.create(center.getX() - (int) radius, center.getY() - (int) radius);
+        lowerROuter = Vector2D.create(center.getX() + (int) radius, center.getY() - (int) radius);
     }
 
     private void updatePosition(int dx, int dy){
@@ -131,10 +131,10 @@ public class BoundBox implements Component {
 
             Vector2D[] axes = new Vector2D[4];
 
-            axes[0] = new Vector2D(boxA.UR.getX() - boxA.UL.getX(), boxA.UR.getY() - boxA.UL.getY());
-            axes[1] = new Vector2D(boxA.UR.getX() - boxA.LR.getX(), boxA.UR.getY() - boxA.LR.getY());
-            axes[2] = new Vector2D(boxB.UR.getX() - boxB.UL.getX(), boxB.UR.getY() - boxB.UL.getY());
-            axes[3] = new Vector2D(boxB.UR.getX() - boxB.LR.getX(), boxB.UR.getY() - boxB.LR.getY());
+            axes[0] = Vector2D.create(boxA.UR.getX() - boxA.UL.getX(), boxA.UR.getY() - boxA.UL.getY());
+            axes[1] = Vector2D.create(boxA.UR.getX() - boxA.LR.getX(), boxA.UR.getY() - boxA.LR.getY());
+            axes[2] = Vector2D.create(boxB.UR.getX() - boxB.UL.getX(), boxB.UR.getY() - boxB.UL.getY());
+            axes[3] = Vector2D.create(boxB.UR.getX() - boxB.LR.getX(), boxB.UR.getY() - boxB.LR.getY());
 
             for(Vector2D axis : axes){
 
