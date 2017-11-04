@@ -15,7 +15,6 @@ import static demo.util.DemoUtil.WIDTH;
 import static sauce.input.InputServer.*;
 
 import static sauce.core.Preferences.ASSET_ROOT;
-import static sauce.core.engine.SceneManager.*;
 
 /**
  * Created by John Crockett.
@@ -27,10 +26,12 @@ public class EggyScene extends Scene implements InputClient {
 
     @Override
     protected void loadResources() {
-        setCamera(new Camera(0, 0, WIDTH, HEIGHT, 0, 0), true);
+        Engine e = Engine.getEngine();
+
+        e.setCamera(new Camera(0, 0, WIDTH, HEIGHT, 0, 0), true);
 
         // Setup Eggy
-        Entity eggy1 = new Eggy(1, 1, SceneManager.getCamera().getWidth() / 2, SceneManager.getCamera().getHeight() / 2, 0);
+        Entity eggy1 = new Eggy(1, 1, e.getCamera().getWidth() / 2, e.getCamera().getHeight() / 2, 0);
 
         putEntity("eggy", eggy1);
 
@@ -60,25 +61,26 @@ public class EggyScene extends Scene implements InputClient {
 
     @Override
     public void receivedKeyEvent(InputEvent event) {
+        Engine e = Engine.getEngine();
         if(event.key() == KEY_ESCAPE && event.action() == ACTION_RELEASED){
-            SceneManager.setScene(new Demo());
+            e.setScene(new Demo());
         }
 
         if(event.key() == KEY_UP || event.key() == KEY_DOWN || event.key() == KEY_LEFT || event.key() == KEY_RIGHT ) {
             if (event.key() == KEY_UP) {
-                getCamera().move(getCamera().getX(), getCamera().getY() + VIEW_SPEED);
+                e.getCamera().move(e.getCamera().getX(), e.getCamera().getY() + VIEW_SPEED);
             }
 
             if (event.key() == KEY_DOWN) {
-                getCamera().move(getCamera().getX(),getCamera().getY() - VIEW_SPEED);
+                e.getCamera().move(e.getCamera().getX(),e.getCamera().getY() - VIEW_SPEED);
             }
 
             if (event.key() == KEY_LEFT) {
-                getCamera().move(getCamera().getX() - VIEW_SPEED, getCamera().getY());
+                e.getCamera().move(e.getCamera().getX() - VIEW_SPEED, e.getCamera().getY());
             }
 
             if (event.key() == KEY_RIGHT) {
-                getCamera().move(getCamera().getX() + VIEW_SPEED, getCamera().getY());
+                e.getCamera().move(e.getCamera().getX() + VIEW_SPEED, e.getCamera().getY());
             }
         }
 
@@ -95,7 +97,7 @@ public class EggyScene extends Scene implements InputClient {
 
     @Override
     public void mouseScrolled(double x, double y) {
-        Camera v = SceneManager.getCamera();
+        Camera v = Engine.getEngine().getCamera();
         v.resize((int)(v.getWidth() + ZOOM_SPEED * -y), (int)(v.getHeight() + (ZOOM_SPEED * Preferences.getCurrentScreenHeight() / Preferences.getCurrentScreenWidth()) * -y));
     }
 }

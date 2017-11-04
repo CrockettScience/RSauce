@@ -1,5 +1,6 @@
 package sauce.core.engine;
 
+import sauce.asset.audio.AudioThread;
 import sauce.core.Preferences;
 import sauce.asset.graphics.DrawBatch;
 import sauce.core.Main;
@@ -28,6 +29,10 @@ public final class Engine {
     private PriorityMap<Class<? extends DrawSystem>, DrawSystem> draws = new PriorityMap<>();
     private RenderSystem render = new RenderSystem(0);
 
+    private Scene scene;
+    private Camera camera = new Camera(0,0, Preferences.getCurrentScreenWidth(), Preferences.getCurrentScreenHeight(), 0, 0);
+    private Set<CameraChangeSubscriber> cameraChangeSubscribers = new Set<>();
+
     private Engine() {
         render.addedToEngine(this);
     }
@@ -37,6 +42,59 @@ public final class Engine {
             singletonEngine = new Engine();
 
         return singletonEngine;
+    }
+
+    public Scene getCurrentScene() {
+        return scene;
+    }
+
+    public Camera getCamera() {
+        return camera;
+    }
+
+    public void setScene(Scene aScene) {
+        if(scene != null) {
+            scene.dispose();
+        }
+
+        AudioThread.clear();
+        AudioThread.clearAudioCache();
+
+        setCamera(new Camera(0, 0, Preferences.getCurrentScreenWidth(), Preferences.getCurrentScreenHeight(), 0, 0), true);
+
+        scene = aScene;
+        scene.loadResources();
+        scene.sceneMain();
+    }
+
+    public void setCamera(Camera aCamera, boolean disposeCurrent) {
+        if(aCamera == null) {
+            RSauceLogger.printWarningln("You cannot set camera to a null value.");
+            return;
+        }
+
+        if(disposeCurrent)
+            camera.dispose();
+
+        camera.deactivate();
+        camera = aCamera;
+
+        for (CameraChangeSubscriber sub : cameraChangeSubscribers) {
+            sub.cameraChanged(camera);
+            camera.bindSubscriber(sub);
+        }
+
+        camera.activate();
+    }
+
+    public void subscribeToCameraChanges(CameraChangeSubscriber sub){
+        cameraChangeSubscribers.add(sub);
+        camera.bindSubscriber(sub);
+    }
+
+    public void unsubscribeToCameraChanges(CameraChangeSubscriber sub){
+        cameraChangeSubscribers.remove(sub);
+        camera.removeSubscriber(sub);
     }
 
     public void bindEntitySubscriber(EntitySubscriber sub){
@@ -170,7 +228,7 @@ public final class Engine {
     private void preDraw(double delta){
         glClear(GL_COLOR_BUFFER_BIT);
 
-        Scene scene = SceneManager.getCurrentScene();
+        Scene scene = getCurrentScene();
 
         if(scene.containsAttribute(BackgroundAttribute.class)) {
             BackgroundAttribute bg = scene.getAttribute(BackgroundAttribute.class);
@@ -182,7 +240,7 @@ public final class Engine {
                 if (back != null) {
                     back.update(delta);
 
-                    Camera cam = SceneManager.getCamera();
+                    Camera cam = getCamera();
 
                     int modX = back.getXPos() % back.getIOImage().getGraphicInfo().getWidth();
                     int modY = back.getYPos() % back.getIOImage().getGraphicInfo().getHeight();
@@ -206,7 +264,7 @@ public final class Engine {
     }
 
     private void postDraw(double delta){
-        Scene scene = SceneManager.getCurrentScene();
+        Scene scene = getCurrentScene();
 
         if(scene.containsAttribute(BackgroundAttribute.class)) {
             BackgroundAttribute bg = scene.getAttribute(BackgroundAttribute.class);
@@ -218,7 +276,7 @@ public final class Engine {
                 if (fore != null) {
                     fore.update(delta);
 
-                    Camera cam = SceneManager.getCamera();
+                    Camera cam = getCamera();
 
                     int modX = fore.getXPos() % fore.getIOImage().getGraphicInfo().getWidth();
                     int modY = fore.getYPos() % fore.getIOImage().getGraphicInfo().getWidth();

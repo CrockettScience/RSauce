@@ -3,7 +3,6 @@ package sauce.core;
 import demo.scenes.Demo;
 import sauce.asset.audio.AudioThread;
 import sauce.core.engine.Engine;
-import sauce.core.engine.SceneManager;
 import sauce.util.ogl.OGLCoordinateSystem;
 import util.RSauceLogger;
 import org.lwjgl.*;
@@ -116,7 +115,7 @@ public class Main{
     }
 
     private static Engine initEngine(){
-        SceneManager.setScene(new Demo());
+        Engine.getEngine().setScene(new Demo());
 
         return Engine.getEngine();
     }

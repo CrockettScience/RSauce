@@ -14,7 +14,6 @@ import sauce.core.engine.*;
 import sauce.core.engine.BackgroundAttribute;
 import sauce.core.engine.Camera;
 import sauce.core.engine.Scene;
-import sauce.core.engine.SceneManager;
 import sauce.input.InputClient;
 import sauce.input.InputEvent;
 import sauce.input.InputServer;
@@ -25,7 +24,6 @@ import util.structures.nonsaveable.ArrayList;
 
 import static demo.util.DemoUtil.HEIGHT;
 import static demo.util.DemoUtil.WIDTH;
-import static sauce.core.engine.SceneManager.*;
 import static sauce.input.InputServer.ACTION_RELEASED;
 import static sauce.input.InputServer.KEY_ESCAPE;
 import static sauce.input.InputServer.MOUSE_LEFT;
@@ -35,7 +33,9 @@ public class Demo extends Scene implements InputClient{
 
     @Override
     protected void loadResources() {
-        setCamera(new Camera(0, 0, WIDTH, HEIGHT), true);
+        Engine e = Engine.getEngine();
+
+        e.setCamera(new Camera(0, 0, WIDTH, HEIGHT), true);
 
         BackgroundAttribute bg  = new BackgroundAttribute();
         addAttribute(bg);
@@ -62,7 +62,7 @@ public class Demo extends Scene implements InputClient{
 
             @Override
             protected Return scriptMain(Argument args) {
-                SceneManager.setScene(new EggyScene());
+                e.setScene(new EggyScene());
                 return null;
             }
 

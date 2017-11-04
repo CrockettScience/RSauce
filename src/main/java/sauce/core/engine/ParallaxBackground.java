@@ -13,12 +13,14 @@ public class ParallaxBackground extends TiledTexture implements CameraChangeSubs
 
     public ParallaxBackground(String fileSource, int xScrollFactor, int yScrollFactor) {
         super(fileSource, 0, 0);
-        resize(SceneManager.getCamera().getWidth() + getIOImage().getGraphicInfo().getWidth(), SceneManager.getCamera().getHeight() + getIOImage().getGraphicInfo().getHeight());
+        Engine e = Engine.getEngine();
+
+        resize(e.getCamera().getWidth() + getIOImage().getGraphicInfo().getWidth(), e.getCamera().getHeight() + getIOImage().getGraphicInfo().getHeight());
 
         xScroll = xScrollFactor;
         yScroll = yScrollFactor;
 
-        SceneManager.subscribeToCameraChanges(this);
+        e.subscribeToCameraChanges(this);
     }
 
     @Override
@@ -102,6 +104,6 @@ public class ParallaxBackground extends TiledTexture implements CameraChangeSubs
     public void dispose() {
         checkDisposed();
         super.dispose();
-        SceneManager.unsubscribeToCameraChanges(this);
+        Engine.getEngine().unsubscribeToCameraChanges(this);
     }
 }

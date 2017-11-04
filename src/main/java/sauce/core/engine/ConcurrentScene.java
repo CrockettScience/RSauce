@@ -1,7 +1,5 @@
 package sauce.core.engine;
 
-import sauce.core.engine.Scene;
-import sauce.core.engine.SceneManager;
 
 /**
  *
@@ -16,7 +14,7 @@ public abstract class ConcurrentScene extends Scene implements Runnable {
     @Override
     protected final void sceneMain() {
         (new Thread(this)).start();
-        SceneManager.setScene(getForegroundScene());
+        Engine.getEngine().setScene(getForegroundScene());
     }
     
     protected final void loadResources(){
