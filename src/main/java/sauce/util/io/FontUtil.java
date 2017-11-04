@@ -1,6 +1,5 @@
 package sauce.util.io;
 
-import util.Vector2D;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.stb.STBTTBakedChar;
 import org.lwjgl.stb.STBTTFontinfo;
@@ -9,21 +8,19 @@ import org.lwjgl.system.MemoryStack;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
 import static org.lwjgl.stb.STBTruetype.*;
 import static org.lwjgl.system.MemoryStack.stackPush;
 
 public class FontUtil {
 
     public static IOFont ioResourceToFont(ResourceUtil.IOResource resource, FontInfo info){
-        return new IOFont(resource.buffer, info);
+        return new IOFont(resource.getBuffer(), info);
     }
 
     public static FontInfo getFontInfo(ResourceUtil.IOResource resource, int fontsize){
         STBTTFontinfo rawInfo = STBTTFontinfo.create();
 
-        if(!stbtt_InitFont(rawInfo, resource.buffer))
+        if(!stbtt_InitFont(rawInfo, resource.getBuffer()))
             throw new IllegalStateException("Failed to initialize font information.");
 
         try (MemoryStack stack = stackPush()) {
@@ -38,7 +35,7 @@ public class FontUtil {
             STBTTBakedChar.Buffer cdata = STBTTBakedChar.malloc(96);
 
             ByteBuffer bitmap = BufferUtils.createByteBuffer(bmpBufferSize * bmpBufferSize);
-            stbtt_BakeFontBitmap(resource.buffer, fontsize, bitmap, bmpBufferSize, bmpBufferSize, 32, cdata);
+            stbtt_BakeFontBitmap(resource.getBuffer(), fontsize, bitmap, bmpBufferSize, bmpBufferSize, 32, cdata);
 
             return new FontInfo(pAscent.get(0), pDescent.get(0), pLineGap.get(0), bmpBufferSize, bitmap, cdata, rawInfo);
         }

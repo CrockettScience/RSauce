@@ -1,4 +1,4 @@
-package sauce.core.scene;
+package sauce.core.engine;
 
 import sauce.core.engine.Scene;
 import sauce.core.engine.SceneManager;

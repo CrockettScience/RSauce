@@ -11,7 +11,7 @@ import sauce.asset.scripts.Script;
 import sauce.core.Main;
 import sauce.core.Preferences;
 import sauce.core.engine.*;
-import sauce.core.scene.BackgroundAttribute;
+import sauce.core.engine.BackgroundAttribute;
 import sauce.core.engine.Camera;
 import sauce.core.engine.Scene;
 import sauce.core.engine.SceneManager;
@@ -68,16 +68,6 @@ public class Demo extends Scene implements InputClient{
 
         });
 
-        Button atlas = new Button<>(Preferences.ASSET_ROOT + "button.png", "Atlas Demo", 128, 56, 0, new Script<Argument, Return>(){
-
-            @Override
-            protected Return scriptMain(Argument args) {
-                SceneManager.setScene(new AtlasDemo());
-                return null;
-            }
-
-        });
-
         Button exit = new Button<>(Preferences.ASSET_ROOT + "button.png", "Exit", 128, 20, 0, new Script<Argument, Return>(){
 
             @Override
@@ -93,11 +83,9 @@ public class Demo extends Scene implements InputClient{
         putEntity("RSauce", title);
         putEntity("Version String", new Text(Preferences.ASSET_ROOT + "coderCrux.ttf", Color.C_BLACK, Preferences.ENGINE_VERSION, 8, 128, 128, 0, 6));
         putEntity("Eggy", eggy);
-        putEntity("Atlas", atlas);
         putEntity("Exit", exit);
 
         buttons.add(eggy);
-        buttons.add(atlas);
         buttons.add(exit);
 
         InputServer.bind(this);
@@ -118,7 +106,6 @@ public class Demo extends Scene implements InputClient{
         activateEntity("RSauce");
         activateEntity("Version String");
         activateEntity("Eggy");
-        activateEntity("Atlas");
         activateEntity("Exit");
     }
 

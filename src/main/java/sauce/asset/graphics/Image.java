@@ -1,9 +1,9 @@
 package sauce.asset.graphics;
 
+import sauce.core.Preferences;
 
-import static org.lwjgl.opengl.GL11.*;
 import static sauce.util.io.ResourceUtil.*;
-import static sauce.util.io.GraphicsUtil.*;
+import static sauce.asset.graphics.GraphicsUtil.*;
 
 import java.io.*;
 
@@ -15,7 +15,6 @@ public class Image extends Graphic {
     // Properties
     private IOGraphic image;
     private int components;
-    private int texID = glGenTextures();
 
     public Image(String imagePath){
         IOResource resource;
@@ -30,15 +29,14 @@ public class Image extends Graphic {
 
         image = ioResourceToImage(resource, info);
         components = info.getComponents();
-        resize(info.getWidth(), info.getHeight(), info.getWidth(), info.getHeight());
+        resize(info.getWidth(), info.getHeight(), TextureAtlas.register(imagePath, image, false));
 
     }
 
     @Override
     protected float[] regionCoordinates() {
         checkDisposed();
-        float[] arr = {0f, 0f, 1f, 0f, 1f, 1f, 0f, 1f};
-        return arr;
+        return GraphicsUtil.getRegionCoordinatesAdjustedForTextureRegion(region);
     }
 
     @Override
@@ -50,7 +48,7 @@ public class Image extends Graphic {
     @Override
     protected int textureID() {
         checkDisposed();
-        return texID;
+        return region.page.textureID();
     }
 
     @Override
@@ -64,9 +62,4 @@ public class Image extends Graphic {
         checkDisposed();
     }
 
-    @Override
-    public void dispose() {
-        super.dispose();
-        glDeleteTextures(texID);
-    }
 }

@@ -2,7 +2,6 @@ package sauce.core.engine;
 
 import sauce.asset.audio.AudioThread;
 import sauce.core.Preferences;
-import sauce.core.scene.CameraChangeSubscriber;
 import util.RSauceLogger;
 import util.structures.nonsaveable.Set;
 

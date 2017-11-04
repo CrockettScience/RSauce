@@ -38,15 +38,7 @@ public class CollisionTest extends StepSystem implements InputClient {
 
             Sprite buttonSprite = new Sprite(Preferences.ASSET_ROOT + "button.png", 2, 1, buttonMatrix, false, 0);
 
-            collisionButton = new Entity() {
-                private Sprite sprite = buttonSprite;
-
-                @Override
-                public void dispose() {
-                    super.dispose();
-                    sprite.dispose();
-                }
-            };
+            collisionButton = new Entity();
 
             buttonSprite.setAnimationState("off");
 

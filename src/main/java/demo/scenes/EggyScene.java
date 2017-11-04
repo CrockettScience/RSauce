@@ -6,7 +6,6 @@ import sauce.core.Preferences;
 import demo.entities.Eggy;
 import demo.systems.CollisionTest;
 import sauce.core.engine.*;
-import sauce.core.scene.*;
 import sauce.input.InputClient;
 import sauce.input.InputEvent;
 import sauce.input.InputServer;

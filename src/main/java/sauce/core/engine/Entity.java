@@ -85,5 +85,8 @@ public class Entity{
             Engine.getEngine().entityChangedComponents(this);
     }
 
-    public void dispose(){}
+    public void dispose(){
+        for(Component c : componentMap.valueSet())
+            c.dispose();
+    }
 }

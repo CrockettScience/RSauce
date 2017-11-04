@@ -1,6 +1,5 @@
 package sauce.asset.graphics;
 
-import sauce.util.io.GraphicsUtil;
 import sauce.util.misc.AssetDisposedException;
 import sauce.util.misc.Disposable;
 import util.Vector2D;
@@ -9,40 +8,48 @@ import util.Vector2D;
  * Created by John Crockett.
  */
 public abstract class Graphic implements Disposable {
-    protected boolean disposed = false;
+    private boolean disposed = false;
 
     // Properties
     protected int width;
     protected int height;
-    private int absWidth;
-    private int absHeight;
-    protected float angle = 0.0f;
-    protected float xScale = 1.0f;
-    protected float yScale = 1.0f;
+    private Vector2D origin = new Vector2D(0, 0);
+    private float angle = 0.0f;
+    private float xScale = 1.0f;
+    private float yScale = 1.0f;
 
-    protected Vector2D center;
-    protected Vector2D origin = new Vector2D(0, 0);
+    Vector2D center;
+    TextureAtlas.TextureRegion region;
 
-    public Graphic(int basicWidth, int basicHeight, int actualWidth, int actualHeight){
+    Graphic(int basicWidth, int basicHeight, TextureAtlas.TextureRegion reg){
         width = basicWidth;
         height = basicHeight;
 
-        absWidth = actualWidth;
-        absHeight = actualHeight;
+        region = reg;
 
-        center = new Vector2D(basicWidth / 2, basicHeight / 2);
+        center = findCenter();
     }
 
-    public Graphic(){}
-
-    protected final void resize(int basicWidth, int basicHeight, int actualWidth, int actualHeight){
+    Graphic(int basicWidth, int basicHeight){
         width = basicWidth;
         height = basicHeight;
 
-        absWidth = actualWidth;
-        absHeight = actualHeight;
+        center = findCenter();
+    }
 
-        center = new Vector2D(basicWidth / 2, basicHeight / 2);
+    Graphic(){};
+
+    void resize(int basicWidth, int basicHeight, TextureAtlas.TextureRegion reg){
+        width = basicWidth;
+        height = basicHeight;
+
+        region = reg;
+
+        center = findCenter();
+    }
+
+    private Vector2D findCenter(){
+        return region == null ? new Vector2D(width / 2, height / 2) : new Vector2D(region.p00.getX() + width / 2, region.p00.getY() + height / 2);
     }
 
     public int width(){
@@ -51,14 +58,6 @@ public abstract class Graphic implements Disposable {
 
     public int height(){
         return height;
-    }
-
-    public int actualWidth() {
-        return absWidth;
-    }
-
-    public int actualHeight() {
-        return absHeight;
     }
 
     public void setAngle(float degrees){
@@ -116,6 +115,8 @@ public abstract class Graphic implements Disposable {
     public void dispose(){
         checkDisposed();
         disposed = true;
+        if(region != null)
+            region.removeReference();
     }
 
     protected void checkDisposed(){

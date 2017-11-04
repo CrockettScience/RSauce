@@ -1,5 +1,5 @@
 
-package sauce.core.scene;
+package sauce.core.engine;
 
 
 import sauce.core.engine.Attribute;

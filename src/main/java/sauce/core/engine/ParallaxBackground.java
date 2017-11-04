@@ -1,8 +1,6 @@
 package sauce.core.engine;
 
 import sauce.asset.graphics.TiledTexture;
-import sauce.core.scene.CameraChangeSubscriber;
-import sauce.util.io.GraphicsUtil;
 import util.RSauceLogger;
 import util.Vector2D;
 
@@ -15,7 +13,7 @@ public class ParallaxBackground extends TiledTexture implements CameraChangeSubs
 
     public ParallaxBackground(String fileSource, int xScrollFactor, int yScrollFactor) {
         super(fileSource, 0, 0);
-        resize(SceneManager.getCamera().getWidth() + actualWidth(), SceneManager.getCamera().getHeight() + actualHeight());
+        resize(SceneManager.getCamera().getWidth() + getIOImage().getGraphicInfo().getWidth(), SceneManager.getCamera().getHeight() + getIOImage().getGraphicInfo().getHeight());
 
         xScroll = xScrollFactor;
         yScroll = yScrollFactor;
@@ -79,31 +77,16 @@ public class ParallaxBackground extends TiledTexture implements CameraChangeSubs
         yPos = yPosition;
     }
 
-    int texID(){
-        checkDisposed();
-        return textureID();
-    }
-
-    int getParallaxComponents(){
-        checkDisposed();
-        return components();
-    }
-
-    GraphicsUtil.IOGraphic getParallaxIOImage(){
-        checkDisposed();
-        return getIOImage();
-    }
-
     @Override
     public void cameraResized(Vector2D newSize) {
         checkDisposed();
-        resize(newSize.getX() + actualWidth(), newSize.getY() + actualHeight());
+        resize(newSize.getX() + getIOImage().getGraphicInfo().getWidth(), newSize.getY() + getIOImage().getGraphicInfo().getHeight());
     }
 
     @Override
     public void cameraChanged(Camera newCamera) {
         checkDisposed();
-        resize(newCamera.getWidth() + actualWidth(), newCamera.getHeight() + actualHeight());
+        resize(newCamera.getWidth() +getIOImage().getGraphicInfo().getWidth(), newCamera.getHeight() + getIOImage().getGraphicInfo().getHeight());
         xPos = -newCamera.getX();
         yPos = -newCamera.getY();
     }

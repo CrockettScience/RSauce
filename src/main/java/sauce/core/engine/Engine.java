@@ -3,7 +3,6 @@ package sauce.core.engine;
 import sauce.core.Preferences;
 import sauce.asset.graphics.DrawBatch;
 import sauce.core.Main;
-import sauce.core.scene.BackgroundAttribute;
 import util.RSauceLogger;
 import util.structures.nonsaveable.ArrayList;
 import util.structures.nonsaveable.Set;
@@ -185,12 +184,12 @@ public final class Engine {
 
                     Camera cam = SceneManager.getCamera();
 
-                    int modX = back.getXPos() % back.actualWidth();
-                    int modY = back.getYPos() % back.actualHeight();
+                    int modX = back.getXPos() % back.getIOImage().getGraphicInfo().getWidth();
+                    int modY = back.getYPos() % back.getIOImage().getGraphicInfo().getHeight();
 
                     render.batch.add(back,
-                            cam.getX() + (modX < 0 ? modX : modX - back.actualWidth()),
-                            cam.getY() + (modY < 0 ? modY : modY - back.actualHeight()));
+                            cam.getX() + (modX < 0 ? modX : modX - back.getIOImage().getGraphicInfo().getWidth()),
+                            cam.getY() + (modY < 0 ? modY : modY - back.getIOImage().getGraphicInfo().getHeight()));
                 }
             }
 
@@ -221,22 +220,17 @@ public final class Engine {
 
                     Camera cam = SceneManager.getCamera();
 
-                    int modX = fore.getXPos() % fore.actualWidth();
-                    int modY = fore.getYPos() % fore.actualHeight();
+                    int modX = fore.getXPos() % fore.getIOImage().getGraphicInfo().getWidth();
+                    int modY = fore.getYPos() % fore.getIOImage().getGraphicInfo().getWidth();
 
                     render.batch.add(fore,
-                            cam.getX() + (modX < 0 ? modX : modX - fore.actualWidth()),
-                            cam.getY() + (modY < 0 ? modY : modY - fore.actualHeight()));
+                            cam.getX() + (modX < 0 ? modX : modX - fore.getIOImage().getGraphicInfo().getWidth()),
+                            cam.getY() + (modY < 0 ? modY : modY - fore.getIOImage().getGraphicInfo().getHeight()));
                 }
             }
 
             render.batch.renderBatch();
         }
-    }
-
-    private void swapBuffer(){
-
-
     }
 
     private EntitySet onlyEntitiesWithComponent(Class<? extends Component> c){

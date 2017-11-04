@@ -16,11 +16,11 @@ import static org.lwjgl.stb.STBVorbis.*;
 public class AudioUtil {
 
     public static AudioUtil.IOAudio ioResourceToAudio(ResourceUtil.IOResource resource, AudioInfo info){
-        return new IOAudio(resource.buffer, info);
+        return new IOAudio(resource.getBuffer(), info);
     }
 
     public static AudioInfo getAudioInfo(ResourceUtil.IOResource resource){
-        return new AudioInfo(resource.buffer);
+        return new AudioInfo(resource.getBuffer());
     }
 
     public static class AudioInfo {

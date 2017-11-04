@@ -3,7 +3,6 @@ package sauce.asset.graphics;
 import sauce.asset.scripts.Script;
 import util.structures.nonsaveable.Queue;
 import util.Vector2D;
-import static sauce.util.io.GraphicsUtil.*;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -50,9 +49,6 @@ public class DrawBatch {
             if(image != null) {
 
                 glBindTexture(GL_TEXTURE_2D, image.textureID());
-
-                if (image.getIOImage() != null)
-                    applyIOImageForDrawing(image.getIOImage(), image.actualWidth(), image.actualHeight(), image.components());
 
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);

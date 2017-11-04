@@ -1,16 +1,9 @@
 package sauce.core.engine;
 
-import sauce.asset.graphics.Surface;
-import sauce.core.Preferences;
-import sauce.core.scene.CameraChangeSubscriber;
 import sauce.util.ogl.OGLCoordinateSystem;
 import util.RSauceLogger;
 import util.Vector2D;
 import util.structures.nonsaveable.Set;
-
-import static org.lwjgl.opengl.EXTFramebufferObject.GL_FRAMEBUFFER_EXT;
-import static org.lwjgl.opengl.EXTFramebufferObject.glBindFramebufferEXT;
-import static org.lwjgl.opengl.GL11.*;
 
 /**
  *

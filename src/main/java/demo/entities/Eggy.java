@@ -73,7 +73,6 @@ public class Eggy extends Entity{
     @Override
     public void dispose(){
         super.dispose();
-        eggyComponent.getImage().dispose();
         if(controller.removeEggy(this)){
             Engine.getEngine().removeStepSystem(EggyControl.class);
             controller = null;

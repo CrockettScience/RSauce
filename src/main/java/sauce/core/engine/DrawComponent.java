@@ -76,4 +76,9 @@ public class DrawComponent implements Component {
 
     }
 
+    @Override
+    public void dispose() {
+        if(image != null)
+            image.dispose();
+    }
 }

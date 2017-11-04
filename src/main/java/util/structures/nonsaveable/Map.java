@@ -31,7 +31,7 @@ public class Map<K, V> {
         int currentPos = findPos(key);
         K other = mapTable[currentPos] == null ? null : mapTable[currentPos].key;
 
-        return key.equals(other);
+        return key.equals(other) && mapTable[currentPos].isActive;
     }
 
     public boolean put(K key, V value) {

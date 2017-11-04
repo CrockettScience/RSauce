@@ -87,7 +87,7 @@ public class Button<A extends Argument, R extends Return> extends Entity {
 
     @Override
     public void dispose() {
-        getComponent(DrawComponent.class).getImage().dispose();
+        super.dispose();
         if(tag != null)
             tag.dispose();
     }

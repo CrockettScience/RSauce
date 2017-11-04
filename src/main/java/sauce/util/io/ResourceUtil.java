@@ -1,7 +1,5 @@
 package sauce.util.io;
 
-import org.lwjgl.BufferUtils;
-
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SeekableByteChannel;
@@ -31,10 +29,14 @@ public class ResourceUtil {
     }
 
     public static class IOResource{
-        ByteBuffer buffer;
+        private ByteBuffer buffer;
 
-        IOResource(ByteBuffer aBuffer){
+        public IOResource(ByteBuffer aBuffer){
             buffer = aBuffer;
+        }
+
+        public ByteBuffer getBuffer() {
+            return buffer;
         }
     }
 }

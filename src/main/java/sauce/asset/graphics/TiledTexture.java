@@ -1,61 +1,69 @@
 package sauce.asset.graphics;
 
-import sauce.util.io.GraphicsUtil;
+import sauce.util.io.ResourceUtil;
+
+import java.io.IOException;
+
+import static sauce.asset.graphics.GraphicsUtil.getGraphicInfo;
+import static sauce.asset.graphics.GraphicsUtil.ioResourceToImage;
+import static sauce.util.io.ResourceUtil.loadResource;
 
 /**
  * Created by John Crockett.
  */
 public class TiledTexture extends Graphic {
-    private Image image;
+    private GraphicsUtil.IOGraphic ioGraphic;
 
     public TiledTexture(String fileSource, int width, int height){
-        image = new Image(fileSource);
+        ResourceUtil.IOResource resource;
 
-        resize(width, height, image.width, image.height);
+        try{
+            resource = loadResource(fileSource);
+        } catch(IOException e){
+            throw new RuntimeException();
+        }
+
+        GraphicsUtil.GraphicInfo info = getGraphicInfo(resource);
+
+        ioGraphic = ioResourceToImage(resource, info);
+        resize(info.getWidth(), info.getHeight(), TextureAtlas.register(fileSource, ioGraphic, true));
     }
 
     @Override
     protected float[] regionCoordinates() {
         checkDisposed();
-        float w = (float)width() / (float)actualWidth();
-        float h = (float)height() / (float)actualHeight();
+        float w = (float)width() / (float)getIOImage().getGraphicInfo().getWidth();
+        float h = (float)height() / (float)getIOImage().getGraphicInfo().getHeight();
 
-        float[] arr = { 0, 0, w, 0, w, -h, 0, -h};
-        return arr;
+        return new float[]{ 0, 0, w, 0, w, -h, 0, -h};
     }
 
     public void resize(int width, int height){
         checkDisposed();
 
-        resize(width, height, image.width, image.height);
+        resize(width, height, region);
     }
 
     @Override
     protected int components() {
         checkDisposed();
-        return image.components();
+        return ioGraphic.getGraphicInfo().getComponents();
     }
 
     @Override
     protected int textureID() {
         checkDisposed();
-        return image.textureID();
+        return region.page.textureID();
     }
 
     @Override
     public GraphicsUtil.IOGraphic getIOImage() {
         checkDisposed();
-        return image.getIOImage();
+        return ioGraphic;
     }
 
     @Override
     public void update(double delta) {
         checkDisposed();
-    }
-
-    @Override
-    public void dispose(){
-        super.dispose();
-        image.dispose();
     }
 }

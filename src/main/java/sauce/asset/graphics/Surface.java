@@ -1,6 +1,5 @@
 package sauce.asset.graphics;
 
-import sauce.util.io.GraphicsUtil;
 import sauce.util.ogl.OGLCoordinateSystem;
 import util.Color;
 import util.RSauceLogger;
@@ -19,7 +18,7 @@ public class Surface extends Graphic {
     private int texID = glGenTextures();
 
     public Surface(int width, int height){
-        super(width, height, width, height);
+        super(width, height);
 
         glBindTexture(GL_TEXTURE_2D, texID);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
