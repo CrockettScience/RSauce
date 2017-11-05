@@ -1,8 +1,8 @@
 package sauce.asset.graphics;
 
 import sauce.asset.scripts.Script;
-import util.structures.nonsaveable.Queue;
 import util.Vector2D;
+import util.structures.nonsaveable.Queue;
 
 import static org.lwjgl.opengl.GL11.*;
 

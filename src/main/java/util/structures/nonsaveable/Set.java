@@ -1,7 +1,5 @@
 package util.structures.nonsaveable;
 
-import org.lwjgl.system.CallbackI;
-
 import java.util.Iterator;
 
 /**

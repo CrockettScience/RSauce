@@ -2,9 +2,6 @@
 package sauce.core.engine;
 
 
-import sauce.core.engine.Attribute;
-import sauce.core.engine.ParallaxBackground;
-
 import java.util.Iterator;
 
 /**

@@ -11,9 +11,6 @@ import sauce.asset.scripts.Script;
 import sauce.core.Main;
 import sauce.core.Preferences;
 import sauce.core.engine.*;
-import sauce.core.engine.BackgroundAttribute;
-import sauce.core.engine.Camera;
-import sauce.core.engine.Scene;
 import sauce.input.InputClient;
 import sauce.input.InputEvent;
 import sauce.input.InputServer;
@@ -24,9 +21,7 @@ import util.structures.nonsaveable.ArrayList;
 
 import static demo.util.DemoUtil.HEIGHT;
 import static demo.util.DemoUtil.WIDTH;
-import static sauce.input.InputServer.ACTION_RELEASED;
-import static sauce.input.InputServer.KEY_ESCAPE;
-import static sauce.input.InputServer.MOUSE_LEFT;
+import static sauce.input.InputServer.*;
 
 public class Demo extends Scene implements InputClient{
     private ArrayList<Button> buttons = new ArrayList<>();

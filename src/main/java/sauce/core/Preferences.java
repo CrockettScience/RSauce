@@ -1,12 +1,11 @@
 package sauce.core;
 
+import org.lwjgl.glfw.GLFWVidMode;
 import sauce.util.misc.Ini;
 import util.RSauceLogger;
 import util.structures.special.SortedArrayList;
-import org.lwjgl.glfw.GLFWVidMode;
 
 import javax.swing.*;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.function.Consumer;
@@ -21,7 +20,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 public class Preferences {
 
     // Project CONSTANTS
-    public static final String ENGINE_VERSION = "0.3.6 Dev 21";
+    public static final String ENGINE_VERSION = "0.4.0";
     public static final String NAME = "RSauce " + ENGINE_VERSION;
     public static final String PROJECT_VERSION = "0.0.0";
 

@@ -5,7 +5,7 @@ import util.Color;
 import util.RSauceLogger;
 import util.structures.nonsaveable.Stack;
 
-import static org.lwjgl.opengl.EXTFramebufferObject.*;
+import static org.lwjgl.opengl.EXTFramebufferObject.GL_FRAMEBUFFER_EXT;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.*;
 

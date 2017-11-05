@@ -4,8 +4,6 @@ import util.RSauceLogger;
 import util.structures.nonsaveable.Stack;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
-import static org.lwjgl.opengl.GL11.glMatrixMode;
 
 public class OGLCoordinateSystem {
 

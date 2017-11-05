@@ -2,10 +2,10 @@ package util.collision;
 
 import sauce.core.engine.Component;
 import util.Vector2D;
-import static util.Vector2D.toVector2DDouble;
-import static util.collision.CollisionUtil.InternalUtil.*;
 
 import static java.lang.Math.*;
+import static util.Vector2D.toVector2DDouble;
+import static util.collision.CollisionUtil.InternalUtil.*;
 
 public class BoundBox implements Component {
     private int x;

@@ -1,6 +1,5 @@
 package sauce.core.engine;
 
-import util.structures.nonsaveable.ArrayList;
 import util.structures.nonsaveable.Set;
 
 import java.util.Iterator;

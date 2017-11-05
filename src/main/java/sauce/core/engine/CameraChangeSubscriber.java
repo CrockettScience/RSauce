@@ -1,6 +1,5 @@
 package sauce.core.engine;
 
-import sauce.core.engine.Camera;
 import util.Vector2D;
 
 public interface CameraChangeSubscriber {

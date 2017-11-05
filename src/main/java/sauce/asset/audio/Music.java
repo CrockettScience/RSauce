@@ -1,7 +1,6 @@
 package sauce.asset.audio;
 
 import static org.lwjgl.openal.AL10.*;
-import static org.lwjgl.openal.AL10.alSourcePlay;
 
 public class Music extends Audio {
 

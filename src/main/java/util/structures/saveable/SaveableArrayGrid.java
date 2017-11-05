@@ -1,7 +1,9 @@
 package util.structures.saveable;
 
 import util.structures.nonsaveable.ArrayGrid;
-import util.structures.saveable.util.*;
+import util.structures.saveable.util.CreateData;
+import util.structures.saveable.util.SaveableData;
+import util.structures.saveable.util.SaveableStructure;
 
 import java.io.*;
 import java.util.logging.Level;

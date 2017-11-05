@@ -1,10 +1,10 @@
 package sauce.asset.graphics;
 
 import sauce.util.io.ResourceUtil;
+import util.Vector2D;
 import util.structures.nonsaveable.ArrayGrid;
 import util.structures.nonsaveable.ArrayList;
 import util.structures.nonsaveable.Map;
-import util.Vector2D;
 
 import java.io.IOException;
 

@@ -3,7 +3,6 @@ package sauce.asset.audio;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.lwjgl.openal.AL10.*;
-import static org.lwjgl.openal.AL10.alSourcePlay;
 
 public class Effect extends Audio {
 

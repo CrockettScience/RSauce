@@ -5,9 +5,7 @@ import sauce.core.engine.StepSystem;
 
 import java.nio.FloatBuffer;
 
-import static org.lwjgl.glfw.GLFW.glfwGetJoystickAxes;
-import static org.lwjgl.glfw.GLFW.glfwGetJoystickButtons;
-import static org.lwjgl.glfw.GLFW.glfwGetJoystickName;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class ControllerMapper extends StepSystem {
 

@@ -3,17 +3,15 @@ package sauce.asset.audio;
 import sauce.core.Preferences;
 import sauce.util.misc.AssetDisposedException;
 import sauce.util.misc.Disposable;
-import util.RSauceLogger;
 
 import java.io.IOException;
 import java.nio.IntBuffer;
 
-import static sauce.util.io.ResourceUtil.*;
-import static sauce.util.io.AudioUtil.*;
-
 import static org.lwjgl.openal.AL10.*;
-import static org.lwjgl.openal.AL10.alSourcePlay;
 import static org.lwjgl.stb.STBVorbis.*;
+import static sauce.util.io.AudioUtil.*;
+import static sauce.util.io.ResourceUtil.IOResource;
+import static sauce.util.io.ResourceUtil.loadResource;
 
 public abstract class Audio implements Disposable{
     private boolean disposed = false;

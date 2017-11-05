@@ -8,10 +8,8 @@ import util.Vector2DDouble;
 import util.structures.nonsaveable.LinkedList;
 import util.structures.nonsaveable.Set;
 
-import static java.lang.Math.cos;
-import static java.lang.Math.pow;
-import static java.lang.Math.sin;
-import static util.DrawUtil.*;
+import static java.lang.Math.*;
+import static util.DrawUtil.quad;
 
 public class CollisionUtil {
 

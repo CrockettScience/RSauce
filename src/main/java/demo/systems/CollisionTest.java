@@ -9,12 +9,12 @@ import sauce.core.engine.Entity;
 import sauce.core.engine.StepSystem;
 import sauce.input.InputClient;
 import sauce.input.InputEvent;
-import static sauce.input.InputServer.*;
-
 import sauce.input.InputServer;
 import util.collision.BoundBox;
 import util.collision.CollisionUtil;
 import util.structures.nonsaveable.ArrayGrid;
+
+import static sauce.input.InputServer.*;
 
 public class CollisionTest extends StepSystem implements InputClient {
 

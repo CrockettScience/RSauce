@@ -1,8 +1,8 @@
 package sauce.util.io;
 
-import sauce.core.Preferences;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.stb.STBVorbisInfo;
+import sauce.core.Preferences;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;

@@ -1,9 +1,9 @@
 package sauce.core.engine;
 
 import sauce.asset.audio.AudioThread;
-import sauce.core.Preferences;
 import sauce.asset.graphics.DrawBatch;
 import sauce.core.Main;
+import sauce.core.Preferences;
 import util.RSauceLogger;
 import util.structures.nonsaveable.ArrayList;
 import util.structures.nonsaveable.Set;
@@ -14,7 +14,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.glClear;
 
 
 /**

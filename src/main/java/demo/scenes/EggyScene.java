@@ -1,10 +1,10 @@
 package demo.scenes;
 
+import demo.entities.Eggy;
+import demo.systems.CollisionTest;
 import sauce.asset.audio.AudioThread;
 import sauce.asset.audio.Music;
 import sauce.core.Preferences;
-import demo.entities.Eggy;
-import demo.systems.CollisionTest;
 import sauce.core.engine.*;
 import sauce.input.InputClient;
 import sauce.input.InputEvent;
@@ -12,9 +12,8 @@ import sauce.input.InputServer;
 
 import static demo.util.DemoUtil.HEIGHT;
 import static demo.util.DemoUtil.WIDTH;
-import static sauce.input.InputServer.*;
-
 import static sauce.core.Preferences.ASSET_ROOT;
+import static sauce.input.InputServer.*;
 
 /**
  * Created by John Crockett.

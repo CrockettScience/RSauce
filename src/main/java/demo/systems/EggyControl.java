@@ -1,10 +1,10 @@
 package demo.systems;
 
-import sauce.core.Preferences;
 import demo.entities.Eggy;
 import sauce.asset.audio.AudioThread;
 import sauce.asset.audio.Effect;
 import sauce.asset.graphics.Sprite;
+import sauce.core.Preferences;
 import sauce.core.engine.DrawComponent;
 import sauce.core.engine.Engine;
 import sauce.core.engine.StepSystem;

@@ -1,21 +1,20 @@
 package sauce.asset.fonts;
 
-import static sauce.util.io.FontUtil.*;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.stb.STBTruetype.*;
-import static org.lwjgl.system.MemoryStack.stackPush;
-
-import sauce.asset.graphics.Surface;
+import org.lwjgl.stb.STBTTAlignedQuad;
+import org.lwjgl.system.MemoryStack;
 import sauce.util.io.ResourceUtil;
 import sauce.util.misc.AssetDisposedException;
 import sauce.util.misc.Disposable;
 import util.Color;
-import org.lwjgl.stb.STBTTAlignedQuad;
-import org.lwjgl.system.MemoryStack;
 
 import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.stb.STBTruetype.*;
+import static org.lwjgl.system.MemoryStack.stackPush;
+import static sauce.util.io.FontUtil.*;
 
 public class Font implements Disposable {
     private boolean disposed = false;

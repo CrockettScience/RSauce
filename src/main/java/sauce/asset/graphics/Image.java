@@ -1,11 +1,10 @@
 package sauce.asset.graphics;
 
-import sauce.core.Preferences;
+import java.io.IOException;
 
-import static sauce.util.io.ResourceUtil.*;
 import static sauce.asset.graphics.GraphicsUtil.*;
-
-import java.io.*;
+import static sauce.util.io.ResourceUtil.IOResource;
+import static sauce.util.io.ResourceUtil.loadResource;
 
 /**
  * Created by John Crockett.

@@ -1,14 +1,14 @@
 package sauce.asset.audio;
 
+import org.lwjgl.BufferUtils;
+import org.lwjgl.openal.AL;
+import org.lwjgl.openal.ALC;
+import org.lwjgl.openal.ALCCapabilities;
 import sauce.util.io.AudioUtil;
 import util.RSauceLogger;
 import util.structures.nonsaveable.Map;
 import util.structures.nonsaveable.Queue;
 import util.structures.nonsaveable.Set;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.openal.AL;
-import org.lwjgl.openal.ALC;
-import org.lwjgl.openal.ALCCapabilities;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
