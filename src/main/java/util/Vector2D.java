@@ -1,6 +1,7 @@
 package util;
 
 import util.structures.nonsaveable.HashGrid;
+import util.structures.nonsaveable.Set;
 
 /**
  * Created by John Crockett.
@@ -9,12 +10,12 @@ public class Vector2D implements Comparable<Vector2D> {
 
     private static HashGrid<Vector2D> vecMap = new HashGrid<>();
 
-    private int x;
-    private int y;
+    private int xx;
+    private int yy;
 
     private Vector2D(int x, int y) {
-        this.x = x;
-        this.y = y;
+        xx = x;
+        yy = y;
     }
 
     public static Vector2D create(int x, int y) {
@@ -29,23 +30,31 @@ public class Vector2D implements Comparable<Vector2D> {
     }
 
     public int getX(){
-        return x;
+        return xx;
     }
 
     public int getY(){
-        return y;
+        return yy;
     }
 
     public void setX(int x){
-        this.x = x;
+        setMap(xx, yy, x, yy);
     }
 
     public void setY(int y){
-        this.y = y;
+        setMap(xx, yy, xx, y);
+    }
+
+    private void setMap(int oldX, int oldY, int x, int y){
+        vecMap.set(oldX, oldY, null);
+        vecMap.set(x, y, null);
+
+        xx = x;
+        yy = y;
     }
 
     public static Vector2DDouble toVector2DDouble(Vector2D v){
-        return new Vector2DDouble((double) v.x, (double) v.y);
+        return new Vector2DDouble((double) v.xx, (double) v.yy);
     }
 
     @Override
@@ -54,11 +63,11 @@ public class Vector2D implements Comparable<Vector2D> {
             return false;
 
         Vector2D other = (Vector2D) obj;
-        return x == other.x && y == other.y;
+        return xx == other.xx && yy == other.yy;
     }
 
     @Override
     public int compareTo(Vector2D o) {
-        return x == o.x ? y - o.y : x - o.x;
+        return xx == o.xx ? yy - o.yy : xx - o.xx;
     }
 }

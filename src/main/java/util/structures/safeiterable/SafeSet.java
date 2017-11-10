@@ -1,4 +1,4 @@
-package util.structures.threadsafe;
+package util.structures.safeiterable;
 
 import util.structures.nonsaveable.Set;
 

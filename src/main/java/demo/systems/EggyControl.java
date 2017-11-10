@@ -1,7 +1,7 @@
 package demo.systems;
 
 import demo.entities.Eggy;
-import sauce.asset.audio.AudioThread;
+import sauce.asset.audio.AudioManager;
 import sauce.asset.audio.Effect;
 import sauce.asset.graphics.Sprite;
 import sauce.core.Preferences;
@@ -60,7 +60,7 @@ public class EggyControl extends StepSystem {
 
                 // 8fps
                 if (totalDelta >= 1.0 / 8) {
-                    AudioThread.enqueue(new Effect(Preferences.ASSET_ROOT + "blip.ogg"));
+                    AudioManager.enqueue(new Effect(Preferences.ASSET_ROOT + "blip.ogg"));
                     totalDelta = 0;
                 }
 

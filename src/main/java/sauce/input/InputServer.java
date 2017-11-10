@@ -8,7 +8,7 @@ import sauce.core.engine.Engine;
 import util.Vector2D;
 import util.Vector2DDouble;
 import util.structures.special.Pool;
-import util.structures.threadsafe.SafeArrayList;
+import util.structures.safeiterable.SafeArrayList;
 
 import static org.lwjgl.glfw.GLFW.*;
 

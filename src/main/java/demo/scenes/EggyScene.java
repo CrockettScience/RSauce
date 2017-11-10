@@ -2,7 +2,7 @@ package demo.scenes;
 
 import demo.entities.Eggy;
 import demo.systems.CollisionTest;
-import sauce.asset.audio.AudioThread;
+import sauce.asset.audio.AudioManager;
 import sauce.asset.audio.Music;
 import sauce.core.Preferences;
 import sauce.core.engine.*;
@@ -44,7 +44,7 @@ public class EggyScene extends Scene implements InputClient {
         // Bind to recieve InputEvents
         bind(this);
 
-        AudioThread.enqueue(new Music(Preferences.ASSET_ROOT + "Patriarchy.ogg", 21.391f));
+        AudioManager.enqueue(new Music(Preferences.ASSET_ROOT + "Patriarchy.ogg", 21.391f));
     }
 
     @Override
@@ -65,7 +65,7 @@ public class EggyScene extends Scene implements InputClient {
             e.setScene(new Demo());
         }
 
-        if(event.key() == KEY_UP || event.key() == KEY_DOWN || event.key() == KEY_LEFT || event.key() == KEY_RIGHT ) {
+        else if(event.key() == KEY_UP || event.key() == KEY_DOWN || event.key() == KEY_LEFT || event.key() == KEY_RIGHT ) {
             if (event.key() == KEY_UP) {
                 e.getCamera().move(e.getCamera().getX(), e.getCamera().getY() + VIEW_SPEED);
             }
@@ -83,14 +83,33 @@ public class EggyScene extends Scene implements InputClient {
             }
         }
 
-        if(event.key() == KEY_ENTER)
+        else if(event.key() == KEY_ENTER)
             Engine.getEngine().add(new CollisionTest(0, (Eggy) getEntity("eggy")));
 
-        if(event.key() == KEY_F && event.action() == ACTION_RELEASED){
+        else if(event.key() == KEY_F && event.action() == ACTION_RELEASED){
             if(Preferences.isFullscreen())
                 Preferences.setFullscreen(false);
             else
                 Preferences.setFullscreen(true);
+        }
+
+        else if(event.key() == KEY_U && event.action() == ACTION_PRESSED){
+            AudioManager.setVolMaster(AudioManager.getVolMaster() + 0.1f);
+        }
+        else if(event.key() == KEY_J && event.action() == ACTION_PRESSED){
+            AudioManager.setVolMaster(AudioManager.getVolMaster() - 0.1f);
+        }
+        else if(event.key() == KEY_I && event.action() == ACTION_PRESSED){
+            AudioManager.setVolSFX(AudioManager.getVolSFX() + 0.1f);
+        }
+        else if(event.key() == KEY_K && event.action() == ACTION_PRESSED){
+            AudioManager.setVolSFX(AudioManager.getVolSFX() - 0.1f);
+        }
+        else if(event.key() == KEY_O && event.action() == ACTION_PRESSED){
+            AudioManager.setVolMusic(AudioManager.getVolMusic() + 0.1f);
+        }
+        else if(event.key() == KEY_L && event.action() == ACTION_PRESSED){
+            AudioManager.setVolMusic(AudioManager.getVolMusic() - 0.1f);
         }
     }
 

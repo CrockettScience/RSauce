@@ -1,6 +1,6 @@
 package sauce.core.engine;
 
-import sauce.asset.audio.AudioThread;
+import sauce.asset.audio.AudioManager;
 import sauce.asset.graphics.DrawBatch;
 import sauce.core.Main;
 import sauce.core.Preferences;
@@ -58,8 +58,8 @@ public final class Engine {
             scene.dispose();
         }
 
-        AudioThread.clear();
-        AudioThread.clearAudioCache();
+        AudioManager.clear();
+        AudioManager.clearAudioCache();
 
         setCamera(new Camera(0, 0, Preferences.getCurrentScreenWidth(), Preferences.getCurrentScreenHeight(), 0, 0), true);
 

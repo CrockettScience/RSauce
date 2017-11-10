@@ -2,7 +2,7 @@ package demo.scenes;
 
 import demo.entities.Button;
 import demo.entities.Text;
-import sauce.asset.audio.AudioThread;
+import sauce.asset.audio.AudioManager;
 import sauce.asset.audio.Music;
 import sauce.asset.graphics.Image;
 import sauce.asset.scripts.Argument;
@@ -84,7 +84,7 @@ public class Demo extends Scene implements InputClient{
         buttons.add(exit);
 
         InputServer.bind(this);
-        AudioThread.enqueue(new Music(Preferences.ASSET_ROOT + "waves.ogg", 0));
+        AudioManager.enqueue(new Music(Preferences.ASSET_ROOT + "waves.ogg", 0));
 
         if(Preferences.DEBUG)
             Engine.getEngine().add(new CollisionUtil.DrawBBoxWires());

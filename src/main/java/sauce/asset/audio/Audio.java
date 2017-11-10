@@ -13,7 +13,7 @@ import static sauce.util.io.AudioUtil.*;
 import static sauce.util.io.ResourceUtil.IOResource;
 import static sauce.util.io.ResourceUtil.loadResource;
 
-public abstract class Audio implements Disposable{
+abstract class Audio implements Disposable{
     private boolean disposed = false;
 
     private String fileName;
@@ -23,7 +23,7 @@ public abstract class Audio implements Disposable{
     private int samplesLeft;
     private boolean removeMe = false;
 
-    public Audio(String fileSource){
+    Audio(String fileSource){
         fileName = fileSource;
     }
 
@@ -41,7 +41,7 @@ public abstract class Audio implements Disposable{
         samplesLeft = audio.getAudioInfo().getLengthSamples();
     }
 
-    protected void loadAudio(IOAudio cachedAudio){
+    void loadAudio(IOAudio cachedAudio){
         audio = cachedAudio;
 
         source = alGenSources();
@@ -53,7 +53,7 @@ public abstract class Audio implements Disposable{
         return fileName;
     }
 
-    protected boolean stream(int buffer) {
+    boolean stream(int buffer) {
         if(disposed)
             throw new AssetDisposedException(this);
 
@@ -82,7 +82,7 @@ public abstract class Audio implements Disposable{
         return true;
     }
 
-    protected void rewind() {
+    void rewind() {
         if(disposed)
             throw new AssetDisposedException(this);
 
@@ -90,7 +90,7 @@ public abstract class Audio implements Disposable{
         samplesLeft = audio.getAudioInfo().getLengthSamples();
     }
 
-    protected void seek(int sample_number) {
+    void seek(int sample_number) {
         if(disposed)
             throw new AssetDisposedException(this);
 
@@ -98,7 +98,7 @@ public abstract class Audio implements Disposable{
         samplesLeft = audio.getAudioInfo().getLengthSamples() - sample_number;
     }
 
-    protected boolean play(IntBuffer buffers) {
+    boolean play(IntBuffer buffers) {
         if(disposed)
             throw new AssetDisposedException(this);
 
@@ -116,7 +116,7 @@ public abstract class Audio implements Disposable{
 
     protected abstract boolean update();
 
-    protected int getSource(){
+    int getSource(){
         return source;
     }
 
@@ -141,7 +141,7 @@ public abstract class Audio implements Disposable{
         return audio;
     }
 
-    protected int getSamplesLeft() {
+    int getSamplesLeft() {
         return samplesLeft;
     }
 

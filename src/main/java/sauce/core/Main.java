@@ -5,7 +5,7 @@ import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
-import sauce.asset.audio.AudioThread;
+import sauce.asset.audio.AudioManager;
 import sauce.core.engine.Engine;
 import sauce.util.ogl.OGLCoordinateSystem;
 import util.RSauceLogger;
@@ -51,7 +51,7 @@ public class Main{
             loop(initEngine());
         }
         finally {
-            AudioThread.killAudioThread();
+            AudioManager.killAudioThread();
 
             glfwFreeCallbacks(window);
             glfwDestroyWindow(window);
@@ -110,7 +110,7 @@ public class Main{
     }
 
     private static void initOpenAL(){
-        Thread audio = AudioThread.getAudioThread();
+        Thread audio = AudioManager.getAudioThread();
         audio.start();
     }
 
