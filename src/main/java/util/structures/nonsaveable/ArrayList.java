@@ -68,6 +68,15 @@ public class ArrayList<T> implements Iterable<T> {
         return null;
     }
 
+    public boolean contains(T element){
+        for(T e : elements){
+            if(e != null && e.equals(element))
+                return true;
+        }
+
+        return false;
+    }
+
     public final void clear() {
         elements = (T[]) new Object[10];
         size = 0;
@@ -83,7 +92,10 @@ public class ArrayList<T> implements Iterable<T> {
     }
 
     private void reAllocate() {
+        T[] arr = elements;
         elements = (T[]) new Object[elements.length * 2];
+
+        System.arraycopy(arr, 0, elements, 0, arr.length);
     }
 
     @Override

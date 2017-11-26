@@ -82,11 +82,6 @@ public class Preferences {
 
         TEXTURE_PAGE_SIZE = proj.readInt("GRAPHICS", "TexturePageSize", 2048);
 
-
-        for(SupportedVideoModes.FullScreenMode mode : SupportedVideoModes.getModes()){
-            RSauceLogger.printDebugln(mode.width + " x " + mode.height + " at " + mode.rate);
-        }
-
     }
 
     // FINAL SETTINGS: Require a restart to change.
