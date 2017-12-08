@@ -10,6 +10,10 @@ abstract class System implements Comparable<System>{
         prio = priority;
     }
 
+    public System(){
+        prio = 0;
+    }
+
     public abstract void addedToEngine(Engine engine);
     public abstract void update(double delta);
     public abstract void removedFromEngine(Engine engine);

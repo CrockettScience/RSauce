@@ -52,7 +52,12 @@ public class Set<T> implements Iterable<T> {
     }
 
     public boolean add(T e) {
-        return add(new SetEntry(e));
+        if(contains(e))
+            return false;
+
+        add(new SetEntry<>(e));
+
+        return true;
     }
 
     public Set<T> union(Set<? extends T> otherSet) {
@@ -111,7 +116,7 @@ public class Set<T> implements Iterable<T> {
         return xor;
     }
 
-    protected boolean add(SetEntry<T> entry) {
+    protected void add(SetEntry<T> entry) {
         int pos = findPos(entry.element);
 
         if(entryTable[pos] == null){
@@ -122,21 +127,20 @@ public class Set<T> implements Iterable<T> {
             if(occupied >= entryTable.length)
                 rehash();
 
-            return true;
         } else{
             SetEntry<T> currentEntry = entryTable[pos];
             while(true){
                 if(currentEntry.next == null){
                     currentEntry.next = entry;
                     currentSize++;
-                    return true;
+                    return;
                 }
 
-                if(!currentEntry.isActive){
-                    currentEntry.isActive = true;
-                    currentEntry.element = entry.element;
+                if(!currentEntry.next.isActive){
+                    entry.next = currentEntry.next.next;
+                    currentEntry.next = entry;
                     currentSize++;
-                    return true;
+                    return;
                 }
 
                 currentEntry = currentEntry.next;
@@ -246,7 +250,7 @@ public class Set<T> implements Iterable<T> {
     protected class SetEntry<T> {
         public T element;
         public boolean isActive;
-        public SetEntry next = null;
+        public SetEntry<T> next = null;
 
         protected SetEntry(T e) {
             element = e;

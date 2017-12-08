@@ -9,8 +9,6 @@ import util.structures.nonsaveable.Map;
  * @author Jonathan Crockett
  */
 public abstract class Scene{
-    private static final Engine ENGINE = Engine.getEngine();
-
     private final Map<Class<? extends Attribute>, Attribute> attributes = new Map<>();
     private Map<String, EntityEntry> entities = new Map<>();
 
@@ -19,7 +17,16 @@ public abstract class Scene{
     protected abstract void sceneMain();
     
     public void addAttribute(Attribute attr){
-        attributes.put(attr.getClass(), attr);
+        if(!attributes.containsKey(attr.getClass())) {
+            if(attr.addedToScene(this)){
+                attributes.put(attr.getClass(), attr);
+
+            }
+
+            attr.removedFromScene(this);
+        }
+        else
+            RSauceLogger.printWarningln(attr.getClass().getSimpleName() + " could not be added to the Scene, the Scene already contians an attribute of this type");
     }
     
     public <AnyType extends Attribute> AnyType getAttribute(Class<AnyType> attr){
@@ -31,7 +38,7 @@ public abstract class Scene{
     }
     
     public void removeAttribute(Class<? extends Attribute> attr){
-        attributes.remove(attr);
+        attributes.remove(attr).removedFromScene(this);
     }
     
     public void putEntity(String key, Entity ent){
@@ -108,7 +115,7 @@ public abstract class Scene{
         entities.clear();
 
         for (Attribute attr : attributes.valueSet()){
-            attr.dispose();
+            attr.removedFromScene(this);
         }
 
         attributes.clear();

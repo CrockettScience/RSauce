@@ -1,10 +1,12 @@
 package util.structures.nonsaveable;
 
+import java.util.Iterator;
+
 /**
  * Created by John Crockett.
  */
 
-public class HashGrid<T> {
+public class HashGrid<T> implements Iterable<T>{
     protected Map<Coordinates, T> gridMap;
 
     public HashGrid() {
@@ -32,6 +34,11 @@ public class HashGrid<T> {
 
     protected Coordinates makeCoordinates(int x, int y) {
         return new Coordinates(x, y);
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return gridMap.valueSet().iterator();
     }
 
     protected static class Coordinates {

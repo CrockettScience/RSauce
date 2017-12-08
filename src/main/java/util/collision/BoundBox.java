@@ -1,13 +1,21 @@
 package util.collision;
 
 import sauce.core.engine.Component;
+import sauce.core.engine.Entity;
+import util.RSauceLogger;
 import util.Vector2D;
+import util.structures.nonsaveable.Set;
 
 import static java.lang.Math.*;
 import static util.Vector2D.toVector2DDouble;
 import static util.collision.CollisionUtil.InternalUtil.*;
 
 public class BoundBox implements Component {
+
+    private static EntityGrid sceneGrid = null;
+
+    private Entity entity = null;
+
     private int x;
     private int y;
     private int width;
@@ -26,6 +34,10 @@ public class BoundBox implements Component {
     private Vector2D upperROuter;
     private Vector2D lowerLOuter;
     private Vector2D lowerROuter;
+
+    static void setSceneGrid(EntityGrid grid){
+        sceneGrid = grid;
+    }
 
     public BoundBox(int posX, int posY, int wide, int high){
         x = posX;
@@ -100,6 +112,9 @@ public class BoundBox implements Component {
 
     public void moveTo(int newX, int newY){
         updatePosition(newX - x, newY - y);
+
+        if(sceneGrid != null)
+            sceneGrid.boxMoved(this);
     }
 
     public void resize(int newWidth, int newHeight){
@@ -107,6 +122,9 @@ public class BoundBox implements Component {
         height = newHeight;
 
         setup();
+
+        if(sceneGrid != null)
+            sceneGrid.boxMoved(this);
     }
 
     public void rotate(double radianAngle){
@@ -195,6 +213,35 @@ public class BoundBox implements Component {
         }
     }
 
+    public Set<Entity> getCollisions(){
+        if(sceneGrid == null){
+            RSauceLogger.printErrorln("Entity " + entity + " tried to check for a collision, but the current scene has no EntityGrid Attribute.");
+            return null;
+        }
+
+        Set<Entity> collidingEntities = new Set<>();
+
+        for(BoundBox box : sceneGrid.getCollisions(this))
+            collidingEntities.add(box.entity);
+
+        return collidingEntities;
+    }
+
+    public Set<Entity> checkForCollisionsAt(Vector2D point){
+        Set<Entity> collidingEntities = new Set<>();
+
+        int oldX = x;
+        int oldY = y;
+
+        moveTo(point.getX(), point.getY());
+
+        collidingEntities = getCollisions();
+
+        moveTo(oldX, oldY);
+
+        return collidingEntities;
+    }
+
     public int getX() {
         return x;
     }
@@ -222,6 +269,21 @@ public class BoundBox implements Component {
     Box getInnerBox(){
         return new Box(getRotatedPoint(upperLInner, center, angle), getRotatedPoint(upperRInner, center, angle),
                        getRotatedPoint(lowerLInner, center, angle), getRotatedPoint(lowerRInner, center, angle));
+    }
+
+    @Override
+    public boolean addedToEntity(Entity ent) {
+        entity = ent;
+        return true;
+    }
+
+    @Override
+    public void removedFromEntity(Entity ent) {
+        entity = null;
+    }
+
+    public Entity getEntity(){
+        return entity;
     }
 
     static class Box {

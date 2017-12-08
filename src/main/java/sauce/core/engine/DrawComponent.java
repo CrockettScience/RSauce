@@ -2,6 +2,7 @@ package sauce.core.engine;
 
 import sauce.asset.graphics.Graphic;
 import sauce.asset.scripts.Script;
+import util.RSauceLogger;
 import util.Vector3D;
 
 /**
@@ -10,7 +11,6 @@ import util.Vector3D;
 public class DrawComponent implements Component {
     private Graphic image;
     private Vector3D position;
-    private Entity entity = null;
     private Script<?, ?> script;
 
     public DrawComponent(Graphic asset, int x, int y, int z){
@@ -27,15 +27,6 @@ public class DrawComponent implements Component {
     public DrawComponent(Script<?, ?> drawScript, int z){
         script = drawScript;
         position = new Vector3D(0, 0, z);
-    }
-
-    boolean setEntity(Entity ent){
-        if(entity == null) {
-            entity = ent;
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public void attachDrawScript(Script<?, ?> drawScript){
@@ -74,6 +65,24 @@ public class DrawComponent implements Component {
         position.setZ(z);
         Engine.getEngine().entityChangedZ(entity);
 
+    }
+
+    private Entity entity = null;
+
+    @Override
+    public boolean addedToEntity(Entity ent) {
+        if(entity == null) {
+            entity = ent;
+            return true;
+        }
+
+        RSauceLogger.printWarningln("This DrawComponent already belongs to another Entity");
+        return false;
+    }
+
+    @Override
+    public void removedFromEntity(Entity ent) {
+        entity = null;
     }
 
     @Override

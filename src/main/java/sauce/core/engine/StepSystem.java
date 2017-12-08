@@ -9,4 +9,7 @@ public abstract class StepSystem extends System {
     public StepSystem(int priority){
         super(priority);
     }
+    public StepSystem(){
+        super();
+    }
 }
