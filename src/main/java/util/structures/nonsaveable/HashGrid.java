@@ -1,5 +1,7 @@
 package util.structures.nonsaveable;
 
+import util.structures.special.PriorityMap;
+
 import java.util.Iterator;
 
 /**
@@ -29,8 +31,10 @@ public class HashGrid<T> implements Iterable<T>{
     }
 
     public void clear() {
-        gridMap = new Map<Coordinates, T>();
+        gridMap = new Map<>();
     }
+
+
 
     protected Coordinates makeCoordinates(int x, int y) {
         return new Coordinates(x, y);

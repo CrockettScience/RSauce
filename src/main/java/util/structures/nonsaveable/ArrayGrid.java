@@ -51,4 +51,14 @@ public class ArrayGrid<T> {
     public void clear() {
         grid = (T[][]) new Object[width][height];
     }
+
+    public void clear(T o){
+        clear();
+
+        for(int i = 0; i < width; i++){
+            for(int j = 0; j < height; j++){
+                set(i, j, o);
+            }
+        }
+    }
 }
