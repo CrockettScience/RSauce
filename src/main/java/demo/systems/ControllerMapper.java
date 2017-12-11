@@ -1,7 +1,6 @@
 package demo.systems;
 
-import sauce.core.engine.Engine;
-import sauce.core.engine.StepSystem;
+import sauce.core.StepSystem;
 
 import java.nio.FloatBuffer;
 
@@ -17,7 +16,7 @@ public class ControllerMapper extends StepSystem {
     }
 
     @Override
-    public void addedToEngine(Engine engine) {
+    public void addedToEngine() {
 
         System.out.println("Controller Mapping Utility");
         String name = glfwGetJoystickName(joyId);
@@ -33,7 +32,7 @@ public class ControllerMapper extends StepSystem {
     }
 
     @Override
-    public void removedFromEngine(Engine engine) {
+    public void removedFromEngine() {
 
     }
 }

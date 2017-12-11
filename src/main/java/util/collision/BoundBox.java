@@ -1,7 +1,7 @@
 package util.collision;
 
-import sauce.core.engine.Component;
-import sauce.core.engine.Entity;
+import sauce.core.Component;
+import sauce.core.Entity;
 import util.RSauceLogger;
 import util.Vector2D;
 import util.structures.nonsaveable.Set;

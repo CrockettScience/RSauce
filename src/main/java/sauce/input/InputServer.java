@@ -3,8 +3,8 @@ package sauce.input;
 
 import sauce.core.Main;
 import sauce.core.Preferences;
-import sauce.core.engine.Camera;
-import sauce.core.engine.Engine;
+import sauce.core.Camera;
+import sauce.core.Engine;
 import util.Vector2D;
 import util.Vector2DDouble;
 import util.structures.special.Pool;
@@ -139,7 +139,7 @@ public class InputServer {
 
     public static Vector2D mouseScenePosition(){
         Vector2DDouble pos = mouseScreenPosition();
-        Camera cam = Engine.getEngine().getCamera();
+        Camera cam = Engine.getCamera();
 
         int sWidth = Preferences.getCurrentScreenWidth();
         int sHeight = Preferences.getCurrentScreenHeight();

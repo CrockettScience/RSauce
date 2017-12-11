@@ -1,4 +1,4 @@
-package sauce.core.engine;
+package sauce.core;
 
 
 import util.RSauceLogger;
@@ -134,18 +134,18 @@ public abstract class Scene{
 
         private void deactivate(){
             isActive = false;
-            Engine.getEngine().removeEntity(entity);
+            Engine.remove(entity);
         }
 
         private void activate(){
             isActive = true;
-            Engine.getEngine().add(entity);
+            Engine.add(entity);
         }
 
         private void dispose(){
             entity.dispose();
             if(isActive){
-                Engine.getEngine().removeEntity(entity);
+                Engine.remove(entity);
                 isActive = false;
             }
         }

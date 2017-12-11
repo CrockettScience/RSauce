@@ -2,9 +2,9 @@ package demo.entities;
 
 import demo.systems.EggyControl;
 import sauce.asset.graphics.Sprite;
-import sauce.core.engine.DrawComponent;
-import sauce.core.engine.Engine;
-import sauce.core.engine.Entity;
+import sauce.core.DrawComponent;
+import sauce.core.Engine;
+import sauce.core.Entity;
 import util.collision.BoundBox;
 import util.structures.nonsaveable.ArrayGrid;
 
@@ -41,7 +41,7 @@ public class Eggy extends Entity{
 
         if(controller == null){
             controller = new EggyControl(0,this,  eggyComponent, box);
-            Engine.getEngine().add(controller);
+            Engine.add(controller);
         }
         else{
             controller.addEggy(this, eggyComponent, box);
@@ -74,7 +74,7 @@ public class Eggy extends Entity{
     public void dispose(){
         super.dispose();
         if(controller.removeEggy(this)){
-            Engine.getEngine().removeStepSystem(EggyControl.class);
+            Engine.remove(EggyControl.class);
             controller = null;
         }
     }

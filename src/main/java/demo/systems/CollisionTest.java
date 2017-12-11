@@ -3,10 +3,10 @@ package demo.systems;
 import demo.entities.Eggy;
 import sauce.asset.graphics.Sprite;
 import sauce.core.Preferences;
-import sauce.core.engine.DrawComponent;
-import sauce.core.engine.Engine;
-import sauce.core.engine.Entity;
-import sauce.core.engine.StepSystem;
+import sauce.core.DrawComponent;
+import sauce.core.Engine;
+import sauce.core.Entity;
+import sauce.core.StepSystem;
 import sauce.input.InputClient;
 import sauce.input.InputEvent;
 import sauce.input.InputServer;
@@ -28,7 +28,7 @@ public class CollisionTest extends StepSystem implements InputClient {
     }
 
     @Override
-    public void addedToEngine(Engine engine) {
+    public void addedToEngine() {
         {
             ArrayGrid<String> buttonMatrix = new ArrayGrid<>(2, 1);
             {
@@ -50,8 +50,8 @@ public class CollisionTest extends StepSystem implements InputClient {
             collisionButton.addComponent(box);
         }
 
-        Engine.getEngine().add(collisionButton);
-        Engine.getEngine().add(new CollisionUtil.DrawBBoxWires());
+        Engine.add(collisionButton);
+        Engine.add(new CollisionUtil.DrawBBoxWires());
 
         InputServer.bind(this);
     }
@@ -72,10 +72,10 @@ public class CollisionTest extends StepSystem implements InputClient {
     }
 
     @Override
-    public void removedFromEngine(Engine engine) {
-        Engine.getEngine().removeEntity(collisionButton);
+    public void removedFromEngine() {
+        Engine.remove(collisionButton);
         eggy.removeComponent(BoundBox.class);
-        Engine.getEngine().removeDrawSystem(CollisionUtil.DrawBBoxWires.class);
+        Engine.remove(CollisionUtil.DrawBBoxWires.class);
 
         collisionButton.dispose();
 
@@ -85,7 +85,7 @@ public class CollisionTest extends StepSystem implements InputClient {
     @Override
     public void receivedKeyEvent(InputEvent event) {
         if(event.key() == KEY_Q && event.action() == ACTION_PRESSED){
-            Engine.getEngine().removeStepSystem(this.getClass());
+            Engine.remove(this.getClass());
         }
     }
 

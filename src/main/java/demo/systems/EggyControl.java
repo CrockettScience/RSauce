@@ -5,9 +5,8 @@ import sauce.asset.audio.AudioManager;
 import sauce.asset.audio.Effect;
 import sauce.asset.graphics.Sprite;
 import sauce.core.Preferences;
-import sauce.core.engine.DrawComponent;
-import sauce.core.engine.Engine;
-import sauce.core.engine.StepSystem;
+import sauce.core.DrawComponent;
+import sauce.core.StepSystem;
 import util.collision.BoundBox;
 import util.structures.nonsaveable.Map;
 
@@ -27,7 +26,7 @@ public class EggyControl extends StepSystem {
     }
 
     @Override
-    public void addedToEngine(Engine engine) {
+    public void addedToEngine() {
 
     }
 
@@ -88,7 +87,7 @@ public class EggyControl extends StepSystem {
     }
 
     @Override
-    public void removedFromEngine(Engine engine) {
+    public void removedFromEngine() {
         components.clear();
     }
 }

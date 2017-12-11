@@ -8,9 +8,7 @@ import sauce.asset.graphics.Image;
 import sauce.asset.scripts.Argument;
 import sauce.asset.scripts.Return;
 import sauce.asset.scripts.Script;
-import sauce.core.Main;
-import sauce.core.Preferences;
-import sauce.core.engine.*;
+import sauce.core.*;
 import sauce.input.InputClient;
 import sauce.input.InputEvent;
 import sauce.input.InputServer;
@@ -28,9 +26,8 @@ public class Demo extends Scene implements InputClient{
 
     @Override
     protected void loadResources() {
-        Engine e = Engine.getEngine();
 
-        e.setCamera(new Camera(0, 0, WIDTH, HEIGHT), true);
+        Engine.setCamera(new Camera(0, 0, WIDTH, HEIGHT), true);
 
         BackgroundAttribute bg  = new BackgroundAttribute();
         addAttribute(bg);
@@ -57,7 +54,7 @@ public class Demo extends Scene implements InputClient{
 
             @Override
             protected Return scriptMain(Argument args) {
-                e.setScene(new EggyScene());
+                Engine.setScene(new EggyScene());
                 return null;
             }
 
@@ -87,7 +84,7 @@ public class Demo extends Scene implements InputClient{
         AudioManager.enqueue(new Music(Preferences.ASSET_ROOT + "waves.ogg", 0));
 
         if(Preferences.DEBUG)
-            Engine.getEngine().add(new CollisionUtil.DrawBBoxWires());
+            Engine.add(new CollisionUtil.DrawBBoxWires());
 
     }
 

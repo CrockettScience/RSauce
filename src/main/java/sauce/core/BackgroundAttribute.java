@@ -1,5 +1,5 @@
 
-package sauce.core.engine;
+package sauce.core;
 
 
 import java.util.Iterator;

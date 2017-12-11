@@ -1,4 +1,4 @@
-package sauce.core.engine;
+package sauce.core;
 
 import sauce.asset.graphics.Graphic;
 import sauce.asset.scripts.Script;
@@ -63,7 +63,7 @@ public class DrawComponent implements Component {
 
     public void setZ(int z){
         position.setZ(z);
-        Engine.getEngine().entityChangedZ(entity);
+        Engine.entityChangedZ(entity);
 
     }
 

@@ -5,9 +5,9 @@ import sauce.asset.scripts.Argument;
 import sauce.asset.scripts.Return;
 import sauce.asset.scripts.Script;
 import sauce.core.Preferences;
-import sauce.core.engine.DrawComponent;
-import sauce.core.engine.Engine;
-import sauce.core.engine.Entity;
+import sauce.core.DrawComponent;
+import sauce.core.Engine;
+import sauce.core.Entity;
 import util.Color;
 import util.collision.BoundBox;
 import util.structures.nonsaveable.ArrayGrid;
@@ -66,7 +66,7 @@ public class Button<A extends Argument, R extends Return> extends Entity {
         super.addedToEngine();
 
         if(tag != null)
-            Engine.getEngine().add(tag);
+            Engine.add(tag);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class Button<A extends Argument, R extends Return> extends Entity {
         super.removedFromEngine();
 
         if(tag != null)
-            Engine.getEngine().removeEntity(tag);
+            Engine.remove(tag);
     }
 
     public R invoke(){

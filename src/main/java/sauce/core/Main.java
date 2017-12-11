@@ -6,10 +6,10 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 import sauce.asset.audio.AudioManager;
-import sauce.core.engine.Engine;
 import sauce.util.ogl.OGLCoordinateSystem;
 import util.RSauceLogger;
 
+import java.lang.System;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
@@ -26,7 +26,6 @@ import static sauce.core.Preferences.*;
 
 public class Main{
 
-    // The window handle
     private static long window;
 
     private static boolean running = true;
@@ -48,7 +47,7 @@ public class Main{
         RSauceLogger.printDebugln(w[0] + "x" + h[0]);
 
         try {
-            loop(initEngine());
+            loop();
         }
         finally {
             AudioManager.killAudioThread();
@@ -114,13 +113,7 @@ public class Main{
         audio.start();
     }
 
-    private static Engine initEngine(){
-        Engine.getEngine().setScene(new Demo());
-
-        return Engine.getEngine();
-    }
-
-    private static void loop(Engine engine) {
+    private static void loop() {
         double current = glfwGetTime();
         double last;
 
@@ -129,7 +122,7 @@ public class Main{
 
             last = current;
             current = glfwGetTime();
-            engine.update(current - last);
+            Engine.update(current - last);
 
             glfwPollEvents();
         }

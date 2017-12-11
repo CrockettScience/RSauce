@@ -1,4 +1,4 @@
-package sauce.core.engine;
+package sauce.core;
 
 import sauce.util.ogl.OGLCoordinateSystem;
 import util.RSauceLogger;

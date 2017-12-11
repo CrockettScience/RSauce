@@ -1,6 +1,6 @@
 package util.collision;
 
-import sauce.core.engine.*;
+import sauce.core.*;
 import sauce.input.InputServer;
 import util.Color;
 import util.Vector2D;
@@ -31,7 +31,7 @@ public class CollisionUtil {
 
     }
 
-    public static class DrawBBoxWires extends DrawSystem implements EntitySubscriber{
+    public static class DrawBBoxWires extends DrawSystem implements EntitySubscriber {
 
         private LinkedList<Entity> boxes = new LinkedList<>();
 
@@ -40,8 +40,8 @@ public class CollisionUtil {
         }
 
         @Override
-        public void addedToEngine(Engine engine) {
-            Engine.getEngine().bindEntitySubscriber(this);
+        public void addedToEngine() {
+            Engine.bindEntitySubscriber(this);
 
         }
 
@@ -62,8 +62,8 @@ public class CollisionUtil {
         }
 
         @Override
-        public void removedFromEngine(Engine engine) {
-            Engine.getEngine().unbindEntitySubscriber(this);
+        public void removedFromEngine() {
+            Engine.unbindEntitySubscriber(this);
         }
 
         @Override

@@ -1,4 +1,4 @@
-package sauce.core.engine;
+package sauce.core;
 
 import sauce.asset.graphics.TiledTexture;
 import util.RSauceLogger;
@@ -13,14 +13,13 @@ public class ParallaxBackground extends TiledTexture implements CameraChangeSubs
 
     public ParallaxBackground(String fileSource, int xScrollFactor, int yScrollFactor) {
         super(fileSource, 0, 0);
-        Engine e = Engine.getEngine();
 
-        resize(e.getCamera().getWidth() + getIOImage().getGraphicInfo().getWidth(), e.getCamera().getHeight() + getIOImage().getGraphicInfo().getHeight());
+        resize(Engine.getCamera().getWidth() + getIOImage().getGraphicInfo().getWidth(), Engine.getCamera().getHeight() + getIOImage().getGraphicInfo().getHeight());
 
         xScroll = xScrollFactor;
         yScroll = yScrollFactor;
 
-        e.subscribeToCameraChanges(this);
+        Engine.subscribeToCameraChanges(this);
     }
 
     @Override
@@ -104,6 +103,6 @@ public class ParallaxBackground extends TiledTexture implements CameraChangeSubs
     public void dispose() {
         checkDisposed();
         super.dispose();
-        Engine.getEngine().unsubscribeToCameraChanges(this);
+        Engine.unsubscribeToCameraChanges(this);
     }
 }

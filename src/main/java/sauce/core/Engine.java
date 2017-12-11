@@ -1,9 +1,9 @@
-package sauce.core.engine;
+package sauce.core;
 
+import demo.scenes.Demo;
 import sauce.asset.audio.AudioManager;
 import sauce.asset.graphics.DrawBatch;
-import sauce.core.Main;
-import sauce.core.Preferences;
+import sauce.asset.graphics.Surface;
 import util.RSauceLogger;
 import util.structures.nonsaveable.ArrayList;
 import util.structures.nonsaveable.Set;
@@ -22,38 +22,35 @@ import static org.lwjgl.opengl.GL11.glClear;
  * Created by John Crockett.
  */
 public final class Engine {
-    private static Engine singletonEngine;
 
-    private EntitySet entities = new EntitySet();
-    private ArrayList<EntitySubscriber> subs = new ArrayList<>();
-    private PriorityMap<Class<? extends StepSystem>, StepSystem> steps = new PriorityMap<>();
-    private PriorityMap<Class<? extends DrawSystem>, DrawSystem> draws = new PriorityMap<>();
-    private RenderSystem render = new RenderSystem(0);
+    private static final Scene OPENING_SCENE = new Demo();
 
-    private Scene scene;
-    private Camera camera = new Camera(0,0, Preferences.getCurrentScreenWidth(), Preferences.getCurrentScreenHeight(), 0, 0);
-    private Set<CameraChangeSubscriber> cameraChangeSubscribers = new Set<>();
+    private static EntitySet entities = new EntitySet();
+    private static ArrayList<EntitySubscriber> subs = new ArrayList<>();
+    private static PriorityMap<Class<? extends StepSystem>, StepSystem> steps = new PriorityMap<>();
+    private static PriorityMap<Class<? extends DrawSystem>, DrawSystem> draws = new PriorityMap<>();
+    private static PriorityMap<Class<? extends GUISystem>, GUISystem> gui = new PriorityMap<>();
+    private static Surface GUILayer = new Surface(Preferences.getCurrentScreenWidth(), Preferences.getCurrentScreenHeight());
+    private static RenderSystem render = new RenderSystem(0);
 
-    private Engine() {
-        render.addedToEngine(this);
+    private static Scene scene;
+    private static Camera camera = new Camera(0,0, Preferences.getCurrentScreenWidth(), Preferences.getCurrentScreenHeight(), 0, 0);
+    private static Set<CameraChangeSubscriber> cameraChangeSubscribers = new Set<>();
+
+    static{
+        setScene(OPENING_SCENE);
+        render.addedToEngine();
     }
 
-    public static Engine getEngine(){
-        if(singletonEngine == null)
-            singletonEngine = new Engine();
-
-        return singletonEngine;
-    }
-
-    public Scene getCurrentScene() {
+    public static Scene getCurrentScene() {
         return scene;
     }
 
-    public Camera getCamera() {
+    public static Camera getCamera() {
         return camera;
     }
 
-    public void setScene(Scene aScene) {
+    public static void setScene(Scene aScene) {
         if(scene != null) {
             scene.dispose();
         }
@@ -68,7 +65,7 @@ public final class Engine {
         scene.sceneMain();
     }
 
-    public void setCamera(Camera aCamera, boolean disposeCurrent) {
+    public static void setCamera(Camera aCamera, boolean disposeCurrent) {
         if(aCamera == null) {
             RSauceLogger.printWarningln("You cannot set camera to a null value.");
             return;
@@ -88,47 +85,47 @@ public final class Engine {
         camera.activate();
     }
 
-    public void subscribeToCameraChanges(CameraChangeSubscriber sub){
+    public static void subscribeToCameraChanges(CameraChangeSubscriber sub){
         cameraChangeSubscribers.add(sub);
         camera.bindSubscriber(sub);
     }
 
-    public void unsubscribeToCameraChanges(CameraChangeSubscriber sub){
+    public static void unsubscribeToCameraChanges(CameraChangeSubscriber sub){
         cameraChangeSubscribers.remove(sub);
         camera.removeSubscriber(sub);
     }
 
-    public void bindEntitySubscriber(EntitySubscriber sub){
+    public static void bindEntitySubscriber(EntitySubscriber sub){
         subs.add(sub);
         sub.addQualifiedEntities(getEntityQualifier().all(sub.componentsToHave()).not(sub.componentsNotToHave()).getSet());
     }
 
-    public void unbindEntitySubscriber(EntitySubscriber sub){
+    public static void unbindEntitySubscriber(EntitySubscriber sub){
         subs.remove(sub);
     }
 
-    public boolean add(StepSystem sys){
+    public static boolean add(StepSystem sys){
         if(steps.containsKey(sys.getClass())){
             RSauceLogger.printWarningln("Can't add duplicate StepSystem " + sys.getClass().getName());
             return false;
         }
 
         steps.put(sys.getClass(), sys, sys.prio);
-        sys.addedToEngine(this);
+        sys.addedToEngine();
         return true;
     }
 
-    public boolean add(DrawSystem sys){
+    public static boolean add(DrawSystem sys){
         if(draws.containsKey(sys.getClass())){
             RSauceLogger.printWarningln("Can't add duplicate DrawSystem " + sys.getClass().getName());
             return false;
         }
         draws.put(sys.getClass(), sys, sys.prio);
-        sys.addedToEngine(this);
+        sys.addedToEngine();
         return true;
     }
 
-    public void add(Entity ent){
+    public static void add(Entity ent){
         entities.add(ent);
         ent.addedToEngine();
 
@@ -138,41 +135,65 @@ public final class Engine {
         }
     }
 
-    public boolean containsStepSystem(Class<? extends StepSystem> sys){
-        return steps.containsKey(sys);
+    public static boolean contains(Class<? extends EngineSystem> sys){
+        switch (sys.getSimpleName()){
+            case "GUISystem":
+                return gui.containsKey((Class<? extends GUISystem>) sys);
+
+            case "StepSystem":
+                return steps.containsKey((Class<? extends StepSystem>) sys);
+
+            case "DrawSystem":
+                return draws.containsKey((Class<? extends DrawSystem>) sys);
+        }
+
+        return false;
     }
 
-    public boolean containsDrawSystem(Class<? extends DrawSystem> sys){
-        return draws.containsKey(sys);
-    }
-
-    public boolean containsEntity(Entity ent){
+    public static boolean contains(Entity ent){
         return entities.contains(ent);
     }
 
-    public <T extends StepSystem> T removeStepSystem(Class<T> sys){
-        StepSystem ret = steps.get(sys);
-        if(ret == null){
-            RSauceLogger.printWarningln("System " + sys.getSimpleName() + " was not found in engine");
-            return null;
+    public static <T extends EngineSystem> T remove(Class<T> sys){
+        switch (sys.getSimpleName()){
+            case "GUISystem": {
+                GUISystem ret = gui.get((Class<? extends GUISystem>) sys);
+                if (ret == null) {
+                    RSauceLogger.printWarningln("EngineSystem " + sys.getSimpleName() + " was not found in engine");
+                    return null;
+                }
+                gui.remove((Class<? extends GUISystem>) sys);
+                ret.removedFromEngine();
+                return (T) ret;
+            }
+
+            case "StepSystem": {
+                StepSystem ret = steps.get((Class<? extends StepSystem>) sys);
+                if (ret == null) {
+                    RSauceLogger.printWarningln("EngineSystem " + sys.getSimpleName() + " was not found in engine");
+                    return null;
+                }
+                steps.remove((Class<? extends StepSystem>) sys);
+                ret.removedFromEngine();
+                return (T) ret;
+            }
+
+            case "DrawSystem": {
+                DrawSystem ret = draws.get((Class<? extends DrawSystem>) sys);
+                if (ret == null) {
+                    RSauceLogger.printWarningln("EngineSystem " + sys.getSimpleName() + " was not found in engine");
+                    return null;
+                }
+                draws.remove((Class<? extends DrawSystem>) sys);
+                ret.removedFromEngine();
+                return (T) ret;
+            }
         }
-        steps.remove(sys);
-        ret.removedFromEngine(this);
-        return (T) ret;
+
+        return null;
     }
 
-    public <T extends DrawSystem> T removeDrawSystem(Class<T> sys){
-        DrawSystem ret = draws.get(sys);
-        if(ret == null){
-            RSauceLogger.printWarningln("System " + sys.getSimpleName() + " was not found in engine");
-            return null;
-        }
-        draws.remove(sys);
-        ret.removedFromEngine(this);
-        return (T) ret;
-    }
-
-    public void removeEntity(Entity ent){
+    public static void remove(Entity ent){
         if(!entities.contains(ent)){
             RSauceLogger.printWarningln("Entity was not found in engine");
             return;
@@ -187,12 +208,12 @@ public final class Engine {
         }
     }
 
-    public void clearSystems(){
+    public static void clearSystems(){
         steps.clear();
         draws.clear();
     }
 
-    public void clearEntities(){
+    public static void clearEntities(){
         for(Entity ent : entities){
             for(EntitySubscriber sub : subs){
                 if(sub.containsEntity(ent)){
@@ -204,9 +225,9 @@ public final class Engine {
         }
     }
 
-    private double timeSinceLast;
+    private static double timeSinceLast;
 
-    public void update(double delta){
+    public static void update(double delta){
         timeSinceLast += delta;
         if(timeSinceLast >= 1.0 / Preferences.getFullscreenRefreshRate()) {
             step(timeSinceLast);
@@ -215,18 +236,20 @@ public final class Engine {
             draw(timeSinceLast);
             postDraw(timeSinceLast);
 
+            drawGUI(timeSinceLast);
+
             glfwSwapBuffers(Main.getWindowHandle());
             timeSinceLast = 0;
         }
     }
 
-    private void step(double delta){
+    private static void step(double delta){
         for (int i = 0; i < steps.size(); i++) {
             steps.next().update(delta);
         }
     }
 
-    private void preDraw(double delta){
+    private static void preDraw(double delta){
         glClear(GL_COLOR_BUFFER_BIT);
 
         Scene scene = getCurrentScene();
@@ -256,7 +279,7 @@ public final class Engine {
         }
     }
 
-    private void draw(double delta){
+    private static void draw(double delta){
         render.update(delta);
 
         for (int i = 0; i < draws.size(); i++) {
@@ -264,7 +287,7 @@ public final class Engine {
         }
     }
 
-    private void postDraw(double delta){
+    private static void postDraw(double delta){
         Scene scene = getCurrentScene();
 
         if(scene.containsAttribute(BackgroundAttribute.class)) {
@@ -292,19 +315,34 @@ public final class Engine {
         }
     }
 
-    private EntitySet onlyEntitiesWithComponent(Class<? extends Component> c){
+    private static void drawGUI(double delta){
+        if(Preferences.getCurrentScreenWidth() != GUILayer.width() || Preferences.getCurrentScreenHeight() != GUILayer.height()){
+            GUILayer.dispose();
+            GUILayer = new Surface(Preferences.getCurrentScreenWidth(), Preferences.getCurrentScreenHeight());
+        }
+
+        GUILayer.bind();
+        {
+            for (int i = 0; i < gui.size(); i++) {
+                gui.next().update(delta);
+            }
+        }
+        GUILayer.unbind();
+    }
+
+    private static EntitySet onlyEntitiesWithComponent(Class<? extends Component> c){
         return entities.onlyEntitiesWithComponent(c);
     }
 
-    private EntitySet onlyEntitiesWithoutComponent(Class<? extends Component> c){
+    private static EntitySet onlyEntitiesWithoutComponent(Class<? extends Component> c){
         return entities.onlyEntitiesWithoutComponent(c);
     }
 
-    public EntityQualifier getEntityQualifier(){
+    public static EntityQualifier getEntityQualifier(){
         return new EntityQualifier(entities);
     }
 
-    private static class RenderSystem extends System implements EntitySubscriber{
+    private static class RenderSystem extends EngineSystem implements EntitySubscriber{
         private SortedArrayList<Entity> entities = new SortedArrayList<>(new ZComparator());
         private final DrawBatch batch = new DrawBatch();
 
@@ -351,8 +389,8 @@ public final class Engine {
         }
 
         @Override
-        public void addedToEngine(Engine engine) {
-            engine.bindEntitySubscriber(this);
+        public void addedToEngine() {
+            Engine.bindEntitySubscriber(this);
         }
 
         @Override
@@ -368,8 +406,8 @@ public final class Engine {
         }
 
         @Override
-        public void removedFromEngine(Engine engine) {
-            engine.unbindEntitySubscriber(this);
+        public void removedFromEngine() {
+            Engine.unbindEntitySubscriber(this);
         }
 
         public void entityChangedZ(Entity ent){
@@ -386,7 +424,7 @@ public final class Engine {
         }
     }
 
-    public class EntityQualifier {
+    public static class EntityQualifier {
         private EntitySet ents;
 
         private EntityQualifier(EntitySet entities){
@@ -395,7 +433,7 @@ public final class Engine {
 
         public EntityQualifier all(Class<? extends Component>... components){
             if(components.length > 0) {
-                ents = Engine.this.onlyEntitiesWithComponent(components[0]);
+                ents = Engine.onlyEntitiesWithComponent(components[0]);
                 for (int i = 1; i < components.length; i++) {
                     ents = ents.onlyEntitiesWithComponent(components[i]);
                 }
@@ -406,7 +444,7 @@ public final class Engine {
 
         public EntityQualifier not(Class<? extends Component>... components){
             if(components.length > 0) {
-                ents = Engine.this.onlyEntitiesWithoutComponent(components[0]);
+                ents = Engine.onlyEntitiesWithoutComponent(components[0]);
                 for (int i = 1; i < components.length; i++) {
                     ents = ents.onlyEntitiesWithoutComponent(components[i]);
                 }
@@ -420,7 +458,7 @@ public final class Engine {
         }
     }
 
-    void entityChangedComponents(Entity ent){
+    static void entityChangedComponents(Entity ent){
         for(EntitySubscriber sub : subs){
             if(sub.containsEntity(ent)){
                 if( !(ent.hasAll(sub.componentsToHave()) && ent.hasNone(sub.componentsNotToHave())) )
@@ -432,7 +470,7 @@ public final class Engine {
         }
     }
 
-    void entityChangedZ(Entity ent){
+    static void entityChangedZ(Entity ent){
         if(render.containsEntity(ent))
             render.entityChangedZ(ent);
     }

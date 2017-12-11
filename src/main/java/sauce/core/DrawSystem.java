@@ -1,10 +1,10 @@
-package sauce.core.engine;
+package sauce.core;
 
 
 /**
  * Created by John Crockett.
  */
-public abstract class DrawSystem extends System {
+public abstract class DrawSystem extends EngineSystem {
 
     public DrawSystem(int priority){
         super(priority);

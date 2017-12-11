@@ -1,12 +1,12 @@
 package util.collision;
 
-import sauce.core.engine.*;
+import sauce.core.*;
 import util.Vector2D;
 import util.structures.nonsaveable.HashGrid;
 import util.structures.nonsaveable.Map;
 import util.structures.nonsaveable.Set;
 
-public class EntityGrid implements Attribute, EntitySubscriber{
+public class EntityGrid implements Attribute, EntitySubscriber {
 
     private Map<Entity, BoxEntry> boxes = new Map<>();
     private HashGrid<Bucket> buckets = new HashGrid<>();
@@ -18,14 +18,14 @@ public class EntityGrid implements Attribute, EntitySubscriber{
 
     @Override
     public boolean addedToScene(Scene scn) {
-        Engine.getEngine().bindEntitySubscriber(this);
+        Engine.bindEntitySubscriber(this);
         BoundBox.setSceneGrid(this);
         return true;
     }
 
     @Override
     public void removedFromScene(Scene scn) {
-        Engine.getEngine().unbindEntitySubscriber(this);
+        Engine.unbindEntitySubscriber(this);
         BoundBox.setSceneGrid(null);
     }
 

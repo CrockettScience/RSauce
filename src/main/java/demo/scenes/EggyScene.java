@@ -4,8 +4,7 @@ import demo.entities.Eggy;
 import demo.systems.CollisionTest;
 import sauce.asset.audio.AudioManager;
 import sauce.asset.audio.Music;
-import sauce.core.Preferences;
-import sauce.core.engine.*;
+import sauce.core.*;
 import sauce.input.InputClient;
 import sauce.input.InputEvent;
 import sauce.input.InputServer;
@@ -25,12 +24,11 @@ public class EggyScene extends Scene implements InputClient {
 
     @Override
     protected void loadResources() {
-        Engine e = Engine.getEngine();
 
-        e.setCamera(new Camera(0, 0, WIDTH, HEIGHT, 0, 0), true);
+        Engine.setCamera(new Camera(0, 0, WIDTH, HEIGHT, 0, 0), true);
 
         // Setup Eggy
-        Entity eggy1 = new Eggy(1, 1, e.getCamera().getWidth() / 2, e.getCamera().getHeight() / 2, 0);
+        Entity eggy1 = new Eggy(1, 1, Engine.getCamera().getWidth() / 2, Engine.getCamera().getHeight() / 2, 0);
 
         putEntity("eggy", eggy1);
 
@@ -50,7 +48,7 @@ public class EggyScene extends Scene implements InputClient {
     @Override
     protected void destroyResources() {
         InputServer.unbind(this);
-        Engine.getEngine().removeStepSystem(CollisionTest.class);
+        Engine.remove(CollisionTest.class);
     }
 
     @Override
@@ -60,31 +58,30 @@ public class EggyScene extends Scene implements InputClient {
 
     @Override
     public void receivedKeyEvent(InputEvent event) {
-        Engine e = Engine.getEngine();
         if(event.key() == KEY_ESCAPE && event.action() == ACTION_RELEASED){
-            e.setScene(new Demo());
+            Engine.setScene(new Demo());
         }
 
         else if(event.key() == KEY_UP || event.key() == KEY_DOWN || event.key() == KEY_LEFT || event.key() == KEY_RIGHT ) {
             if (event.key() == KEY_UP) {
-                e.getCamera().move(e.getCamera().getX(), e.getCamera().getY() + VIEW_SPEED);
+                Engine.getCamera().move(Engine.getCamera().getX(), Engine.getCamera().getY() + VIEW_SPEED);
             }
 
             if (event.key() == KEY_DOWN) {
-                e.getCamera().move(e.getCamera().getX(),e.getCamera().getY() - VIEW_SPEED);
+                Engine.getCamera().move(Engine.getCamera().getX(),Engine.getCamera().getY() - VIEW_SPEED);
             }
 
             if (event.key() == KEY_LEFT) {
-                e.getCamera().move(e.getCamera().getX() - VIEW_SPEED, e.getCamera().getY());
+                Engine.getCamera().move(Engine.getCamera().getX() - VIEW_SPEED, Engine.getCamera().getY());
             }
 
             if (event.key() == KEY_RIGHT) {
-                e.getCamera().move(e.getCamera().getX() + VIEW_SPEED, e.getCamera().getY());
+                Engine.getCamera().move(Engine.getCamera().getX() + VIEW_SPEED, Engine.getCamera().getY());
             }
         }
 
         else if(event.key() == KEY_ENTER)
-            Engine.getEngine().add(new CollisionTest(0, (Eggy) getEntity("eggy")));
+            Engine.add(new CollisionTest(0, (Eggy) getEntity("eggy")));
 
         else if(event.key() == KEY_F && event.action() == ACTION_RELEASED){
             if(Preferences.isFullscreen())
@@ -115,7 +112,7 @@ public class EggyScene extends Scene implements InputClient {
 
     @Override
     public void mouseScrolled(double x, double y) {
-        Camera v = Engine.getEngine().getCamera();
+        Camera v = Engine.getCamera();
         v.resize((int)(v.getWidth() + ZOOM_SPEED * -y), (int)(v.getHeight() + (ZOOM_SPEED * Preferences.getCurrentScreenHeight() / Preferences.getCurrentScreenWidth()) * -y));
     }
 }

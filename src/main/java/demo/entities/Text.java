@@ -5,8 +5,8 @@ import sauce.asset.graphics.Surface;
 import sauce.asset.scripts.Argument;
 import sauce.asset.scripts.Return;
 import sauce.asset.scripts.Script;
-import sauce.core.engine.DrawComponent;
-import sauce.core.engine.Entity;
+import sauce.core.DrawComponent;
+import sauce.core.Entity;
 import util.Color;
 
 public class Text extends Entity {

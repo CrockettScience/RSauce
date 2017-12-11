@@ -1,4 +1,4 @@
-package sauce.core.engine;
+package sauce.core;
 
 import util.RSauceLogger;
 import util.structures.nonsaveable.Map;
@@ -45,7 +45,7 @@ public class Entity{
         notifyEngine();
     }
 
-    public <T extends Component>T getComponent(Class<T> c){
+    public <T extends Component> T getComponent(Class<T> c){
         return (T) componentMap.get(c);
     }
 
@@ -85,7 +85,7 @@ public class Entity{
 
     void notifyEngine(){
         if(isInEngine)
-            Engine.getEngine().entityChangedComponents(this);
+            Engine.entityChangedComponents(this);
     }
 
     public void dispose(){

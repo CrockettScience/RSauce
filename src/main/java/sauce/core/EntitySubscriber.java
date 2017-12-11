@@ -1,4 +1,4 @@
-package sauce.core.engine;
+package sauce.core;
 
 import util.structures.nonsaveable.Set;
 
