@@ -7,6 +7,7 @@ import org.lwjgl.openal.ALCCapabilities;
 import sauce.asset.scripts.Argument;
 import sauce.asset.scripts.Return;
 import sauce.asset.scripts.Script;
+import sauce.core.concurrent.Concurrent;
 import sauce.core.coreutil.io.AudioUtil;
 import util.RSauceLogger;
 import util.structures.nonsaveable.Map;
@@ -30,7 +31,7 @@ public class AudioManager extends Thread {
     private static long audioContext;
 
     private static AudioManager singletonAudioThread;
-    private static boolean audioRunning = true;
+    private static boolean audioRunning = false;
     private static Set<OpenALPlayEntry> loadedAudio = new Set<>();
     private static ThreadSafeQueue<Script<?, ?>> scriptQueue = new ThreadSafeQueue<>();
     private static Queue<OpenALPlayEntry> removalQueue = new Queue<>();
@@ -53,6 +54,13 @@ public class AudioManager extends Thread {
 
     @Override
     public void run() {
+        if(audioRunning){
+            RSauceLogger.printWarningln("AudioThread is already running.");
+            return;
+        }
+
+        audioRunning = true;
+
         audioDevice = alcOpenDevice((ByteBuffer) null);
         if (audioDevice == NULL) {
             throw new IllegalStateException("Failed to open the default device.");
@@ -95,6 +103,16 @@ public class AudioManager extends Thread {
             alcSetThreadContext(NULL);
             alcDestroyContext(audioContext);
             alcCloseDevice(audioDevice);
+
+            if(audioRunning){
+                Concurrent.requestMainThread(new Script<Argument, Return>() {
+                    @Override
+                    protected Return scriptMain(Argument args) {
+                        AudioManager.getAudioThread().start();
+                        return null;
+                    }
+                }, null);
+            }
         }
     }
 
