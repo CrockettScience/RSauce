@@ -1,17 +1,17 @@
 package sauce.asset.audio;
 
-import sauce.core.Preferences;
-import sauce.util.misc.AssetDisposedException;
-import sauce.util.misc.Disposable;
+import sauce.core.engine.Preferences;
+import sauce.core.coreutil.misc.AssetDisposedException;
+import sauce.core.coreutil.misc.Disposable;
 
 import java.io.IOException;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.openal.AL10.*;
 import static org.lwjgl.stb.STBVorbis.*;
-import static sauce.util.io.AudioUtil.*;
-import static sauce.util.io.ResourceUtil.IOResource;
-import static sauce.util.io.ResourceUtil.loadResource;
+import static sauce.core.coreutil.io.AudioUtil.*;
+import static sauce.core.coreutil.io.ResourceUtil.IOResource;
+import static sauce.core.coreutil.io.ResourceUtil.loadResource;
 
 abstract class Audio implements Disposable{
     private boolean disposed = false;

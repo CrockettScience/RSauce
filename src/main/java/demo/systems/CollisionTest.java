@@ -2,16 +2,16 @@ package demo.systems;
 
 import demo.entities.Eggy;
 import sauce.asset.graphics.Sprite;
-import sauce.core.Preferences;
-import sauce.core.DrawComponent;
-import sauce.core.Engine;
-import sauce.core.Entity;
-import sauce.core.StepSystem;
+import sauce.core.engine.Preferences;
+import sauce.core.engine.DrawComponent;
+import sauce.core.engine.Engine;
+import sauce.core.engine.Entity;
+import sauce.core.engine.StepSystem;
 import sauce.input.InputClient;
 import sauce.input.InputEvent;
 import sauce.input.InputServer;
-import util.collision.BoundBox;
-import util.collision.CollisionUtil;
+import sauce.core.collision.BoundBox;
+import sauce.core.collision.CollisionUtil;
 import util.structures.nonsaveable.ArrayGrid;
 
 import static sauce.input.InputServer.*;

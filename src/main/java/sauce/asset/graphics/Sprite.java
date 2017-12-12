@@ -1,6 +1,7 @@
 package sauce.asset.graphics;
 
-import sauce.util.io.ResourceUtil;
+import sauce.core.coreutil.io.ResourceUtil;
+import util.RSauceLogger;
 import util.Vector2D;
 import util.structures.nonsaveable.ArrayGrid;
 import util.structures.nonsaveable.ArrayList;
@@ -10,7 +11,7 @@ import java.io.IOException;
 
 import static sauce.asset.graphics.GraphicsUtil.getGraphicInfo;
 import static sauce.asset.graphics.GraphicsUtil.ioResourceToImage;
-import static sauce.util.io.ResourceUtil.loadResource;
+import static sauce.core.coreutil.io.ResourceUtil.loadResource;
 
 /**
  * Created by John Crockett.
@@ -78,6 +79,35 @@ public class Sprite extends Graphic {
 
     }
 
+    public Sprite(String fileSource, int horizontalCount, int verticalCount, boolean looping, int fps) {
+        cellsInRow = horizontalCount;
+        cellsInColumn = verticalCount;
+        loop = looping;
+
+        for(int i = 0; i < cellsInColumn; i++){
+            for(int j = 0; j < cellsInRow; j++){
+                animationState.add(Vector2D.create(i, j));
+            }
+        }
+
+        frameLimit = 1.0 / fps;
+
+        ResourceUtil.IOResource resource;
+
+        try{
+            resource = loadResource(fileSource);
+        } catch(IOException e){
+            throw new RuntimeException();
+        }
+
+        GraphicsUtil.GraphicInfo info = getGraphicInfo(resource);
+
+        image = ioResourceToImage(resource, info);
+        components = info.getComponents();
+        resize(info.getWidth() / cellsInRow, info.getHeight() / cellsInColumn, TextureAtlas.register(fileSource, image, false));
+
+    }
+
     private double timeSinceLastUpdate;
     public void update(double delta){
         checkDisposed();
@@ -105,6 +135,11 @@ public class Sprite extends Graphic {
     }
 
     public void setAnimationState(String state){
+        if(animStateID == null) {
+            RSauceLogger.printWarningln("No IDMap given to construction of Sprite; cannot set animationState");
+            return;
+        }
+
         checkDisposed();
         if(!state.equals(animStateID)){
             animationState = idMap.get(state);

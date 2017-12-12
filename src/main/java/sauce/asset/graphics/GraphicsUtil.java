@@ -1,8 +1,8 @@
 package sauce.asset.graphics;
 
 import org.lwjgl.BufferUtils;
-import sauce.core.Preferences;
-import sauce.util.io.ResourceUtil;
+import sauce.core.engine.Preferences;
+import sauce.core.coreutil.io.ResourceUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;

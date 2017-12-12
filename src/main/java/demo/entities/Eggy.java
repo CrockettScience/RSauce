@@ -2,13 +2,13 @@ package demo.entities;
 
 import demo.systems.EggyControl;
 import sauce.asset.graphics.Sprite;
-import sauce.core.DrawComponent;
-import sauce.core.Engine;
-import sauce.core.Entity;
-import util.collision.BoundBox;
+import sauce.core.engine.DrawComponent;
+import sauce.core.engine.Engine;
+import sauce.core.engine.Entity;
+import sauce.core.collision.BoundBox;
 import util.structures.nonsaveable.ArrayGrid;
 
-import static sauce.core.Preferences.ASSET_ROOT;
+import static sauce.core.engine.Preferences.ASSET_ROOT;
 
 public class Eggy extends Entity{
 

@@ -1,6 +1,7 @@
 package sauce.asset.graphics;
 
-import sauce.util.ogl.OGLCoordinateSystem;
+import sauce.core.coreutil.ogl.OGLCoordinateSystem;
+import sauce.core.engine.Main;
 import util.Color;
 import util.RSauceLogger;
 import util.structures.nonsaveable.Stack;

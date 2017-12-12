@@ -3,8 +3,8 @@ package sauce.asset.graphics;
 import java.io.IOException;
 
 import static sauce.asset.graphics.GraphicsUtil.*;
-import static sauce.util.io.ResourceUtil.IOResource;
-import static sauce.util.io.ResourceUtil.loadResource;
+import static sauce.core.coreutil.io.ResourceUtil.IOResource;
+import static sauce.core.coreutil.io.ResourceUtil.loadResource;
 
 /**
  * Created by John Crockett.

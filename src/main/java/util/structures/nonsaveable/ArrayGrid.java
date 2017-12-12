@@ -1,10 +1,12 @@
 package util.structures.nonsaveable;
 
+import java.util.Iterator;
+
 /**
  * Created by John Crockett.
  */
 
-public class ArrayGrid<T> {
+public class ArrayGrid<T> implements Iterable<T> {
     protected T[][] grid;
     private int width;
     private int height;
@@ -59,6 +61,27 @@ public class ArrayGrid<T> {
             for(int j = 0; j < height; j++){
                 set(i, j, o);
             }
+        }
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new GridIterator();
+    }
+
+    private class GridIterator implements Iterator<T>{
+        private int x = 0;
+        private int y = 0;
+
+
+        @Override
+        public boolean hasNext() {
+            return x < width && y < height;
+        }
+
+        @Override
+        public T next() {
+            return get(x++, y++);
         }
     }
 }

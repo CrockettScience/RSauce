@@ -4,10 +4,10 @@ import demo.entities.Eggy;
 import sauce.asset.audio.AudioManager;
 import sauce.asset.audio.Effect;
 import sauce.asset.graphics.Sprite;
-import sauce.core.Preferences;
-import sauce.core.DrawComponent;
-import sauce.core.StepSystem;
-import util.collision.BoundBox;
+import sauce.core.engine.Preferences;
+import sauce.core.engine.DrawComponent;
+import sauce.core.engine.StepSystem;
+import sauce.core.collision.BoundBox;
 import util.structures.nonsaveable.Map;
 
 import static sauce.input.InputServer.*;

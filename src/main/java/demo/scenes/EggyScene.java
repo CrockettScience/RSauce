@@ -4,14 +4,15 @@ import demo.entities.Eggy;
 import demo.systems.CollisionTest;
 import sauce.asset.audio.AudioManager;
 import sauce.asset.audio.Music;
-import sauce.core.*;
+import sauce.core.attributes.BackgroundAttribute;
+import sauce.core.engine.*;
 import sauce.input.InputClient;
 import sauce.input.InputEvent;
 import sauce.input.InputServer;
 
 import static demo.util.DemoUtil.HEIGHT;
 import static demo.util.DemoUtil.WIDTH;
-import static sauce.core.Preferences.ASSET_ROOT;
+import static sauce.core.engine.Preferences.ASSET_ROOT;
 import static sauce.input.InputServer.*;
 
 /**

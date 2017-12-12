@@ -1,10 +1,10 @@
 package sauce.input;
 
 
-import sauce.core.Main;
-import sauce.core.Preferences;
-import sauce.core.Camera;
-import sauce.core.Engine;
+import sauce.core.engine.Main;
+import sauce.core.engine.Preferences;
+import sauce.core.engine.Camera;
+import sauce.core.engine.Engine;
 import util.Vector2D;
 import util.Vector2DDouble;
 import util.structures.special.Pool;

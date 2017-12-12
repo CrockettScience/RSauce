@@ -1,6 +1,6 @@
 package util;
 
-import sauce.core.Preferences;
+import sauce.core.engine.Preferences;
 
 /**
  * Utility logging and printing class for RSauce

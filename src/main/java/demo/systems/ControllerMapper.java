@@ -1,6 +1,6 @@
 package demo.systems;
 
-import sauce.core.StepSystem;
+import sauce.core.engine.StepSystem;
 
 import java.nio.FloatBuffer;
 

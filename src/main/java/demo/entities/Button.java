@@ -4,12 +4,12 @@ import sauce.asset.graphics.Sprite;
 import sauce.asset.scripts.Argument;
 import sauce.asset.scripts.Return;
 import sauce.asset.scripts.Script;
-import sauce.core.Preferences;
-import sauce.core.DrawComponent;
-import sauce.core.Engine;
-import sauce.core.Entity;
+import sauce.core.engine.Preferences;
+import sauce.core.engine.DrawComponent;
+import sauce.core.engine.Engine;
+import sauce.core.engine.Entity;
 import util.Color;
-import util.collision.BoundBox;
+import sauce.core.collision.BoundBox;
 import util.structures.nonsaveable.ArrayGrid;
 
 public class Button<A extends Argument, R extends Return> extends Entity {

@@ -1,6 +1,6 @@
 package sauce.asset.graphics;
 
-import sauce.core.Preferences;
+import sauce.core.engine.Preferences;
 import util.Color;
 import util.Vector2D;
 import util.structures.nonsaveable.LinkedList;
@@ -9,7 +9,7 @@ import util.structures.nonsaveable.Map;
 import java.util.Iterator;
 
 import static org.lwjgl.opengl.GL11.*;
-import static sauce.core.Preferences.TEXTURE_PAGE_SIZE;
+import static sauce.core.engine.Preferences.TEXTURE_PAGE_SIZE;
 
 public class TextureAtlas{
 

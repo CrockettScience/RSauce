@@ -1,7 +1,7 @@
 package sauce.asset.graphics;
 
-import sauce.util.misc.AssetDisposedException;
-import sauce.util.misc.Disposable;
+import sauce.core.coreutil.misc.AssetDisposedException;
+import sauce.core.coreutil.misc.Disposable;
 import util.Vector2D;
 
 /**

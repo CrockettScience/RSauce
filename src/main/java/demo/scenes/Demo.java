@@ -8,13 +8,14 @@ import sauce.asset.graphics.Image;
 import sauce.asset.scripts.Argument;
 import sauce.asset.scripts.Return;
 import sauce.asset.scripts.Script;
-import sauce.core.*;
+import sauce.core.attributes.BackgroundAttribute;
+import sauce.core.engine.*;
 import sauce.input.InputClient;
 import sauce.input.InputEvent;
 import sauce.input.InputServer;
 import util.Color;
-import util.collision.BoundBox;
-import util.collision.CollisionUtil;
+import sauce.core.collision.BoundBox;
+import sauce.core.collision.CollisionUtil;
 import util.structures.nonsaveable.ArrayList;
 
 import static demo.util.DemoUtil.HEIGHT;
