@@ -108,6 +108,11 @@ public class Sprite extends Graphic {
 
     }
 
+    public Sprite(String fileSource){
+        this(fileSource, 1, 1, false, 0);
+
+    }
+
     private double timeSinceLastUpdate;
     public void update(double delta){
         checkDisposed();

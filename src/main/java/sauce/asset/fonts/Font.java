@@ -104,7 +104,6 @@ public class Font implements Disposable {
             }
             glEnd();
         }
-        glPopMatrix();
 
         glColor3f(1, 1, 1);
 

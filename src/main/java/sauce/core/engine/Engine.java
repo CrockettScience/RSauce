@@ -2,7 +2,7 @@ package sauce.core.engine;
 
 import demo.scenes.Demo;
 import sauce.asset.audio.AudioManager;
-import sauce.asset.graphics.DrawBatch;
+import sauce.asset.graphics.SpriteBatch;
 import sauce.asset.graphics.Surface;
 import sauce.asset.scripts.Argument;
 import sauce.asset.scripts.Return;
@@ -370,7 +370,7 @@ public final class Engine {
 
     private static class RenderSystem extends EngineSystem implements EntitySubscriber{
         private SortedArrayList<Entity> entities = new SortedArrayList<>(new ZComparator());
-        private final DrawBatch batch = new DrawBatch();
+        private final SpriteBatch batch = new SpriteBatch();
 
         public RenderSystem(int priority){
             super(priority);

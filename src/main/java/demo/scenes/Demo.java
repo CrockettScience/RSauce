@@ -4,7 +4,7 @@ import demo.entities.Button;
 import demo.entities.Text;
 import sauce.asset.audio.AudioManager;
 import sauce.asset.audio.Music;
-import sauce.asset.graphics.Image;
+import sauce.asset.graphics.Sprite;
 import sauce.asset.scripts.Argument;
 import sauce.asset.scripts.Return;
 import sauce.asset.scripts.Script;
@@ -43,7 +43,7 @@ public class Demo extends Scene implements InputClient{
 
         Entity title = new Entity();
         {
-            Image rsauce = new Image(Preferences.ASSET_ROOT + "main.png");
+            Sprite rsauce = new Sprite(Preferences.ASSET_ROOT + "main.png");
             rsauce.setOrigin(64, 32);
 
             DrawComponent draw = new DrawComponent(rsauce, 128, 168, 0);
