@@ -1,7 +1,7 @@
 package sauce.core.collision;
 
 import sauce.core.engine.*;
-import sauce.input.InputServer;
+import sauce.core.engine.InputServer;
 import util.Color;
 import util.Vector2D;
 import util.Vector2DDouble;

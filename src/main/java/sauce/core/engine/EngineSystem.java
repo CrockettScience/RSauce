@@ -6,11 +6,11 @@ package sauce.core.engine;
 abstract class EngineSystem implements Comparable<EngineSystem>{
     int prio;
 
-    public EngineSystem(int priority){
+    EngineSystem(int priority){
         prio = priority;
     }
 
-    public EngineSystem(){
+    EngineSystem(){
         prio = 0;
     }
 

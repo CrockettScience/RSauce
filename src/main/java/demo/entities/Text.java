@@ -1,17 +1,18 @@
 package demo.entities;
 
 import sauce.asset.fonts.Font;
-import sauce.asset.graphics.Surface;
+import sauce.core.engine.Sprite;
+import sauce.core.engine.Surface;
 import sauce.asset.scripts.Argument;
 import sauce.asset.scripts.Return;
 import sauce.asset.scripts.Script;
-import sauce.core.engine.DrawComponent;
+import sauce.core.engine.SpriteComponent;
 import sauce.core.engine.Entity;
 import util.Color;
 
 public class Text extends Entity {
     private Font font;
-    DrawComponent draw;
+    SpriteComponent draw;
     private int width;
     private int height;
 
@@ -27,7 +28,7 @@ public class Text extends Entity {
             pX[0] = x;
             pY[0] = y;
 
-            draw = new DrawComponent(new Script<Argument, Return>() {
+            draw = new SpriteComponent(new Script<Argument, Return>() {
 
                 @Override
                 protected Return scriptMain(Argument args) {
@@ -50,18 +51,21 @@ public class Text extends Entity {
         height = metricFont.getHeight();
         metricFont.dispose();
 
-        Surface scaleDown = new Surface((int) font.getStringWidth(text) + 1, font.getHeight());
+        Surface image = new Surface((int) font.getStringWidth(text) + 1, font.getHeight());
 
-        scaleDown.bind();
+        image.bind();
         {
             font.renderText(text, color, 0, 0);
         }
-        scaleDown.unbind();
+        image.unbind();
+
+        Sprite scaleDown = new Sprite(image);
 
         scaleDown.setXScale(1f / oversampleFactor);
         scaleDown.setYScale(1f / oversampleFactor);
 
-        draw = new DrawComponent(scaleDown, x, y, z);
+        draw = new SpriteComponent(scaleDown, x, y, z);
+
 
         addComponent(draw);
 

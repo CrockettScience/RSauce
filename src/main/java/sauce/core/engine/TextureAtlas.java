@@ -1,11 +1,11 @@
-package sauce.asset.graphics;
+package sauce.core.engine;
 
-import sauce.core.engine.Preferences;
 import util.Color;
 import util.Vector2D;
 import util.structures.nonsaveable.LinkedList;
 import util.structures.nonsaveable.Map;
 
+import java.nio.ByteBuffer;
 import java.util.Iterator;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -14,22 +14,21 @@ import static sauce.core.engine.Preferences.TEXTURE_PAGE_SIZE;
 public class TextureAtlas{
 
     private static LinkedList<Page> pages = new LinkedList<>();
-    private static Map<String, TextureRegion> regionMap = new Map<>();
+    private static Map<String, TextureRegion> textureMap = new Map<>();
 
     private TextureAtlas(){
         pages.add(new Page());
     }
 
-    static TextureRegion register(String source, GraphicsUtil.IOGraphic ioGraphic, boolean exclusive){
-
-        if(regionMap.containsKey(source))
-            return regionMap.get(source).addReference();
+    static TextureRegion register(Object key, int width, int height, int components, ByteBuffer buffer, boolean exclusive){
+        if(textureMap.containsKey(key.toString()))
+            return textureMap.get(key.toString());
 
         TextureRegion region = null;
 
-        if(ioGraphic.getGraphicInfo().getWidth() > Preferences.TEXTURE_PAGE_SIZE || ioGraphic.getGraphicInfo().getHeight() > Preferences.TEXTURE_PAGE_SIZE || exclusive){
+        if(width > Preferences.TEXTURE_PAGE_SIZE || height > Preferences.TEXTURE_PAGE_SIZE || exclusive){
             // Texture is to big to fit on page
-            region = new TextureRegion(0, 0, ioGraphic.getGraphicInfo().getWidth(), ioGraphic.getGraphicInfo().getHeight(), new Surface(ioGraphic.getGraphicInfo().getWidth(), ioGraphic.getGraphicInfo().getHeight())){
+            region = new TextureRegion(0, 0, width, height, new Surface(width, height)){
                 @Override
                 public void removeReference() {
                     super.removeReference();
@@ -37,12 +36,12 @@ public class TextureAtlas{
                 }
             };
 
-            region.drawGraphicToRegion(new GraphicEntry(ioGraphic));
+            region.drawGraphicToRegion(new GraphicEntry(width, height, components, buffer));
 
         } else {
 
             Iterator<Page> i = pages.iterator();
-            GraphicEntry entry = new GraphicEntry(ioGraphic);
+            GraphicEntry entry = new GraphicEntry(width, height, components, buffer);
 
             while (region == null) {
                 if (i.hasNext()) {
@@ -56,8 +55,50 @@ public class TextureAtlas{
 
         }
 
-        regionMap.put(source, region);
-        region.key = source;
+        region.key = key.toString();
+        textureMap.put(region.key, region);
+
+        return region;
+    }
+
+    static TextureRegion register(Surface key, int width, int height, int components, ByteBuffer buffer, boolean exclusive){
+        if(textureMap.containsKey(key.toString()))
+            return textureMap.get(key.toString());
+
+        TextureRegion region = null;
+
+        if(width > Preferences.TEXTURE_PAGE_SIZE || height > Preferences.TEXTURE_PAGE_SIZE || exclusive){
+            // Texture is to big to fit on page
+            region = new TextureRegion(0, 0, width, height, new Surface(width, height)){
+                @Override
+                public void removeReference() {
+                    super.removeReference();
+                    page.dispose();
+                }
+            };
+
+            region.drawGraphicToRegion(new GraphicEntry(key));
+
+        } else {
+
+            Iterator<Page> i = pages.iterator();
+            GraphicEntry entry = new GraphicEntry(key);
+
+            while (region == null) {
+                if (i.hasNext()) {
+                    region = i.next().insert(entry);
+                } else {
+                    Page newPage = new Page();
+                    pages.add(newPage);
+                    region = newPage.insert(entry);
+                }
+            }
+
+        }
+
+        region.key = key.toString();
+        textureMap.put(region.key, region);
+
         return region;
     }
 
@@ -65,7 +106,7 @@ public class TextureAtlas{
         return pages.size();
     }
 
-    public static  Surface getPageSurface(int i){
+    public static Surface getPageSurface(int i){
         return pages.get(i).pageSurface;
     }
 
@@ -156,13 +197,7 @@ public class TextureAtlas{
             {
 
                 glDisable(GL_BLEND);
-
-                glBindTexture(GL_TEXTURE_2D, graphic.texID);
-
-                GraphicsUtil.applyIOImageForDrawing(graphic.ioGraphic, graphic.width, graphic.height, graphic.ioGraphic.getGraphicInfo().getComponents());
-
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                GraphicsUtil.applyBufferToTexture(graphic.buffer, graphic.width, graphic.height, graphic.components, graphic.texID);
 
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -170,6 +205,15 @@ public class TextureAtlas{
                 glEnable(GL_TEXTURE_2D);
 
                 glPushMatrix();
+
+                if(graphic.buffer != null) {
+                    int centerX = graphic.width / 2;
+                    int centerY = graphic.height / 2;
+
+                    glTranslatef(p00.getX() + centerX, p00.getY() + centerY, 0);
+                    glScalef(1, -1, 1);
+                    glTranslatef(-p00.getX() - centerX, -p00.getY() - centerY, 0);
+                }
 
                 glBegin(GL_QUADS);
                 {
@@ -232,7 +276,7 @@ public class TextureAtlas{
         public void removeReference() {
             if(--referenceCount <= 0) {
                 occupied = false;
-                regionMap.remove(key);
+                textureMap.remove(key);
             }
         }
 
@@ -328,14 +372,24 @@ public class TextureAtlas{
         private int texID;
         private int width;
         private int height;
-        private GraphicsUtil.IOGraphic ioGraphic;
+        private int components;
+        private ByteBuffer buffer;
 
 
-        private GraphicEntry(GraphicsUtil.IOGraphic io){
+        private GraphicEntry(int w, int h, int comp, ByteBuffer buff){
             texID = glGenTextures();
-            width = io.getGraphicInfo().getWidth();
-            height = io.getGraphicInfo().getHeight();
-            ioGraphic = io;
+            width = w;
+            height = h;
+            components = comp;
+            buffer = buff;
+        }
+
+        private GraphicEntry(Surface source){
+            texID = source.textureID();
+            width = source.getWidth();
+            height = source.getHeight();
+            components = source.components();
+            buffer = null;
         }
 
         private void dispose(){

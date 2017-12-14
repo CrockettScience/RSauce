@@ -3,7 +3,8 @@ package sauce.core.attributes;
 
 
 import sauce.core.engine.Attribute;
-import sauce.core.engine.ParallaxBackground;
+import sauce.core.engine.Background;
+import sauce.core.engine.Scene;
 
 import java.util.Iterator;
 
@@ -12,37 +13,42 @@ import java.util.Iterator;
  * @author Jonathan Crockett
  */
 public class BackgroundAttribute implements Attribute {
-    public ParallaxBackground[] backgrounds = new ParallaxBackground[10];
-    public ParallaxBackground[] foregrounds = new ParallaxBackground[10];
+    public Background[] backgrounds = new Background[10];
+    public Background[] foregrounds = new Background[10];
 
-    public void setBackground(ParallaxBackground para, int index){
+    public void setBackground(Background para, int index){
         backgrounds[index] = para;
     }
 
-    public void setForeground(ParallaxBackground para, int index){
+    public void setForeground(Background para, int index){
         foregrounds[index] = para;
     }
 
-    public Iterator<ParallaxBackground> backgroundIterator(){
+    public Iterator<Background> backgroundIterator(){
         return new ParallaxIterator(true);
     }
 
-    public Iterator<ParallaxBackground> foregroundIterator(){
+    public Iterator<Background> foregroundIterator(){
         return new ParallaxIterator(false);
     }
 
     @Override
+    public void removedFromScene(Scene scn) {
+        dispose();
+    }
+
+    @Override
     public void dispose() {
-        for(ParallaxBackground bg : backgrounds)
+        for(Background bg : backgrounds)
             if(bg != null)
                 bg.dispose();
 
-        for(ParallaxBackground fg : foregrounds)
+        for(Background fg : foregrounds)
             if(fg != null)
                 fg.dispose();
     }
 
-    private class ParallaxIterator implements Iterator<ParallaxBackground>{
+    private class ParallaxIterator implements Iterator<Background>{
 
         private int current = -1;
         private boolean type;
@@ -57,7 +63,7 @@ public class BackgroundAttribute implements Attribute {
         }
 
         @Override
-        public ParallaxBackground next() {
+        public Background next() {
             current++;
             if(type){
                 return backgrounds[current];

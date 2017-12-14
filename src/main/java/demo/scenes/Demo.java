@@ -4,15 +4,12 @@ import demo.entities.Button;
 import demo.entities.Text;
 import sauce.asset.audio.AudioManager;
 import sauce.asset.audio.Music;
-import sauce.asset.graphics.Sprite;
+import sauce.core.engine.Sprite;
 import sauce.asset.scripts.Argument;
 import sauce.asset.scripts.Return;
 import sauce.asset.scripts.Script;
 import sauce.core.attributes.BackgroundAttribute;
 import sauce.core.engine.*;
-import sauce.input.InputClient;
-import sauce.input.InputEvent;
-import sauce.input.InputServer;
 import util.Color;
 import sauce.core.collision.BoundBox;
 import sauce.core.collision.CollisionUtil;
@@ -20,7 +17,7 @@ import util.structures.nonsaveable.ArrayList;
 
 import static demo.util.DemoUtil.HEIGHT;
 import static demo.util.DemoUtil.WIDTH;
-import static sauce.input.InputServer.*;
+import static sauce.core.engine.InputServer.*;
 
 public class Demo extends Scene implements InputClient{
     private ArrayList<Button> buttons = new ArrayList<>();
@@ -33,9 +30,9 @@ public class Demo extends Scene implements InputClient{
         BackgroundAttribute bg  = new BackgroundAttribute();
         addAttribute(bg);
 
-        ParallaxBackground sky = new ParallaxBackground(Preferences.ASSET_ROOT + "sky.png", 0, 0);
-        ParallaxBackground clouds = new ParallaxBackground(Preferences.ASSET_ROOT + "cloudParallax.png", -1, 0);
-        ParallaxBackground flare = new ParallaxBackground(Preferences.ASSET_ROOT + "flare.png", 0, 0);
+        Background sky = new Background(Preferences.ASSET_ROOT + "sky.png", 0, 0);
+        Background clouds = new Background(Preferences.ASSET_ROOT + "cloudParallax.png", 20f, 0);
+        Background flare = new Background(Preferences.ASSET_ROOT + "flare.png", 0, 0);
 
         bg.setBackground(sky, 0);
         bg.setBackground(clouds, 1);
@@ -46,7 +43,7 @@ public class Demo extends Scene implements InputClient{
             Sprite rsauce = new Sprite(Preferences.ASSET_ROOT + "main.png");
             rsauce.setOrigin(64, 32);
 
-            DrawComponent draw = new DrawComponent(rsauce, 128, 168, 0);
+            SpriteComponent draw = new SpriteComponent(rsauce, 128, 168, 0);
 
             title.addComponent(draw);
         }
@@ -84,8 +81,9 @@ public class Demo extends Scene implements InputClient{
         InputServer.bind(this);
         AudioManager.enqueue(new Music(Preferences.ASSET_ROOT + "waves.ogg", 0));
 
-        if(Preferences.DEBUG)
+        if(Preferences.DEBUG) {
             Engine.add(new CollisionUtil.DrawBBoxWires());
+        }
 
     }
 

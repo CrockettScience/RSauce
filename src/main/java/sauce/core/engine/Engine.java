@@ -2,8 +2,6 @@ package sauce.core.engine;
 
 import demo.scenes.Demo;
 import sauce.asset.audio.AudioManager;
-import sauce.asset.graphics.SpriteBatch;
-import sauce.asset.graphics.Surface;
 import sauce.asset.scripts.Argument;
 import sauce.asset.scripts.Return;
 import sauce.asset.scripts.Script;
@@ -244,7 +242,7 @@ public final class Engine {
 
     private static double timeSinceLast;
 
-    public static void update(double delta){
+    static void update(double delta){
         timeSinceLast += delta;
         if(timeSinceLast >= 1.0 / Preferences.getFullscreenRefreshRate()) {
 
@@ -263,7 +261,7 @@ public final class Engine {
         }
     }
 
-    private static void step(double delta){
+    static void step(double delta){
 
         while(!scriptQueue.isEmpty()){
             ScriptEntry entry = scriptQueue.dequeue();
@@ -275,37 +273,22 @@ public final class Engine {
         }
     }
 
-    private static void preDraw(double delta){
-        glClear(GL_COLOR_BUFFER_BIT);
+    static void preDraw(double delta){
+        if(getCurrentScene().containsAttribute(BackgroundAttribute.class)){
+            BackgroundAttribute backAttr = getCurrentScene().getAttribute(BackgroundAttribute.class);
+             Iterator<Background> i = backAttr.backgroundIterator();
+                Background back;
 
-        Scene scene = getCurrentScene();
-
-        if(scene.containsAttribute(BackgroundAttribute.class)) {
-            BackgroundAttribute bg = scene.getAttribute(BackgroundAttribute.class);
-
-            Iterator<ParallaxBackground> i = bg.backgroundIterator();
-
-            while (i.hasNext()) {
-                ParallaxBackground back = i.next();
-                if (back != null) {
-                    back.update(delta);
-
-                    Camera cam = getCamera();
-
-                    int modX = back.getXPos() % back.getIOImage().getGraphicInfo().getWidth();
-                    int modY = back.getYPos() % back.getIOImage().getGraphicInfo().getHeight();
-
-                    render.batch.add(back,
-                            cam.getX() + (modX < 0 ? modX : modX - back.getIOImage().getGraphicInfo().getWidth()),
-                            cam.getY() + (modY < 0 ? modY : modY - back.getIOImage().getGraphicInfo().getHeight()));
-                }
-            }
-
-            render.batch.renderBatch();
+             while(i.hasNext()){
+                 if((back = i.next()) != null) {
+                     back.update(delta);
+                     back.render();
+                 }
+             }
         }
     }
 
-    private static void draw(double delta){
+    static void draw(double delta){
         render.update(delta);
 
         for (int i = 0; i < draws.size(); i++) {
@@ -313,36 +296,23 @@ public final class Engine {
         }
     }
 
-    private static void postDraw(double delta){
-        Scene scene = getCurrentScene();
+    static void postDraw(double delta){
+        if(getCurrentScene().containsAttribute(BackgroundAttribute.class)){
+            BackgroundAttribute backAttr = getCurrentScene().getAttribute(BackgroundAttribute.class);
+            Iterator<Background> i = backAttr.foregroundIterator();
+            Background fore;
 
-        if(scene.containsAttribute(BackgroundAttribute.class)) {
-            BackgroundAttribute bg = scene.getAttribute(BackgroundAttribute.class);
-
-            Iterator<ParallaxBackground> i = bg.foregroundIterator();
-
-            while (i.hasNext()) {
-                ParallaxBackground fore = i.next();
-                if (fore != null) {
+            while(i.hasNext()) {
+                if ((fore = i.next()) != null) {
                     fore.update(delta);
-
-                    Camera cam = getCamera();
-
-                    int modX = fore.getXPos() % fore.getIOImage().getGraphicInfo().getWidth();
-                    int modY = fore.getYPos() % fore.getIOImage().getGraphicInfo().getWidth();
-
-                    render.batch.add(fore,
-                            cam.getX() + (modX < 0 ? modX : modX - fore.getIOImage().getGraphicInfo().getWidth()),
-                            cam.getY() + (modY < 0 ? modY : modY - fore.getIOImage().getGraphicInfo().getHeight()));
+                    fore.render();
                 }
             }
-
-            render.batch.renderBatch();
         }
     }
 
-    private static void drawGUI(double delta){
-        if(Preferences.getCurrentScreenWidth() != GUILayer.width() || Preferences.getCurrentScreenHeight() != GUILayer.height()){
+    static void drawGUI(double delta){
+        if(Preferences.getCurrentScreenWidth() != GUILayer.getWidth() || Preferences.getCurrentScreenHeight() != GUILayer.getHeight()){
             GUILayer.dispose();
             GUILayer = new Surface(Preferences.getCurrentScreenWidth(), Preferences.getCurrentScreenHeight());
         }
@@ -378,7 +348,7 @@ public final class Engine {
 
         @Override
         public Class<? extends Component>[] componentsToHave() {
-            Class[] classes = {DrawComponent.class};
+            Class[] classes = {SpriteComponent.class};
             return classes;
         }
 
@@ -422,13 +392,13 @@ public final class Engine {
         @Override
         public void update(double delta) {
             for(Entity ent : entities){
-                DrawComponent draw = ent.getComponent(DrawComponent.class);
-                if(draw.getImage() != null)
-                    draw.getImage().update(delta);
-                batch.add(draw.getImage(), draw.getX(), draw.getY(), draw.getScript());
+                SpriteComponent draw = ent.getComponent(SpriteComponent.class);
+                if(draw.getSprite() != null)
+                    draw.getSprite().update(delta);
+                batch.add(draw.getSprite(), draw.getX(), draw.getY(), draw.getScript());
             }
 
-            batch.renderBatch();
+            batch.render();
         }
 
         @Override
@@ -445,7 +415,7 @@ public final class Engine {
 
             @Override
             public int compare(Entity o1, Entity o2) {
-                return ((DrawComponent) o2.getComponent(DrawComponent.class)).getZ() - ((DrawComponent) o1.getComponent(DrawComponent.class)).getZ();
+                return ((SpriteComponent) o2.getComponent(SpriteComponent.class)).getZ() - ((SpriteComponent) o1.getComponent(SpriteComponent.class)).getZ();
             }
         }
     }

@@ -12,23 +12,23 @@ import java.util.Iterator;
 class EntitySet implements Iterable<Entity>{
     private Set<Entity> entities = new Set<>();
 
-    public int size() {
+    int size() {
         return entities.size();
     }
 
-    public boolean isEmpty() {
+    boolean isEmpty() {
         return entities.isEmpty();
     }
 
-    public boolean add(Entity e) {
+    boolean add(Entity e) {
         return entities.add(e);
     }
 
-    public boolean contains(Entity e){
+    boolean contains(Entity e){
         return entities.contains(e);
     }
 
-    public EntitySet onlyEntitiesWithComponent(Class<? extends Component> c) {
+    EntitySet onlyEntitiesWithComponent(Class<? extends Component> c) {
         EntitySet ents = new EntitySet();
 
         for (Entity ent : entities) {
@@ -40,7 +40,7 @@ class EntitySet implements Iterable<Entity>{
         return ents;
     }
 
-    public EntitySet onlyEntitiesWithoutComponent(Class<? extends Component> c) {
+    EntitySet onlyEntitiesWithoutComponent(Class<? extends Component> c) {
         EntitySet ents = new EntitySet();
 
         for (Entity ent : entities) {
@@ -52,15 +52,15 @@ class EntitySet implements Iterable<Entity>{
         return ents;
     }
 
-    public void remove(Entity e) {
+    void remove(Entity e) {
         Entity ent = entities.remove(e);
     }
 
-    public void clear() {
+    void clear() {
         entities.clear();
     }
 
-    public Set<Entity> toSet(){
+    Set<Entity> toSet(){
         Set<Entity> ents = new Set<>();
         for(Entity ent : entities)
             ents.add(ent);

@@ -1,11 +1,11 @@
 package demo.entities;
 
-import sauce.asset.graphics.Sprite;
+import sauce.core.engine.Sprite;
 import sauce.asset.scripts.Argument;
 import sauce.asset.scripts.Return;
 import sauce.asset.scripts.Script;
 import sauce.core.engine.Preferences;
-import sauce.core.engine.DrawComponent;
+import sauce.core.engine.SpriteComponent;
 import sauce.core.engine.Engine;
 import sauce.core.engine.Entity;
 import util.Color;
@@ -29,7 +29,7 @@ public class Button<A extends Argument, R extends Return> extends Entity {
 
         BoundBox box = new BoundBox(x - buttonSprite.width() / 2, y - buttonSprite.height() / 2, buttonSprite.width(), buttonSprite.height());
 
-        addComponent(new DrawComponent(buttonSprite, x ,y, z));
+        addComponent(new SpriteComponent(buttonSprite, x ,y, z));
         addComponent(box);
 
         Text text = new Text(Preferences.ASSET_ROOT + "coderCrux.ttf", Color.C_BLACK, label, buttonSprite.height() / 2, 0, 0, 0, 6);
@@ -54,7 +54,7 @@ public class Button<A extends Argument, R extends Return> extends Entity {
 
         BoundBox box = new BoundBox(x - buttonSprite.width() / 2, y - buttonSprite.height() / 2, buttonSprite.width(), buttonSprite.height());
 
-        addComponent(new DrawComponent(buttonSprite, x ,y, z));
+        addComponent(new SpriteComponent(buttonSprite, x ,y, z));
         addComponent(box);
 
         execute = invokation;
@@ -93,10 +93,10 @@ public class Button<A extends Argument, R extends Return> extends Entity {
     }
 
     public void turnOn(){
-        ((Sprite)getComponent(DrawComponent.class).getImage()).setAnimationState("on");
+        ((Sprite)getComponent(SpriteComponent.class).getSprite()).setAnimationState("on");
     }
 
     public void turnOff(){
-        ((Sprite)getComponent(DrawComponent.class).getImage()).setAnimationState("off");
+        ((Sprite)getComponent(SpriteComponent.class).getSprite()).setAnimationState("off");
     }
 }

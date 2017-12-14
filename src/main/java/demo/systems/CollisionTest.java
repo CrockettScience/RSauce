@@ -1,20 +1,17 @@
 package demo.systems;
 
 import demo.entities.Eggy;
-import sauce.asset.graphics.Sprite;
-import sauce.core.engine.Preferences;
-import sauce.core.engine.DrawComponent;
-import sauce.core.engine.Engine;
-import sauce.core.engine.Entity;
-import sauce.core.engine.StepSystem;
-import sauce.input.InputClient;
-import sauce.input.InputEvent;
-import sauce.input.InputServer;
+import sauce.core.engine.Sprite;
+import sauce.core.engine.*;
+import sauce.core.engine.SpriteComponent;
+import sauce.core.engine.InputClient;
+import sauce.core.engine.InputEvent;
+import sauce.core.engine.InputServer;
 import sauce.core.collision.BoundBox;
 import sauce.core.collision.CollisionUtil;
 import util.structures.nonsaveable.ArrayGrid;
 
-import static sauce.input.InputServer.*;
+import static sauce.core.engine.InputServer.*;
 
 public class CollisionTest extends StepSystem implements InputClient {
 
@@ -42,7 +39,7 @@ public class CollisionTest extends StepSystem implements InputClient {
 
             buttonSprite.setAnimationState("off");
 
-            DrawComponent buttonPos = new DrawComponent(buttonSprite, eggy.getComponent(DrawComponent.class).getX(), eggy.getComponent(DrawComponent.class).getY(), eggy.getComponent(DrawComponent.class).getZ() + 1);
+            SpriteComponent buttonPos = new SpriteComponent(buttonSprite, eggy.getComponent(SpriteComponent.class).getX(), eggy.getComponent(SpriteComponent.class).getY(), eggy.getComponent(SpriteComponent.class).getZ() + 1);
 
             BoundBox box = new BoundBox(buttonPos.getX(), buttonPos.getY(), buttonSprite.width(), buttonSprite.height());
 
@@ -59,9 +56,9 @@ public class CollisionTest extends StepSystem implements InputClient {
     @Override
     public void update(double delta) {
         if(eggy.getComponent(BoundBox.class).detectCollision(collisionButton.getComponent(BoundBox.class)))
-            ((Sprite)collisionButton.getComponent(DrawComponent.class).getImage()).setAnimationState("on");
+            ((Sprite)collisionButton.getComponent(SpriteComponent.class).getSprite()).setAnimationState("on");
         else
-            ((Sprite)collisionButton.getComponent(DrawComponent.class).getImage()).setAnimationState("off");
+            ((Sprite)collisionButton.getComponent(SpriteComponent.class).getSprite()).setAnimationState("off");
 
         if(isKeyPressed(KEY_EQUAL))
             eggy.getComponent(BoundBox.class).rotate(eggy.getComponent(BoundBox.class).getRadianAngle() + 0.1);

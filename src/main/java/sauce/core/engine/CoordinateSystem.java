@@ -1,19 +1,19 @@
-package sauce.core.coreutil.ogl;
+package sauce.core.engine;
 
 import util.RSauceLogger;
 import util.structures.nonsaveable.Stack;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class OGLCoordinateSystem {
+class CoordinateSystem {
 
     private static Stack<CoordinateState> coordinateStateStack = new Stack<>();
 
-    public static void pushCoordinateState(){
+    static void pushCoordinateState(){
         coordinateStateStack.push(coordinateStateStack.top());
     }
 
-    public static void popCoordinateState(){
+    static void popCoordinateState(){
         if(coordinateStateStack.isEmpty()){
             RSauceLogger.printErrorln("Coordinate State Stack is empty!");
             return;
@@ -24,7 +24,7 @@ public class OGLCoordinateSystem {
         applyState();
     }
 
-    public static void setCoordinateState(int x, int y, int width, int height){
+    static void setCoordinateState(int x, int y, int width, int height){
         if(!coordinateStateStack.isEmpty()){
             coordinateStateStack.pop();
         }
@@ -34,7 +34,7 @@ public class OGLCoordinateSystem {
         applyState();
     }
 
-    public static int[] getCoordinateState(){
+    static int[] getCoordinateState(){
         int[] state = new int[4];
 
         state[0] = coordinateStateStack.top().x;

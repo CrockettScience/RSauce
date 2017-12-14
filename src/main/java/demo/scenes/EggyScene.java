@@ -6,14 +6,14 @@ import sauce.asset.audio.AudioManager;
 import sauce.asset.audio.Music;
 import sauce.core.attributes.BackgroundAttribute;
 import sauce.core.engine.*;
-import sauce.input.InputClient;
-import sauce.input.InputEvent;
-import sauce.input.InputServer;
+import sauce.core.engine.InputClient;
+import sauce.core.engine.InputEvent;
+import sauce.core.engine.InputServer;
 
 import static demo.util.DemoUtil.HEIGHT;
 import static demo.util.DemoUtil.WIDTH;
 import static sauce.core.engine.Preferences.ASSET_ROOT;
-import static sauce.input.InputServer.*;
+import static sauce.core.engine.InputServer.*;
 
 /**
  * Created by John Crockett.
@@ -28,17 +28,19 @@ public class EggyScene extends Scene implements InputClient {
 
         Engine.setCamera(new Camera(0, 0, WIDTH, HEIGHT, 0, 0), true);
 
-        // Setup Eggy
-        Entity eggy1 = new Eggy(1, 1, Engine.getCamera().getWidth() / 2, Engine.getCamera().getHeight() / 2, 0);
-
-        putEntity("eggy", eggy1);
 
         // Setup Background
         BackgroundAttribute attr = new BackgroundAttribute();
         addAttribute(attr);
 
-        ParallaxBackground grass = new ParallaxBackground(ASSET_ROOT + "grass.png", 0, 0);
+        Background grass = new Background(ASSET_ROOT + "grass.png", 0, 0);
         attr.setBackground(grass, 0);
+
+        // Setup Eggy
+        Entity eggy1 = new Eggy(1, 1, Engine.getCamera().getWidth() / 2, Engine.getCamera().getHeight() / 2, 0);
+
+        putEntity("eggy", eggy1);
+
 
         // Bind to recieve InputEvents
         bind(this);

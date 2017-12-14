@@ -1,6 +1,5 @@
 package sauce.core.engine;
 
-import sauce.asset.graphics.Graphic;
 import sauce.asset.scripts.Script;
 import util.RSauceLogger;
 import util.Vector3D;
@@ -8,23 +7,23 @@ import util.Vector3D;
 /**
  * Created by John Crockett.
  */
-public class DrawComponent implements Component {
-    private Graphic image;
+public class SpriteComponent implements Component {
+    private Sprite sprite;
     private Vector3D position;
     private Script<?, ?> script;
 
-    public DrawComponent(Graphic asset, int x, int y, int z){
-        image = asset;
+    public SpriteComponent(Sprite sprite, int x, int y, int z){
+        this.sprite = sprite;
         position = new Vector3D(x, y, z);
     }
 
-    public DrawComponent(Graphic asset, int x, int y, int z, Script<?, ?> drawScript){
-        image = asset;
+    public SpriteComponent(Sprite sprite, int x, int y, int z, Script<?, ?> drawScript){
+        this.sprite = sprite;
         position = new Vector3D(x, y, z);
         script = drawScript;
     }
 
-    public DrawComponent(Script<?, ?> drawScript, int z){
+    public SpriteComponent(Script<?, ?> drawScript, int z){
         script = drawScript;
         position = new Vector3D(0, 0, z);
     }
@@ -37,8 +36,8 @@ public class DrawComponent implements Component {
         return script;
     }
 
-    public Graphic getImage(){
-        return image;
+    public Sprite getSprite(){
+        return sprite;
     }
 
     public int getX(){
@@ -76,7 +75,7 @@ public class DrawComponent implements Component {
             return true;
         }
 
-        RSauceLogger.printWarningln("This DrawComponent already belongs to another Entity");
+        RSauceLogger.printWarningln("This SpriteComponent already belongs to another Entity");
         return false;
     }
 
@@ -87,7 +86,7 @@ public class DrawComponent implements Component {
 
     @Override
     public void dispose() {
-        if(image != null)
-            image.dispose();
+        if(sprite != null)
+            sprite.dispose();
     }
 }

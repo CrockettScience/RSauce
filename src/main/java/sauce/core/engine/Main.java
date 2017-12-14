@@ -5,7 +5,6 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 import sauce.asset.audio.AudioManager;
-import sauce.core.coreutil.ogl.OGLCoordinateSystem;
 import util.RSauceLogger;
 
 import java.lang.System;
@@ -106,7 +105,7 @@ public class Main{
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        OGLCoordinateSystem.setCoordinateState(0, 0, getCurrentScreenWidth(), getCurrentScreenHeight());
+        CoordinateSystem.setCoordinateState(0, 0, getCurrentScreenWidth(), getCurrentScreenHeight());
 
     }
 
@@ -128,7 +127,7 @@ public class Main{
         }
     }
 
-    public static long getWindowHandle(){
+    static long getWindowHandle(){
         return window;
     }
 

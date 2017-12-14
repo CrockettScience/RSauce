@@ -1,6 +1,5 @@
 package sauce.core.engine;
 
-import sauce.core.coreutil.ogl.OGLCoordinateSystem;
 import util.RSauceLogger;
 import util.Vector2D;
 import util.structures.nonsaveable.Set;
@@ -88,7 +87,7 @@ public class Camera {
 
     private void reAdjustCoordinateSystem(){
         if(isActive)
-            OGLCoordinateSystem.setCoordinateState(x, y, width, height);
+            CoordinateSystem.setCoordinateState(x, y, width, height);
     }
 
     public int getX() {
@@ -108,7 +107,7 @@ public class Camera {
     }
 
     public void followEntity(Entity ent) {
-        if (ent.getComponent(DrawComponent.class) == null) {
+        if (ent.getComponent(SpriteComponent.class) == null) {
             RSauceLogger.printWarningln("The view attempted to follow an entity that does not have a position");
         } else {
             entityFollowing = ent;

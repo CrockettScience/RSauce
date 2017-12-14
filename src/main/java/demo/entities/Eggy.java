@@ -1,8 +1,8 @@
 package demo.entities;
 
 import demo.systems.EggyControl;
-import sauce.asset.graphics.Sprite;
-import sauce.core.engine.DrawComponent;
+import sauce.core.engine.Sprite;
+import sauce.core.engine.SpriteComponent;
 import sauce.core.engine.Engine;
 import sauce.core.engine.Entity;
 import sauce.core.collision.BoundBox;
@@ -14,7 +14,7 @@ public class Eggy extends Entity{
 
 
     private static EggyControl controller;
-    private DrawComponent eggyComponent;
+    private SpriteComponent eggyComponent;
 
     public Eggy(float xScale, float yScale, int x, int y, int z){
         ArrayGrid<String> eggyMatrix = new ArrayGrid<>(4, 4);
@@ -30,7 +30,7 @@ public class Eggy extends Entity{
         eggySprite.setXScale(xScale);
         eggySprite.setYScale(yScale);
 
-        eggyComponent = new DrawComponent(eggySprite, x, y, z);
+        eggyComponent = new SpriteComponent(eggySprite, x, y, z);
 
         int width = (int)(eggySprite.width() * xScale);
         int height = (int)(eggySprite.height() * yScale);

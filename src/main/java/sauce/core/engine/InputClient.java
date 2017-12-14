@@ -1,4 +1,4 @@
-package sauce.input;
+package sauce.core.engine;
 
 /**
  * Created by John Crockett.
