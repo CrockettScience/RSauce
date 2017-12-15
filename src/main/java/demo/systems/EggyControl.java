@@ -1,16 +1,15 @@
 package demo.systems;
 
 import demo.entities.Eggy;
-import sauce.asset.audio.AudioManager;
-import sauce.asset.audio.Effect;
-import sauce.core.engine.Sprite;
-import sauce.core.engine.Preferences;
-import sauce.core.engine.SpriteComponent;
-import sauce.core.engine.StepSystem;
-import sauce.core.collision.BoundBox;
-import util.structures.nonsaveable.Map;
+import sauce.core.AudioManager;
+import sauce.core.Noise;
+import sauce.core.Preferences;
+import sauce.core.SpriteComponent;
+import sauce.core.StepSystem;
+import sauce.collision.BoundBox;
+import sauce.util.structures.nonsaveable.Map;
 
-import static sauce.core.engine.InputServer.*;
+import static sauce.core.InputServer.*;
 
 public class EggyControl extends StepSystem {
 
@@ -39,27 +38,27 @@ public class EggyControl extends StepSystem {
             if (isKeyPressed(KEY_W) || isKeyPressed(KEY_A) || isKeyPressed(KEY_S) || isKeyPressed(KEY_D)) {
                 if (isKeyPressed(KEY_W)) {
                     eggyDraw.setY(eggyDraw.getY() + EGGY_BASE_SPEED * (isKeyPressed(KEY_LEFT_SHIFT) ? 2 : 1));
-                    ((Sprite) eggyDraw.getSprite()).setAnimationState("up");
+                    eggyDraw.getSprite().setAnimationState("up");
                 }
 
                 if (isKeyPressed(KEY_S)) {
                     eggyDraw.setY(eggyDraw.getY() - EGGY_BASE_SPEED * (isKeyPressed(KEY_LEFT_SHIFT) ? 2 : 1));
-                    ((Sprite) eggyDraw.getSprite()).setAnimationState("down");
+                    eggyDraw.getSprite().setAnimationState("down");
                 }
 
                 if (isKeyPressed(KEY_A)) {
                     eggyDraw.setX(eggyDraw.getX() - EGGY_BASE_SPEED * (isKeyPressed(KEY_LEFT_SHIFT) ? 2 : 1));
-                    ((Sprite) eggyDraw.getSprite()).setAnimationState("left");
+                    eggyDraw.getSprite().setAnimationState("left");
                 }
 
                 if (isKeyPressed(KEY_D)) {
                     eggyDraw.setX(eggyDraw.getX() + EGGY_BASE_SPEED * (isKeyPressed(KEY_LEFT_SHIFT) ? 2 : 1));
-                    ((Sprite) eggyDraw.getSprite()).setAnimationState("right");
+                    eggyDraw.getSprite().setAnimationState("right");
                 }
 
                 // 8fps
                 if (totalDelta >= 1.0 / 8) {
-                    AudioManager.enqueue(new Effect(Preferences.ASSET_ROOT + "blip.ogg"));
+                    AudioManager.enqueue(new Noise(Preferences.ASSET_ROOT + "blip.ogg"));
                     totalDelta = 0;
                 }
 
@@ -68,7 +67,7 @@ public class EggyControl extends StepSystem {
 
                 totalDelta += delta;
             } else {
-                ((Sprite) eggyDraw.getSprite()).setAnimationState("idle");
+                eggyDraw.getSprite().setAnimationState("idle");
                 totalDelta = 0;
             }
         }

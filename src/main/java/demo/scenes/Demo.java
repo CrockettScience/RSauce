@@ -2,22 +2,22 @@ package demo.scenes;
 
 import demo.entities.Button;
 import demo.entities.Text;
-import sauce.asset.audio.AudioManager;
-import sauce.asset.audio.Music;
-import sauce.core.engine.Sprite;
-import sauce.asset.scripts.Argument;
-import sauce.asset.scripts.Return;
-import sauce.asset.scripts.Script;
-import sauce.core.attributes.BackgroundAttribute;
-import sauce.core.engine.*;
-import util.Color;
-import sauce.core.collision.BoundBox;
-import sauce.core.collision.CollisionUtil;
-import util.structures.nonsaveable.ArrayList;
+import sauce.core.AudioManager;
+import sauce.core.Music;
+import sauce.core.Sprite;
+import sauce.concurrent.Argument;
+import sauce.concurrent.Return;
+import sauce.concurrent.Script;
+import sauce.attributes.BackgroundAttribute;
+import sauce.core.*;
+import sauce.util.structures.Color;
+import sauce.collision.BoundBox;
+import sauce.collision.CollisionUtil;
+import sauce.util.structures.nonsaveable.ArrayList;
 
 import static demo.util.DemoUtil.HEIGHT;
 import static demo.util.DemoUtil.WIDTH;
-import static sauce.core.engine.InputServer.*;
+import static sauce.core.InputServer.*;
 
 public class Demo extends Scene implements InputClient{
     private ArrayList<Button> buttons = new ArrayList<>();
@@ -31,7 +31,7 @@ public class Demo extends Scene implements InputClient{
         addAttribute(bg);
 
         Background sky = new Background(Preferences.ASSET_ROOT + "sky.png", 0, 0);
-        Background clouds = new Background(Preferences.ASSET_ROOT + "cloudParallax.png", 20f, 0);
+        Background clouds = new Background(Preferences.ASSET_ROOT + "cloudParallax.png", -10f, 0);
         Background flare = new Background(Preferences.ASSET_ROOT + "flare.png", 0, 0);
 
         bg.setBackground(sky, 0);

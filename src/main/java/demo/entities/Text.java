@@ -1,14 +1,14 @@
 package demo.entities;
 
-import sauce.asset.fonts.Font;
-import sauce.core.engine.Sprite;
-import sauce.core.engine.Surface;
-import sauce.asset.scripts.Argument;
-import sauce.asset.scripts.Return;
-import sauce.asset.scripts.Script;
-import sauce.core.engine.SpriteComponent;
-import sauce.core.engine.Entity;
-import util.Color;
+import sauce.core.Font;
+import sauce.core.Sprite;
+import sauce.core.Surface;
+import sauce.concurrent.Argument;
+import sauce.concurrent.Return;
+import sauce.concurrent.Script;
+import sauce.core.SpriteComponent;
+import sauce.core.Entity;
+import sauce.util.structures.Color;
 
 public class Text extends Entity {
     private Font font;

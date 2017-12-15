@@ -1,16 +1,16 @@
 package demo.entities;
 
-import sauce.core.engine.Sprite;
-import sauce.asset.scripts.Argument;
-import sauce.asset.scripts.Return;
-import sauce.asset.scripts.Script;
-import sauce.core.engine.Preferences;
-import sauce.core.engine.SpriteComponent;
-import sauce.core.engine.Engine;
-import sauce.core.engine.Entity;
-import util.Color;
-import sauce.core.collision.BoundBox;
-import util.structures.nonsaveable.ArrayGrid;
+import sauce.core.Sprite;
+import sauce.concurrent.Argument;
+import sauce.concurrent.Return;
+import sauce.concurrent.Script;
+import sauce.core.Preferences;
+import sauce.core.SpriteComponent;
+import sauce.core.Engine;
+import sauce.core.Entity;
+import sauce.util.structures.Color;
+import sauce.collision.BoundBox;
+import sauce.util.structures.nonsaveable.ArrayGrid;
 
 public class Button<A extends Argument, R extends Return> extends Entity {
 
@@ -93,10 +93,10 @@ public class Button<A extends Argument, R extends Return> extends Entity {
     }
 
     public void turnOn(){
-        ((Sprite)getComponent(SpriteComponent.class).getSprite()).setAnimationState("on");
+        getComponent(SpriteComponent.class).getSprite().setAnimationState("on");
     }
 
     public void turnOff(){
-        ((Sprite)getComponent(SpriteComponent.class).getSprite()).setAnimationState("off");
+        getComponent(SpriteComponent.class).getSprite().setAnimationState("off");
     }
 }

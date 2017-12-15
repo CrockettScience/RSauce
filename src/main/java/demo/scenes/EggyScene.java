@@ -2,18 +2,18 @@ package demo.scenes;
 
 import demo.entities.Eggy;
 import demo.systems.CollisionTest;
-import sauce.asset.audio.AudioManager;
-import sauce.asset.audio.Music;
-import sauce.core.attributes.BackgroundAttribute;
-import sauce.core.engine.*;
-import sauce.core.engine.InputClient;
-import sauce.core.engine.InputEvent;
-import sauce.core.engine.InputServer;
+import sauce.core.AudioManager;
+import sauce.core.Music;
+import sauce.attributes.BackgroundAttribute;
+import sauce.core.*;
+import sauce.core.InputClient;
+import sauce.core.InputEvent;
+import sauce.core.InputServer;
 
 import static demo.util.DemoUtil.HEIGHT;
 import static demo.util.DemoUtil.WIDTH;
-import static sauce.core.engine.Preferences.ASSET_ROOT;
-import static sauce.core.engine.InputServer.*;
+import static sauce.core.Preferences.ASSET_ROOT;
+import static sauce.core.InputServer.*;
 
 /**
  * Created by John Crockett.
